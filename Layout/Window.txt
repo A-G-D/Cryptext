@@ -1,0 +1,6 @@
+[Window]
+.BackColor=0xFFCCCCFF
+.ForeColor=
+.Font=
+.Text=
+.Icon=

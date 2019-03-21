@@ -1,0 +1,11 @@
+[btnTextFiles]
+.BackColor=
+.ForeColor=
+.Font=
+.Text=
+
+[btnTranslationFiles]
+.BackColor=
+.ForeColor=
+.Font=
+.Text=
