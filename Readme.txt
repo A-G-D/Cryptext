@@ -1,4 +1,4 @@
-Cryptext v1.0.0
+Cryptext v1.1.0
 
 
 CREATING AN ENCRYPTED TEXT
@@ -21,7 +21,7 @@ READING AN ENCRYPTED TEXT
 
 To be able to decipher the message of an encrypted text file, you
 need the actual file and its key file (which have the extensions
-".txt" and ".ckey" respetively). The file names of the text file and
+".txt" and ".ckey" respectively). The file names of the text file and
 its key must be similar and you must put them into a folder with the
 same name also. Then, put their folder inside the "Texts" folder.
 After this, the program will be able to locate and read the encrypted
