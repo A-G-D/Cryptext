@@ -1,11 +1,23 @@
 [btnTextFiles]
 .BackColor=
 .ForeColor=
-.Font=
+.FontFamily=
+.FontSize=
+.FontStyle=
 .Text=
 
 [btnTranslationFiles]
 .BackColor=
 .ForeColor=
-.Font=
+.FontFamily=
+.FontSize=
+.FontStyle=
+.Text=
+
+[lnklabelAbout]
+.BackColor=
+.ForeColor=
+.FontFamily=
+.FontSize=
+.FontStyle=
 .Text=
