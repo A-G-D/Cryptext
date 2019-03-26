@@ -15,6 +15,7 @@
 *	If not, see <https://www.gnu.org/licenses/>.
 *
 */
+#include "namespaces.h"
 #include "cypher.h"
 #include "utils.h"
 #include "stringtable.h"
@@ -78,42 +79,42 @@ bool Cypher::LoadFromString(String ^text, Hashtable %translationTable, Hashtable
 
 		switch (phase)
 		{
-		case 0:
-			if (text[i] == (wchar_t)'#')
-				phase = 1;
-			break;
+			case 0:
+				if (text[i] == (wchar_t)'#')
+					phase = 1;
+				break;
 
-		case 1:
-			if (text[i] == (wchar_t)'\n')
+			case 1:
+				if (text[i] == (wchar_t)'\n')
+					phase = 0;
+				else
+				{
+					str += text[i];
+					if (str == L"LETTER_SEPARATOR")
+						phase = 2;
+				}
+				break;
+
+			case 2:
+				if (text[i] == (wchar_t)'=')
+					phase = 3;
+				else if (text[i] != (wchar_t)' ' && text[i] != (wchar_t)'\t')
+					phase = 0;
+				break;
+
+			case 3:
+				if (text[i] == (wchar_t)'\'')
+					phase = 4;
+				else if (text[i] != (wchar_t)' ' && text[i] != (wchar_t)'\t')
+					phase = 0;
+				break;
+
+			case 4:
+				if ((i + 1) < text->Length && text[i + 1] == (wchar_t)'\'')
+					separator = text[i];
 				phase = 0;
-			else
-			{
-				str += text[i];
-				if (str == L"LETTER_SEPARATOR")
-					phase = 2;
-			}
-			break;
-
-		case 2:
-			if (text[i] == (wchar_t)'=')
-				phase = 3;
-			else if (text[i] != (wchar_t)' ' && text[i] != (wchar_t)'\t')
-				phase = 0;
-			break;
-
-		case 3:
-			if (text[i] == (wchar_t)'\'')
-				phase = 4;
-			else if (text[i] != (wchar_t)' ' && text[i] != (wchar_t)'\t')
-				phase = 0;
-			break;
-
-		case 4:
-			if ((i + 1) < text->Length && text[i + 1] == (wchar_t)'\'')
-				separator = text[i];
-			phase = 0;
-			str = String::Empty;
-			break;
+				str = String::Empty;
+				break;
 		}
 	}
 	if (separator == 0)
@@ -132,55 +133,55 @@ bool Cypher::LoadFromString(String ^text, Hashtable %translationTable, Hashtable
 			/*
 			*	Phase 1: Look for the '@' marker
 			*/
-		case 0:
-			if (text[i] == (wchar_t)'@')
-				phase = 1;
-			break;
+			case 0:
+				if (text[i] == (wchar_t)'@')
+					phase = 1;
+				break;
 			/*
 			*	Phase 2: Save the character next to the '@' marker
 			*/
-		case 1:
-			c = text[i];
-			phase = 2;
-			break;
+			case 1:
+				c = text[i];
+				phase = 2;
+				break;
 			/*
 			*	Phase 3: Save the translation string found inside the '{' and '}' delimiters
 			*/
-		case 2:
-			if (text[i] == (wchar_t)'{')
-				phase = 3;
-			else if (text[i] == (wchar_t)'@')
-				phase = 1;
-			else if (!IsWhitespace(text[i]))
-				phase = 0;
-			break;
+			case 2:
+				if (text[i] == (wchar_t)'{')
+					phase = 3;
+				else if (text[i] == (wchar_t)'@')
+					phase = 1;
+				else if (!IsWhitespace(text[i]))
+					phase = 0;
+				break;
 
-		case 3:
-			if (text[i] == (wchar_t)'}')
-			{
-				if (%translationTable != nullptr)
-					translationTable[c] = str;
-				if (str != String::Empty)
+			case 3:
+				if (text[i] == (wchar_t)'}')
 				{
-					alphaTable[str] = c;
-					str = String::Empty;
+					if (%translationTable != nullptr)
+						translationTable[c] = str;
+					if (str != String::Empty)
+					{
+						alphaTable[str] = c;
+						str = String::Empty;
+					}
+					c = 0;
+					phase = 0;
 				}
-				c = 0;
-				phase = 0;
-			}
-			else if (text[i] == separator)
-			{
-				MessageBox::Show(L"Separator Character '" + text[i] + L"' is also used as a translation character.", L"Translation File Error", MessageBoxButtons::OK);
-				Cypher::Clear();
-				return false;
-			}
-			else
-			{
-				str += text[i];
-				if (%translationFlag != nullptr)
-					translationFlag[text[i]] = true;
-			}
-			break;
+				else if (text[i] == separator)
+				{
+					MessageBox::Show(L"Separator Character '" + text[i] + L"' is also used as a translation character.", L"Translation File Error", MessageBoxButtons::OK);
+					Cypher::Clear();
+					return false;
+				}
+				else
+				{
+					str += text[i];
+					if (%translationFlag != nullptr)
+						translationFlag[text[i]] = true;
+				}
+				break;
 		}
 	}
 	if (lengths != nullptr)

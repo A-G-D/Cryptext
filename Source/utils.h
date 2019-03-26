@@ -39,8 +39,10 @@ enum AnchorType
 
 void CreateTextBox(TextBox ^%object, String ^name, int x, int y, int width, int height, int tabIndex, AnchorType anchor, bool multiline);
 void CreateLabel(Label ^%object, String ^name, String ^label, int x, int y, int width, int height, int tabIndex, AnchorType anchor);
+void CreateLinkLabel(LinkLabel ^%object, String ^name, String ^label, int x, int y, int width, int height, int tabIndex, AnchorType anchor, LinkLabelLinkClickedEventHandler ^onClickHandler);
 void CreateButton(Button ^%object, String ^name, String ^label, int x, int y, int width, int height, int tabIndex, AnchorType anchor, EventHandler ^onClickHandler);
 void CreateComboBox(ComboBox ^%object, String ^name, int x, int y, int width, int height, int tabIndex, AnchorType anchor, EventHandler ^onLostFocus);
+void CreatePanel(Panel ^%object, String ^name, int x, int y, int width, int height, int tabIndex, AnchorType anchor, bool autoScroll);
 bool IsWhitespace(wchar_t c);
 bool GetTextFiles(Collections::IList ^%list);
 bool GetTranslations(Collections::IList ^%list);

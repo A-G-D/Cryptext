@@ -31,18 +31,18 @@ void TextEditingWindow::InitializeComponent()
 {
 	CreateTextBox(textboxFileName, L"textboxFileName", 12, 26, 145, 20, 0, AnchorType::TOP_LEFT, false);
 
-	CreateComboBox(cboxTranslation, L"cboxTranslation", 177, 26, 145, 20, 1, AnchorType::TOP_RIGHT, gcnew System::EventHandler(this, &TextEditingWindow::OnCBoxLostFocus));
+	CreateComboBox(cboxTranslation, L"cboxTranslation", 177, 26, 145, 20, 1, AnchorType::TOP_RIGHT, gcnew EventHandler(this, &TextEditingWindow::OnCBoxLostFocus));
 	cboxTranslation->SelectedText = L"< Select Translation >";
 
 	textboxInput = gcnew TextBox;
 	textboxInput->AcceptsReturn = true;
 	textboxInput->AcceptsTab = true;
-	textboxInput->Location = System::Drawing::Point(12, 78);
+	textboxInput->Location = Point(12, 78);
 	textboxInput->MaxLength = 67108864 - 1;
 	textboxInput->Multiline = true;
 	textboxInput->Name = L"textboxInput";
-	textboxInput->ScrollBars = System::Windows::Forms::ScrollBars::Both;
-	textboxInput->Size = System::Drawing::Size(310, 104); //310, 104
+	textboxInput->ScrollBars = ScrollBars::Both;
+	textboxInput->Size = Size(310, 104); //310, 104
 	textboxInput->Anchor = (AnchorStyles)AnchorType::CENTER;
 	textboxInput->TabIndex = 2;
 	textboxInput->KeyDown += gcnew KeyEventHandler(this, &TextEditingWindow::OnTextboxInputKeyDown);
@@ -53,20 +53,20 @@ void TextEditingWindow::InitializeComponent()
 	textboxOutput->ReadOnly = true;
 	textboxOutput->AcceptsReturn = true;
 	textboxOutput->AcceptsTab = true;
-	textboxOutput->Location = System::Drawing::Point(12, 68 + 145);
+	textboxOutput->Location = Point(12, 68 + 145);
 	textboxOutput->MaxLength = (textboxInput->MaxLength + 1)*32 - 1;
 	textboxOutput->Multiline = true;
 	textboxOutput->Name = L"textboxOutput";
-	textboxOutput->ScrollBars = System::Windows::Forms::ScrollBars::Both;
-	textboxOutput->Size = System::Drawing::Size(310, 104);
+	textboxOutput->ScrollBars = ScrollBars::Both;
+	textboxOutput->Size = Size(310, 104);
 	textboxOutput->Anchor = (AnchorStyles)AnchorType::CENTER;
 	textboxOutput->TabIndex = 3;
 	textboxOutput->ContextMenu = gcnew ContextMenu;
 
-	CreateButton(btnBack, L"btnBack", L"Back", 12, 325, BUTTON_WIDTH, BUTTON_HEIGHT, 5, AnchorType::BOTTOM_LEFT, gcnew System::EventHandler(this, &TextEditingWindow::OnBtnBackClick));
-	CreateButton(btnSave, L"btnSave", L"Save", 247, 325, BUTTON_WIDTH, BUTTON_HEIGHT, 4, AnchorType::BOTTOM_RIGHT, gcnew System::EventHandler(this, &TextEditingWindow::OnBtnSaveClick));
-	CreateButton(btnImport, L"btnImport", L"Import", 93, 325, BUTTON_WIDTH, BUTTON_HEIGHT, 6, AnchorType::BOTTOM_RIGHT, gcnew System::EventHandler(this, &TextEditingWindow::OnBtnImportClick));
-	CreateButton(btnExport, L"btnExport", L"Export", 170, 325, BUTTON_WIDTH, BUTTON_HEIGHT, 7, AnchorType::BOTTOM_RIGHT, gcnew System::EventHandler(this, &TextEditingWindow::OnBtnExportClick));
+	CreateButton(btnBack, L"btnBack", L"Back", 12, 325, BUTTON_WIDTH, BUTTON_HEIGHT, 5, AnchorType::BOTTOM_LEFT, gcnew EventHandler(this, &TextEditingWindow::OnBtnBackClick));
+	CreateButton(btnSave, L"btnSave", L"Save", 247, 325, BUTTON_WIDTH, BUTTON_HEIGHT, 4, AnchorType::BOTTOM_RIGHT, gcnew EventHandler(this, &TextEditingWindow::OnBtnSaveClick));
+	CreateButton(btnImport, L"btnImport", L"Import", 93, 325, BUTTON_WIDTH, BUTTON_HEIGHT, 6, AnchorType::BOTTOM_RIGHT, gcnew EventHandler(this, &TextEditingWindow::OnBtnImportClick));
+	CreateButton(btnExport, L"btnExport", L"Export", 170, 325, BUTTON_WIDTH, BUTTON_HEIGHT, 7, AnchorType::BOTTOM_RIGHT, gcnew EventHandler(this, &TextEditingWindow::OnBtnExportClick));
 
 	CreateLabel(labelFileName, L"labelFileName", L"File Name", 12, 9, 54, 13, 4, AnchorType::TOP_LEFT);
 	CreateLabel(labelTranslation, L"labelTranslation", L"Translation", 177, 9, 54, 13, 4, AnchorType::TOP_RIGHT);
@@ -74,8 +74,8 @@ void TextEditingWindow::InitializeComponent()
 	CreateLabel(labelOutput, L"labelOuput", L"\r\nOutput Text", 12, 196, 54, 13, 4, AnchorType::TOP_LEFT);
 
 	tlpanelTextboxContainer = gcnew TableLayoutPanel;
-	tlpanelTextboxContainer->Location = System::Drawing::Point(9, 78);
-	tlpanelTextboxContainer->Size = System::Drawing::Size(316, 220);
+	tlpanelTextboxContainer->Location = Point(9, 78);
+	tlpanelTextboxContainer->Size = Size(316, 220);
 	tlpanelTextboxContainer->RowCount = 4;
 	tlpanelTextboxContainer->RowStyles->Add(gcnew RowStyle(SizeType::AutoSize));
 	tlpanelTextboxContainer->RowStyles->Add(gcnew RowStyle(SizeType::Percent, 50));

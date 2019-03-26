@@ -75,20 +75,30 @@ void UserDefined::GetProperties(Form ^form)
 							phase = 4;
 							property = 2;
 						}
-						else if (str == L"Font")
+						else if (str == L"FontFamily")
 						{
 							phase = 4;
 							property = 3;
 						}
-						else if (str == L"Text")
+						else if (str == L"FontSize")
 						{
 							phase = 4;
 							property = 4;
 						}
-						else if (str == L"Icon")
+						else if (str == L"FontStyle")
 						{
 							phase = 4;
 							property = 5;
+						}
+						else if (str == L"Text")
+						{
+							phase = 4;
+							property = 6;
+						}
+						else if (str == L"Icon")
+						{
+							phase = 4;
+							property = 7;
 						}
 						else
 							phase = 0;
@@ -122,12 +132,27 @@ void UserDefined::GetProperties(Form ^form)
 										form->ForeColor = Color::FromArgb(Convert::ToInt32(str, 16));
 										break;
 									case 3:
-										form->Font = gcnew Font(str, 8);
+										form->Font = gcnew Font(str, form->Font->Size, form->Font->Style);
 										break;
 									case 4:
-										form->Text = str;
+										form->Font = gcnew Font(form->Font->FontFamily, Single::Parse(str), form->Font->Style);
 										break;
 									case 5:
+										if (String::Equals(str, L"regular", StringComparison::OrdinalIgnoreCase))
+											form->Font = gcnew Font(form->Font, FontStyle::Regular);
+										else if (String::Equals(str, L"bold", StringComparison::OrdinalIgnoreCase))
+											form->Font = gcnew Font(form->Font, FontStyle::Bold);
+										else if (String::Equals(str, L"italic", StringComparison::OrdinalIgnoreCase))
+											form->Font = gcnew Font(form->Font, FontStyle::Italic);
+										else if (String::Equals(str, L"underline", StringComparison::OrdinalIgnoreCase))
+											form->Font = gcnew Font(form->Font, FontStyle::Underline);
+										else if (String::Equals(str, L"strikeout", StringComparison::OrdinalIgnoreCase))
+											form->Font = gcnew Font(form->Font, FontStyle::Strikeout);
+										break;
+									case 6:
+										form->Text = str;
+										break;
+									case 7:
 										form->Icon = gcnew Icon(str);
 										break;
 								}
@@ -212,15 +237,25 @@ void UserDefined::GetProperties(String ^fileName, ...array<Control^> ^controls)
 							phase = 4;
 							property = 2;
 						}
-						else if (str == L"Font")
+						else if (str == L"FontFamily")
 						{
 							phase = 4;
 							property = 3;
 						}
-						else if (str == L"Text")
+						else if (str == L"FontSize")
 						{
 							phase = 4;
 							property = 4;
+						}
+						else if (str == L"FontStyle")
+						{
+							phase = 4;
+							property = 5;
+						}
+						else if (str == L"Text")
+						{
+							phase = 4;
+							property = 6;
 						}
 						else
 							phase = 0;
@@ -254,9 +289,25 @@ void UserDefined::GetProperties(String ^fileName, ...array<Control^> ^controls)
 										controls[index]->ForeColor = Color::FromArgb(Convert::ToInt32(str, 16));
 										break;
 									case 3:
-										controls[index]->Font = gcnew Font(str, 8);
+										controls[index]->Font = gcnew Font(str, controls[index]->Font->Size, controls[index]->Font->Style);
 										break;
 									case 4:
+										controls[index]->Font = gcnew Font(controls[index]->Font->FontFamily, Single::Parse(str), controls[index]->Font->Style);
+										break;
+									case 5:
+										if (String::Equals(str, L"regular", StringComparison::OrdinalIgnoreCase))
+											controls[index]->Font = gcnew Font(controls[index]->Font, FontStyle::Regular);
+										else if (String::Equals(str, L"bold", StringComparison::OrdinalIgnoreCase))
+											controls[index]->Font = gcnew Font(controls[index]->Font, FontStyle::Bold);
+										else if (String::Equals(str, L"italic", StringComparison::OrdinalIgnoreCase))
+											controls[index]->Font = gcnew Font(controls[index]->Font, FontStyle::Italic);
+										else if (String::Equals(str, L"underline", StringComparison::OrdinalIgnoreCase))
+											controls[index]->Font = gcnew Font(controls[index]->Font, FontStyle::Underline);
+										else if (String::Equals(str, L"strikeout", StringComparison::OrdinalIgnoreCase))
+											controls[index]->Font = gcnew Font(controls[index]->Font, FontStyle::Strikeout);
+										break;
+										break;
+									case 6:
 										controls[index]->Text = str;
 										break;
 								}

@@ -29,10 +29,10 @@ extern gcroot<stringtable^> strtable;
 void CreateTextBox(TextBox ^%object, String ^name, int x, int y, int width, int height, int tabIndex, AnchorType anchor, bool multiline)
 {
 	object = gcnew TextBox;
-	object->Location = Drawing::Point(x, y);
 	object->Name = name;
 	object->Multiline = multiline;
-	object->Size = Drawing::Size(width, height);
+	object->Location = Point(x, y);
+	object->Size = Size(width, height);
 	object->Anchor = (AnchorStyles)anchor;
 	object->TabIndex = tabIndex;
 	object->ContextMenu = gcnew ContextMenu;
@@ -42,11 +42,24 @@ void CreateLabel(Label ^%object, String ^name, String ^label, int x, int y, int 
 	object = gcnew Label;
 	object->AutoSize = true;
 	object->Name = name;
-	object->Location = Drawing::Point(x, y);
-	object->Size = Drawing::Size(width, height);
+	object->Location = Point(x, y);
+	object->Size = Size(width, height);
 	object->Anchor = (AnchorStyles)anchor;
 	object->TabIndex = tabIndex;
 	object->Text = label;
+}
+void CreateLinkLabel(LinkLabel ^%object, String ^name, String ^label, int x, int y, int width, int height, int tabIndex, AnchorType anchor, System::Windows::Forms::LinkLabelLinkClickedEventHandler ^onClickHandler)
+{
+	object = gcnew LinkLabel;
+	object->AutoSize = true;
+	object->Name = name;
+	object->Text = label;
+	object->Location = Point(x, y);
+	object->Size = Size(width, height);
+	object->Anchor = (AnchorStyles)anchor;
+	object->TabIndex = tabIndex;
+	object->LinkBehavior = LinkBehavior::AlwaysUnderline;
+	object->LinkClicked += onClickHandler;
 }
 void CreateButton(Button ^%object, String ^name, String ^label, int x, int y, int width, int height, int tabIndex, AnchorType anchor, EventHandler ^onClickHandler)
 {
@@ -54,8 +67,8 @@ void CreateButton(Button ^%object, String ^name, String ^label, int x, int y, in
 	object->UseVisualStyleBackColor = true;
 	object->Name = name;
 	object->Text = label;
-	object->Location = Drawing::Point(x, y);
-	object->Size = Drawing::Size(width, height);
+	object->Location = Point(x, y);
+	object->Size = Size(width, height);
 	object->Anchor = (AnchorStyles)anchor;
 	object->TabIndex = tabIndex;
 	object->Click += onClickHandler;
@@ -66,13 +79,25 @@ void CreateComboBox(ComboBox ^%object, String ^name, int x, int y, int width, in
 	object->FormattingEnabled = true;
 	object->Sorted = true;
 	object->Name = name;
-	object->Location = System::Drawing::Point(x, y);
-	object->Size = System::Drawing::Size(width, height);
+	object->Location = Point(x, y);
+	object->Size = Size(width, height);
 	object->Anchor = (AnchorStyles)anchor;
 	object->TabIndex = tabIndex;
 	object->LostFocus += onLostFocus;
 	object->ContextMenu = gcnew ContextMenu;
 }
+void CreatePanel(Panel ^%object, String ^name, int x, int y, int width, int height, int tabIndex, AnchorType anchor, bool autoScroll)
+{
+	object = gcnew Panel;
+	object->AutoScroll = autoScroll;
+	object->Name = name;
+	object->BorderStyle = BorderStyle::FixedSingle;
+	object->Location = Point(x, y);
+	object->Size = Size(width, height);
+	object->Anchor = (AnchorStyles)anchor;
+	object->TabIndex = tabIndex;
+}
+
 bool IsWhitespace(wchar_t c)
 {
 	return c == (wchar_t)' ' || c == (wchar_t)'\t';

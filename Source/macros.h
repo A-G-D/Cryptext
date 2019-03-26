@@ -21,25 +21,35 @@
 #define _MACROS_H_
 
 #include "stringtable.h"
+#include "namespaces.h"
 
 #define APPLICATION_NAME						L"Cryptext"
+#define VERSION									L"1.1.0"
+
 #define TEXT_FILES_FOLDER_NAME					L"Texts"
 #define TEXT_FILE_EXTENSION						L".txt"
 #define TRANSLATION_FILES_FOLDER_NAME			L"Translations"
 #define TRANSLATION_FILE_EXTENSION				L".trln"
 #define KEY_FILE_EXTENSION						L".ckey"
-#define TRANSLATION_FILE_MISSING_ERROR			gcnew System::String(static_cast<stringtable^>(strtable)[0])
-#define MESSAGE_CREATE_FILE_SUCCESS				gcnew System::String(static_cast<stringtable^>(strtable)[1])
-#define MESSAGE_CREATE_FILE_FAILURE				gcnew System::String(static_cast<stringtable^>(strtable)[2])
-#define MESSAGE_CREATE_TRANSLATION_SUCCESS		gcnew System::String(static_cast<stringtable^>(strtable)[3])
-#define MESSAGE_CREATE_TRANSLATION_FAILURE		gcnew System::String(static_cast<stringtable^>(strtable)[4])
-#define CAPTION_CREATE_FILE_SUCCESS				gcnew System::String(static_cast<stringtable^>(strtable)[5])
-#define CAPTION_CREATE_FILE_FAILURE				gcnew System::String(static_cast<stringtable^>(strtable)[6])
-#define CAPTION_CREATE_TRANSLATION_SUCCESS		gcnew System::String(static_cast<stringtable^>(strtable)[7])
-#define CAPTION_CREATE_TRANSLATION_FAILURE		gcnew System::String(static_cast<stringtable^>(strtable)[8])
-#define MESSAGE_MISSING_KEY_ERROR				gcnew System::String(static_cast<stringtable^>(strtable)[9])
-#define CAPTION_MISSING_KEY_ERROR				gcnew System::String(static_cast<stringtable^>(strtable)[10])
-#define ERROR_TITLE								gcnew System::String(static_cast<stringtable^>(strtable)[11])
+#define LICENSE_FILE_PATH						L"LICENSE.txt"
+#define LICENSE_LINK_TEXT						L"https://www.gnu.org/licenses/gpl-3.0.html/"
+#define LICENSE_LINK_URL						L"https://www.gnu.org/licenses/gpl-3.0.html/"
+#define SOURCE_LINK_TEXT						L"https://github.com/A-G-D/Cryptext/"
+#define SOURCE_LINK_URL							L"https://github.com/A-G-D/Cryptext/"
+
+#define MESSAGE_CREATE_FILE_SUCCESS				gcnew String(((stringtable^)(strtable))[0])
+#define CAPTION_CREATE_FILE_SUCCESS				gcnew String(((stringtable^)(strtable))[1])
+#define MESSAGE_CREATE_FILE_FAILURE				gcnew String(((stringtable^)(strtable))[2])
+#define CAPTION_CREATE_FILE_FAILURE				gcnew String(((stringtable^)(strtable))[3])
+#define MESSAGE_CREATE_TRANSLATION_SUCCESS		gcnew String(((stringtable^)(strtable))[4])
+#define CAPTION_CREATE_TRANSLATION_SUCCESS		gcnew String(((stringtable^)(strtable))[5])
+#define MESSAGE_CREATE_TRANSLATION_FAILURE		gcnew String(((stringtable^)(strtable))[6])
+#define CAPTION_CREATE_TRANSLATION_FAILURE		gcnew String(((stringtable^)(strtable))[7])
+#define MESSAGE_MISSING_KEY_ERROR				gcnew String(((stringtable^)(strtable))[8])
+#define CAPTION_MISSING_KEY_ERROR				gcnew String(((stringtable^)(strtable))[9])
+#define MESSAGE_MISSING_LICENSE_ERROR			gcnew String(((stringtable^)(strtable))[10])
+#define CAPTION_MISSING_LICENSE_ERROR			gcnew String(((stringtable^)(strtable))[11])
+
 #define STRING_TABLE_SIZE						12
 #define BUTTON_HEIGHT							28
 #define BUTTON_WIDTH							75

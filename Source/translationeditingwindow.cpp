@@ -56,9 +56,6 @@ void TranslationEditingWindow::InitializeComponent()
 	cboxSeparatorChar->EndUpdate();
 	cboxSeparatorChar->SelectedIndex = cboxSeparatorChar->FindStringExact(L"Space");
 
-	panelTranslations = gcnew Panel;
-	panelTranslations->SuspendLayout();
-
 	CreateButton(btnBack, L"btnBack", L"Back", 12, 328, BUTTON_WIDTH, BUTTON_HEIGHT, 98, AnchorType::BOTTOM_LEFT, gcnew System::EventHandler(this, &TranslationEditingWindow::OnBtnBackClick));
 	CreateButton(btnEnter, L"btnEnter", L"Enter", 247, 328, BUTTON_WIDTH, BUTTON_HEIGHT, 99, AnchorType::BOTTOM_RIGHT, gcnew System::EventHandler(this, &TranslationEditingWindow::OnBtnEnterClick));
 
@@ -95,14 +92,9 @@ void TranslationEditingWindow::InitializeComponent()
 	}
 	CreateLabel(labelSymbols[33], L"label__33", L"Tab", 240 - 10, 12 + 26*33, 15, 13, 0, AnchorType::TOP_LEFT);
 	CreateTextBox(textboxSymbols[33], L"textbox__33", 260, 9 + 26*33, 31, 20, 64 + 33, AnchorType::TOP_LEFT, false);
+	CreatePanel(panelTranslations, L"panelTranslations", 12, 82, 318, 240, 1, AnchorType::CENTER, true);
 
-	panelTranslations->AutoScroll = true;
-	panelTranslations->Name = L"panelTranslations";
-	panelTranslations->BorderStyle = BorderStyle::FixedSingle;
-	panelTranslations->Location = Drawing::Point(12, 82);
-	panelTranslations->Size = Drawing::Size(318, 240);
-	panelTranslations->Anchor = (AnchorStyles)AnchorType::CENTER;
-	panelTranslations->TabIndex = 1;
+	panelTranslations->SuspendLayout();
 
 	panelTranslations->Controls->AddRange(labelUppercase);
 	panelTranslations->Controls->AddRange(labelLowercase);
@@ -128,14 +120,14 @@ void TranslationEditingWindow::InitializeComponent()
 	panelTranslations->ResumeLayout(false);
 	panelTranslations->PerformLayout();
 
-	Window::Add(panelTranslations);
-	Window::Add(textboxFileName);
-	Window::Add(labelFileName);
-	Window::Add(labelSeparatorChar);
-	Window::Add(labelTranslationTable);
-	Window::Add(btnBack);
-	Window::Add(btnEnter);
-	Window::Add(cboxSeparatorChar);
+	Add(panelTranslations);
+	Add(textboxFileName);
+	Add(labelFileName);
+	Add(labelSeparatorChar);
+	Add(labelTranslationTable);
+	Add(btnBack);
+	Add(btnEnter);
+	Add(cboxSeparatorChar);
 
 	Hide();
 

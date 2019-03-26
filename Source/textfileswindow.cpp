@@ -37,9 +37,9 @@ void TextFilesWindow::InitializeComponent()
 
 	listboxTextFiles = gcnew ListBox;
 	listboxTextFiles->FormattingEnabled = true;
-	listboxTextFiles->Location = System::Drawing::Point(12, 17);
+	listboxTextFiles->Location = Point(12, 17);
 	listboxTextFiles->Name = L"listboxTextFiles";
-	listboxTextFiles->Size = System::Drawing::Size(310, 303);
+	listboxTextFiles->Size = Size(310, 303);
 	listboxTextFiles->Anchor = (AnchorStyles)AnchorType::CENTER;
 	listboxTextFiles->TabIndex = 3;
 

@@ -1,5 +1,5 @@
 /*
-*	<mainwindow.h>
+*	<aboutwindow.h>
 *
 *
 *	Copyright (C) 2019 Aloever Dulay
@@ -17,56 +17,46 @@
 */
 #pragma once
 
-#ifndef _MAINWINDOW_H_
-#define _MAINWINDOW_H_
+#ifndef _ABOUTWINDOW_H_
+#define _ABOUTWINDOW_H_
 
 #include "namespaces.h"
 #include "window.h"
-#include "textfileswindow.h"
-#include "aboutwindow.h"
 
 /*
-*	MainWindow Class
+*	AboutWindow Class
 */
-ref class MainWindow : public Window
+ref class AboutWindow : public Window
 {
-public:
-	TextFilesWindow ^textFilesWindow;
-	AboutWindow ^aboutWindow;
-
 private:
-	Button
-		^btnTextFiles,
-		^btnTranslationFiles;
-
-	LinkLabel ^lnklabelAbout;
+	Window ^prevForm;
+	Panel ^panelAbout;
+	TextBox ^textboxLicense;
+	LinkLabel
+		^lnklabelBack,
+		^lnklabelAboutInfo;
 
 	void InitializeComponent();
-	void OnBtnTextFilesClick(Object ^sender, EventArgs ^e);
-	void OnBtnTranslationFilesClick(Object ^sender, EventArgs ^e);
+	void OnLnkLabelBackClick(Object ^sender, LinkLabelLinkClickedEventArgs ^e);
 	void OnLnkLabelAboutClick(Object ^sender, LinkLabelLinkClickedEventArgs ^e);
 
 protected:
 
-	!MainWindow()
+	!AboutWindow()
 	{
-		delete textFilesWindow;
-		delete aboutWindow;
 	}
 
-	~MainWindow()
+	~AboutWindow()
 	{
-		this->!MainWindow();
+		this->!AboutWindow();
 	}
 
 public:
 
-	MainWindow();
+	AboutWindow(Window ^form);
 
 	virtual void Show() override;
 	virtual void Hide() override;
-
-	void ClickTextFilesButton();
 };
 #endif
 

@@ -26,7 +26,7 @@
 /*
 *	Form Class
 */
-ref class AppForm : public System::Windows::Forms::Form
+ref class AppForm : public Form
 {
 private:
 	MainWindow ^mainWindow;
