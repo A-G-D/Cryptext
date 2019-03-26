@@ -1,77 +1,103 @@
 [btnBack]
 .BackColor=
 .ForeColor=
-.Font=
+.FontFamily=
+.FontSize=
+.FontStyle=
 .Text=
 
 [btnImport]
 .BackColor=
 .ForeColor=
-.Font=
+.FontFamily=
+.FontSize=
+.FontStyle=
 .Text=
 
 [btnExport]
 .BackColor=
 .ForeColor=
-.Font=
+.FontFamily=
+.FontSize=
+.FontStyle=
 .Text=
 
 [btnSave]
 .BackColor=
 .ForeColor=
-.Font=
+.FontFamily=
+.FontSize=
+.FontStyle=
 .Text=
 
 [labelFileName]
 .BackColor=
 .ForeColor=
-.Font=
+.FontFamily=
+.FontSize=
+.FontStyle=
 .Text=
 
 [labelTranslation]
 .BackColor=
 .ForeColor=
-.Font=
+.FontFamily=
+.FontSize=
+.FontStyle=
 .Text=
 
 [labelInput]
 .BackColor=
 .ForeColor=
-.Font=
+.FontFamily=
+.FontSize=
+.FontStyle=
 .Text=
 
 [labelOutput]
 .BackColor=
 .ForeColor=
-.Font=
+.FontFamily=
+.FontSize=
+.FontStyle=
 .Text=
 
 [textboxFileName]
 .BackColor=
 .ForeColor=
-.Font=
+.FontFamily=
+.FontSize=
+.FontStyle=
 .Text=
 
 [textboxInput]
 .BackColor=
 .ForeColor=
-.Font=
+.FontFamily=
+.FontSize=
+.FontStyle=
 .Text=
 
 [textboxOutput]
 .BackColor=
 .ForeColor=
-.Font=
+.FontFamily=
+.FontSize=
+.FontStyle=
 .Text=
 
 [cboxTranslation]
 .BackColor=
 .ForeColor=
-.Font=
+.FontFamily=
+.FontSize=
+.FontStyle=
 .Text=
 
 [tlpanelTextboxContainer]
 .BackColor=
 .ForeColor=
-.Font=
+.FontFamily=
+.FontSize=
+.FontStyle=
 .Text=
