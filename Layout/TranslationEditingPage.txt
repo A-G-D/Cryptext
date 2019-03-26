@@ -1,47 +1,63 @@
 [btnBack]
 .BackColor=
 .ForeColor=
-.Font=
+.FontFamily=
+.FontSize=
+.FontStyle=
 .Text=
 
 [btnEnter]
 .BackColor=
 .ForeColor=
-.Font=
+.FontFamily=
+.FontSize=
+.FontStyle=
 .Text=
 
 [labelFileName]
 .BackColor=
 .ForeColor=
-.Font=
+.FontFamily=
+.FontSize=
+.FontStyle=
 .Text=
 
 [labelSeparatorChar]
 .BackColor=
 .ForeColor=
-.Font=
+.FontFamily=
+.FontSize=
+.FontStyle=
 .Text=
 
 [labelTranslationTable]
 .BackColor=
 .ForeColor=
-.Font=
+.FontFamily=
+.FontSize=
+.FontStyle=
 .Text=
 
 [textboxFileName]
 .BackColor=
 .ForeColor=
-.Font=
+.FontFamily=
+.FontSize=
+.FontStyle=
 .Text=
 
 [cboxSeparatorChar]
 .BackColor=
 .ForeColor=
-.Font=
+.FontFamily=
+.FontSize=
+.FontStyle=
 .Text=
 
 [panelTranslations]
 .BackColor=
 .ForeColor=
-.Font=
+.FontFamily=
+.FontSize=
+.FontStyle=
 .Text=
