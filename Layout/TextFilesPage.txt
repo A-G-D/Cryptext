@@ -1,29 +1,39 @@
 [btnBack]
 .BackColor=
 .ForeColor=
-.Font=
+.FontFamily=
+.FontSize=
+.FontStyle=
 .Text=
 
 [btnCreateText]
 .BackColor=
 .ForeColor=
-.Font=
+.FontFamily=
+.FontSize=
+.FontStyle=
 .Text=
 
 [btnEditText]
 .BackColor=
 .ForeColor=
-.Font=
+.FontFamily=
+.FontSize=
+.FontStyle=
 .Text=
 
 [btnDeleteText]
 .BackColor=
 .ForeColor=
-.Font=
+.FontFamily=
+.FontSize=
+.FontStyle=
 .Text=
 
 [listboxTextFiles]
 .BackColor=
 .ForeColor=
-.Font=
+.FontFamily=
+.FontSize=
+.FontStyle=
 .Text=
