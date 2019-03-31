@@ -1,5 +1,5 @@
 /*
-*	<stringtable.h>
+*	<stickynote.h>
 *
 *
 *	Copyright (C) 2019 Aloever Dulay
@@ -17,29 +17,43 @@
 */
 #pragma once
 
-#ifndef _STRINGTABLE_H_
-#define _STRINGTABLE_H_
+#ifndef __STICKYNOTE_H__
+#define __STICKYNOTE_H__
 
 #include "namespaces.h"
+#include "window.h"
 
-ref class stringtable
+/*
+*	StickyNote Class
+*/
+ref class StickyNote : public Window
 {
 private:
 
-	List<System::String^> ^__table;
+	TextBox ^textboxStickyNote;
 
-	stringtable();
+	void OnEscKeyDown(Object ^sender, KeyEventArgs ^e);
 
 protected:
 
-	~stringtable();
+	!StickyNote()
+	{
+	}
+	~StickyNote()
+	{
+		this->!StickyNote();
+	}
 
 public:
 
-	String ^operator[](unsigned int i);
-	unsigned int size();
+	Window ^prevForm;
 
-	stringtable(String ^path);
+	StickyNote();
+
+	virtual void Show() override;
+	virtual void Hide() override;
+
+	String ^GetText();
 };
 #endif
 

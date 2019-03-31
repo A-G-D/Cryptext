@@ -29,6 +29,7 @@
 ref class TranslationEditingWindow : public Window
 {
 private:
+
 	Window ^prevForm;
 	Panel ^panelTranslations;
 	TextBox ^textboxFileName;
@@ -39,7 +40,7 @@ private:
 		^labelTranslationTable;
 	Button
 		^btnBack,
-		^btnEnter;
+		^btnSave;
 	array<Label^>
 		^labelUppercase,
 		^labelLowercase,
@@ -60,14 +61,13 @@ private:
 
 	void OnCBoxLostFocus(Object ^sender, EventArgs ^e);
 	void OnBtnBackClick(Object ^sender, EventArgs ^e);
-	void OnBtnEnterClick(Object ^sender, EventArgs ^e);
+	void OnBtnSaveClick(Object ^sender, EventArgs ^e);
 
 protected:
 
 	!TranslationEditingWindow()
 	{
 	}
-
 	~TranslationEditingWindow()
 	{
 		this->!TranslationEditingWindow();

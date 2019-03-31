@@ -31,6 +31,7 @@
 ref class TextFilesWindow : public Window
 {
 private:
+
 	Window ^prevForm;
 	Button
 		^btnBack,
@@ -52,16 +53,14 @@ protected:
 
 	!TextFilesWindow()
 	{
-		delete textEditingWindow;
-		delete translationEditingWindow;
 	}
-
 	~TextFilesWindow()
 	{
 		this->!TextFilesWindow();
 	}
 
 public:
+
 	bool flag;
 
 	TextFilesWindow(Window ^form);

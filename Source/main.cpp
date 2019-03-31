@@ -18,6 +18,7 @@
 #include "macros.h"
 #include "appform.h"
 #include "stringtable.h"
+#include "window.h"
 #include <gcroot.h>
 
 using namespace System;
@@ -26,7 +27,8 @@ using namespace System::Windows::Forms;
 
 bool ADVANCED_FLAG = false;
 
-gcroot<stringtable^> strtable(gcnew stringtable(L"Resources\\stringtable"));
+gcroot<stringtable^> strtable(gcnew stringtable(RESOURCES_FOLDER_NAME + L"\\stringtable"));
+gcroot<Window^> currentPage;
 
 [STAThread]
 void Main(array<String^> ^args)

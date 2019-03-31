@@ -1,5 +1,5 @@
 /*
-*	<aboutwindow.h>
+*	<translatorwindow.h>
 *
 *
 *	Copyright (C) 2019 Aloever Dulay
@@ -17,43 +17,57 @@
 */
 #pragma once
 
-#ifndef _ABOUTWINDOW_H_
-#define _ABOUTWINDOW_H_
+#ifndef __TRANSLATORWINDOW_H__
+#define __TRANSLATORWINDOW_H__
 
 #include "namespaces.h"
 #include "window.h"
 
 /*
-*	AboutWindow Class
+*	TranslatorWindow Class
 */
-ref class AboutWindow : public Window
+ref class TranslatorWindow : public Window
 {
 private:
 
 	Window ^prevForm;
-	Panel ^panelAbout;
-	TextBox ^textboxLicense;
-	LinkLabel
-		^lnklabelBack,
-		^lnklabelAboutInfo;
+	ComboBox ^cboxTranslation;
+	TableLayoutPanel ^tlpanelTextboxContainer;
+	Label
+		^labelTranslation,
+		^labelInput,
+		^labelOutput;
+	TextBox
+		^textboxInput,
+		^textboxOutput;
+	Button
+		^btnBack,
+		^btnTranslateToCode,
+		^btnTranslateToText;
+
+	String ^activeTranslation;
 
 	void InitializeComponent();
-	void OnLnkLabelBackClick(Object ^sender, LinkLabelLinkClickedEventArgs ^e);
-	void OnLnkLabelAboutClick(Object ^sender, LinkLabelLinkClickedEventArgs ^e);
+
+	void OnBtnBackClick(Object ^sender, EventArgs ^e);
+	void OnBtnTranslateToCodeClick(Object ^sender, EventArgs ^e);
+	void OnBtnTranslateToTextClick(Object ^sender, EventArgs ^e);
+
+	void OnCBoxTranslationLostFocus(Object ^sender, EventArgs ^e);
 
 protected:
 
-	!AboutWindow()
+	!TranslatorWindow()
 	{
 	}
-	~AboutWindow()
+	~TranslatorWindow()
 	{
-		this->!AboutWindow();
+		this->!TranslatorWindow();
 	}
 
 public:
 
-	AboutWindow(Window ^form);
+	TranslatorWindow(Window ^form);
 
 	virtual void Show() override;
 	virtual void Hide() override;

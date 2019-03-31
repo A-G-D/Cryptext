@@ -18,6 +18,22 @@
 #include "window.h"
 #include "appform.h"
 #include "namespaces.h"
+#include <gcroot.h>
+
+extern gcroot<Window^> currentPage;
+
+void Window::Display(Window ^form)
+{
+	Hide();
+	form->Show();
+	currentPage = form;
+}
+void Window::Show()
+{
+}
+void Window::Hide()
+{
+}
 
 void Window::Add(Control ^control)
 {

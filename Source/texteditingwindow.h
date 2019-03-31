@@ -29,6 +29,7 @@
 ref class TextEditingWindow : public Window
 {
 private:
+
 	Window ^prevForm;
 	Label
 		^labelFileName,
@@ -61,7 +62,7 @@ private:
 	int DeleteTextForwards(String ^%s, int sStart, int sLength);
 	int DeleteTextBackwards(String ^%s, int sStart, int sLength);
 
-	void OnCBoxLostFocus(Object ^sender, EventArgs ^e);
+	void OnCBoxTranslationLostFocus(Object ^sender, EventArgs ^e);
 
 	void OnTextboxInputKeyDown(Object ^sender, KeyEventArgs ^e);
 	void OnTextboxInputKeyPress(Object ^sender, KeyPressEventArgs ^e);
@@ -79,7 +80,6 @@ protected:
 	!TextEditingWindow()
 	{
 	}
-
 	~TextEditingWindow()
 	{
 		this->!TextEditingWindow();
@@ -88,7 +88,6 @@ protected:
 public:
 
 	virtual void Show() override;
-
 	virtual void Hide() override;
 
 	bool Load(String ^fileName);

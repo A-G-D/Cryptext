@@ -21,13 +21,25 @@
 #define _WINDOW_H_
 
 #include "namespaces.h"
+#include <gcroot.h>
 
 /*
 *	Parent Window Class
 */
 ref class Window
 {
+protected:
+
+	!Window()
+	{
+	}
+	virtual ~Window()
+	{
+		this->!Window();
+	}
+
 public:
+
 	Form ^form;
 
 	static ToolTip ^tooltip = gcnew ToolTip;
@@ -38,26 +50,10 @@ public:
 	static void ResumeLayout();
 	static void PerformLayout();
 
-	virtual void Show()
-	{
-	}
-	virtual void Hide()
-	{
-	}
+	virtual void Show();
+	virtual void Hide();
 
-	void Display(Window ^%form)
-	{
-		Hide();
-		form->Show();
-	}
-
-	!Window()
-	{
-	}
-	virtual ~Window()
-	{
-		this->!Window();
-	}
+	void Display(Window ^form);
 };
 #endif
 

@@ -6,7 +6,7 @@
 .FontStyle=
 .Text=
 
-[btnEnter]
+[btnSave]
 .BackColor=
 .ForeColor=
 .FontFamily=

@@ -49,15 +49,15 @@ void TranslationEditingWindow::InitializeComponent()
 	labelSymbols = gcnew array<Label^>(34);
 	textboxSymbols = gcnew array<TextBox^>(34);
 
-	CreateComboBox(cboxSeparatorChar, L"cboxSeparatorChar", 177, 26, 145, 20, 1, AnchorType::TOP_RIGHT, gcnew System::EventHandler(this, &TranslationEditingWindow::OnCBoxLostFocus));
+	CreateComboBox(cboxSeparatorChar, L"cboxSeparatorChar", 177, 26, 145, 20, 1, AnchorType::TOP_RIGHT, gcnew EventHandler(this, &TranslationEditingWindow::OnCBoxLostFocus));
 	cboxSeparatorChar->BeginUpdate();
 	cboxSeparatorChar->Items->Add(L"None");
 	cboxSeparatorChar->Items->Add(L"Space");
 	cboxSeparatorChar->EndUpdate();
 	cboxSeparatorChar->SelectedIndex = cboxSeparatorChar->FindStringExact(L"Space");
 
-	CreateButton(btnBack, L"btnBack", L"Back", 12, 328, BUTTON_WIDTH, BUTTON_HEIGHT, 98, AnchorType::BOTTOM_LEFT, gcnew System::EventHandler(this, &TranslationEditingWindow::OnBtnBackClick));
-	CreateButton(btnEnter, L"btnEnter", L"Enter", 247, 328, BUTTON_WIDTH, BUTTON_HEIGHT, 99, AnchorType::BOTTOM_RIGHT, gcnew System::EventHandler(this, &TranslationEditingWindow::OnBtnEnterClick));
+	CreateButton(btnBack, L"btnBack", L"Back", 12, 328, BUTTON_WIDTH, BUTTON_HEIGHT, 98, AnchorType::BOTTOM_LEFT, gcnew EventHandler(this, &TranslationEditingWindow::OnBtnBackClick));
+	CreateButton(btnSave, L"btnSave", L"Save", 247, 328, BUTTON_WIDTH, BUTTON_HEIGHT, 99, AnchorType::BOTTOM_RIGHT, gcnew EventHandler(this, &TranslationEditingWindow::OnBtnSaveClick));
 
 	CreateLabel(labelFileName, L"labelFileName", L"Translation Name", 12, 9, 54, 13, 4, AnchorType::TOP_LEFT);
 	CreateLabel(labelSeparatorChar, L"labelSeparatorChar", L"Letter Separator", 177, 9, 54, 13, 5, AnchorType::TOP_RIGHT);
@@ -106,7 +106,7 @@ void TranslationEditingWindow::InitializeComponent()
 	panelTranslations->Controls->AddRange(textboxSymbols);
 
 	UserDefined::GetProperties(L"TranslationEditingPage.txt",
-		btnBack, btnEnter, labelFileName, labelSeparatorChar, labelTranslationTable, textboxFileName, cboxSeparatorChar, panelTranslations,
+		btnBack, btnSave, labelFileName, labelSeparatorChar, labelTranslationTable, textboxFileName, cboxSeparatorChar, panelTranslations,
 		upper(0), upper(1), upper(2), upper(3), upper(4), upper(5), upper(6), upper(7), upper(8), upper(9), upper(10), upper(11), upper(12), upper(13),
 		upper(14), upper(15), upper(16), upper(17), upper(18), upper(19), upper(20), upper(21), upper(22), upper(23), upper(24), upper(25),
 		lower(0), lower(1), lower(2), lower(3), lower(4), lower(5), lower(6), lower(7), lower(8), lower(9), lower(10), lower(11), lower(12), lower(13),
@@ -126,7 +126,7 @@ void TranslationEditingWindow::InitializeComponent()
 	Add(labelSeparatorChar);
 	Add(labelTranslationTable);
 	Add(btnBack);
-	Add(btnEnter);
+	Add(btnSave);
 	Add(cboxSeparatorChar);
 
 	Hide();
@@ -175,7 +175,7 @@ void TranslationEditingWindow::OnBtnBackClick(Object ^sender, EventArgs ^e)
 	LoadTranslations(labelSymbols, textboxSymbols);
 	Display(prevForm);
 }
-void TranslationEditingWindow::OnBtnEnterClick(Object ^sender, EventArgs ^e)
+void TranslationEditingWindow::OnBtnSaveClick(Object ^sender, EventArgs ^e)
 {
 	String ^fileName = TRANSLATION_FILES_FOLDER_NAME + L"\\" + textboxFileName->Text;
 
@@ -248,7 +248,7 @@ void TranslationEditingWindow::Show()
 	labelSeparatorChar->Show();
 	labelTranslationTable->Show();
 	btnBack->Show();
-	btnEnter->Show();
+	btnSave->Show();
 	cboxSeparatorChar->Show();
 	Window::Show();
 }
@@ -260,7 +260,7 @@ void TranslationEditingWindow::Hide()
 	labelSeparatorChar->Hide();
 	labelTranslationTable->Hide();
 	btnBack->Hide();
-	btnEnter->Hide();
+	btnSave->Hide();
 	cboxSeparatorChar->Hide();
 	Window::Hide();
 }

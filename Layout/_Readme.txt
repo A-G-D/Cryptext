@@ -8,4 +8,5 @@ the program to use its default aesthetics.
 - AboutPage.txt
 - TextFilesPage.txt
 - TextEditingPage.txt
-- TransaltionEditingPage.txt
+- TranslationEditingPage.txt
+- TranslatorPage.txt

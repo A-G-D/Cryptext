@@ -24,11 +24,13 @@
 #include "namespaces.h"
 
 #define APPLICATION_NAME						L"Cryptext"
-#define VERSION									L"1.1.0"
+#define VERSION									L"1.2.0"
 
 #define TEXT_FILES_FOLDER_NAME					L"Texts"
-#define TEXT_FILE_EXTENSION						L".txt"
 #define TRANSLATION_FILES_FOLDER_NAME			L"Translations"
+#define LAYOUT_FOLDER_NAME						L"Layout"
+#define RESOURCES_FOLDER_NAME					L"Resources"
+#define TEXT_FILE_EXTENSION						L".txt"
 #define TRANSLATION_FILE_EXTENSION				L".trln"
 #define KEY_FILE_EXTENSION						L".ckey"
 #define LICENSE_FILE_PATH						L"LICENSE.txt"

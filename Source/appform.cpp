@@ -16,14 +16,16 @@
 *
 */
 #include "appform.h"
-#include "namespaces.h"
+#include "stickynote.h"
 #include "mainwindow.h"
+#include "namespaces.h"
 #include "userdefinitions.h"
 #include "macros.h"
 #include "stringtable.h"
 #include <gcroot.h>
 
 extern gcroot<stringtable^> strtable;
+extern gcroot<Window^> currentPage;
 
 AppForm::AppForm()
 {
@@ -35,18 +37,22 @@ AppForm::AppForm()
 	MaximizeBox = true;
 	ShowInTaskbar = true;
 	StartPosition = FormStartPosition::CenterScreen;
-	FormBorderStyle = System::Windows::Forms::FormBorderStyle::Sizable;
-	AutoScaleDimensions = System::Drawing::SizeF(6, 13);
-	AutoScaleMode = System::Windows::Forms::AutoScaleMode::None;
-	MinimumSize = System::Drawing::Size(350, 400);
-	Size = System::Drawing::Size(350, 400);
+	FormBorderStyle = ::FormBorderStyle::Sizable;
+	AutoScaleDimensions = SizeF(6, 13);
+	AutoScaleMode = ::AutoScaleMode::None;
+	MinimumSize = ::Size(350, 400);
+	Size = ::Size(350, 400);
 	ControlBox = true;
+	KeyPreview = true;
 
 	UserDefined::GetProperties(this);
 
 	ResumeLayout(false);
+
+	stickyNote = gcnew StickyNote;
 	mainWindow = gcnew MainWindow;
 	mainWindow->Show();
+	currentPage = mainWindow;
 
 	Window::tooltip->AutoPopDelay = 5000;
 	Window::tooltip->InitialDelay = 1000;
@@ -55,7 +61,6 @@ AppForm::AppForm()
 }
 void AppForm::OnShown(EventArgs ^e)
 {
-	Form::OnShown(e);
 	if (defaultLoadFile != String::Empty)
 	{
 		String
@@ -69,4 +74,20 @@ void AppForm::OnShown(EventArgs ^e)
 		mainWindow->ClickTextFilesButton();
 		mainWindow->textFilesWindow->InitDefaultLoadFile(fileName, s);
 	}
+	Form::OnShown(e);
+}
+void AppForm::OnFormClosed(FormClosedEventArgs ^e)
+{
+	if (!File::Exists(RESOURCES_FOLDER_NAME + L"\\__note__"))
+		File::Create(RESOURCES_FOLDER_NAME + L"\\__note__");
+
+	File::SetAttributes(RESOURCES_FOLDER_NAME + L"\\__note__", FileAttributes::Normal);
+	File::WriteAllText(RESOURCES_FOLDER_NAME + L"\\__note__", stickyNote->GetText());
+	File::SetAttributes(RESOURCES_FOLDER_NAME + L"\\__note__", FileAttributes::Hidden | FileAttributes::System);
+}
+void AppForm::OnKeyDown(KeyEventArgs ^e)
+{
+	if (((Window^)currentPage) != stickyNote && e->KeyCode == Keys::N && ((Control::ModifierKeys & Keys::Alt) == Keys::Alt))
+		((Window^)currentPage)->Display((Window^)stickyNote);
+	Form::OnKeyDown(e);
 }

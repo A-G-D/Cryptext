@@ -22,6 +22,7 @@
 
 #include "namespaces.h"
 #include "mainwindow.h"
+#include "stickynote.h"
 
 /*
 *	Form Class
@@ -29,11 +30,13 @@
 ref class AppForm : public Form
 {
 private:
+
 	MainWindow ^mainWindow;
+
+protected:
 
 	!AppForm()
 	{
-		delete mainWindow;
 	}
 	~AppForm()
 	{
@@ -43,13 +46,15 @@ private:
 public:
 
 	static String ^defaultLoadFile = String::Empty;
+	static AppForm ^Instance;
+
+	StickyNote ^stickyNote;
 
 	AppForm();
 
 	virtual void OnShown(EventArgs ^e) override;
-
-	static AppForm ^Instance;
-
+	virtual void OnFormClosed(FormClosedEventArgs ^e) override;
+	virtual void OnKeyDown(KeyEventArgs ^e) override;
 };
 #endif
 

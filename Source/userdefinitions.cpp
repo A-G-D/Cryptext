@@ -17,14 +17,15 @@
 */
 #include "userdefinitions.h"
 #include "namespaces.h"
+#include "macros.h"
 #include "utils.h"
 
 void UserDefined::GetProperties(Form ^form)
 {
-	if (File::Exists(L"Layout\\Window.txt"))
+	if (File::Exists(LAYOUT_FOLDER_NAME + L"\\Window.txt"))
 	{
 		String
-			^text(File::ReadAllText(L"Layout\\Window.txt")),
+			^text(File::ReadAllText(LAYOUT_FOLDER_NAME + L"\\Window.txt")),
 			^str(String::Empty);
 		short
 			phase(0),
@@ -174,10 +175,10 @@ void UserDefined::GetProperties(Form ^form)
 
 void UserDefined::GetProperties(String ^fileName, ...array<Control^> ^controls)
 {
-	if (File::Exists(L"Layout\\" + fileName))
+	if (File::Exists(LAYOUT_FOLDER_NAME + L"\\" + fileName))
 	{
 		String
-			^text(File::ReadAllText(L"Layout\\" + fileName)),
+			^text(File::ReadAllText(LAYOUT_FOLDER_NAME + L"\\" + fileName)),
 			^str(String::Empty);
 		short
 			phase(0),

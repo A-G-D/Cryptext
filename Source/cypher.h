@@ -25,6 +25,7 @@
 ref class Cypher
 {
 private:
+
 	static Hashtable
 		alphaTable,
 		translationTable,

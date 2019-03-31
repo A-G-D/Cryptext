@@ -31,37 +31,23 @@ void TextEditingWindow::InitializeComponent()
 {
 	CreateTextBox(textboxFileName, L"textboxFileName", 12, 26, 145, 20, 0, AnchorType::TOP_LEFT, false);
 
-	CreateComboBox(cboxTranslation, L"cboxTranslation", 177, 26, 145, 20, 1, AnchorType::TOP_RIGHT, gcnew EventHandler(this, &TextEditingWindow::OnCBoxLostFocus));
+	CreateComboBox(cboxTranslation, L"cboxTranslation", 177, 26, 145, 20, 1, AnchorType::TOP_RIGHT, gcnew EventHandler(this, &TextEditingWindow::OnCBoxTranslationLostFocus));
 	cboxTranslation->SelectedText = L"< Select Translation >";
 
-	textboxInput = gcnew TextBox;
+	CreateTextBox(textboxInput, L"textboxInput", 12, 78, 310, 104, 2, AnchorType::CENTER, true);
 	textboxInput->AcceptsReturn = true;
 	textboxInput->AcceptsTab = true;
-	textboxInput->Location = Point(12, 78);
 	textboxInput->MaxLength = 67108864 - 1;
-	textboxInput->Multiline = true;
-	textboxInput->Name = L"textboxInput";
 	textboxInput->ScrollBars = ScrollBars::Both;
-	textboxInput->Size = Size(310, 104); //310, 104
-	textboxInput->Anchor = (AnchorStyles)AnchorType::CENTER;
-	textboxInput->TabIndex = 2;
 	textboxInput->KeyDown += gcnew KeyEventHandler(this, &TextEditingWindow::OnTextboxInputKeyDown);
 	textboxInput->KeyPress += gcnew KeyPressEventHandler(this, &TextEditingWindow::OnTextboxInputKeyPress);
-	textboxInput->ContextMenu = gcnew ContextMenu;
 
-	textboxOutput = gcnew TextBox;
+	CreateTextBox(textboxOutput, L"textboxOutput", 12, 68 + 145, 310, 104, 3, AnchorType::CENTER, true);
 	textboxOutput->ReadOnly = true;
 	textboxOutput->AcceptsReturn = true;
 	textboxOutput->AcceptsTab = true;
-	textboxOutput->Location = Point(12, 68 + 145);
 	textboxOutput->MaxLength = (textboxInput->MaxLength + 1)*32 - 1;
-	textboxOutput->Multiline = true;
-	textboxOutput->Name = L"textboxOutput";
 	textboxOutput->ScrollBars = ScrollBars::Both;
-	textboxOutput->Size = Size(310, 104);
-	textboxOutput->Anchor = (AnchorStyles)AnchorType::CENTER;
-	textboxOutput->TabIndex = 3;
-	textboxOutput->ContextMenu = gcnew ContextMenu;
 
 	CreateButton(btnBack, L"btnBack", L"Back", 12, 325, BUTTON_WIDTH, BUTTON_HEIGHT, 5, AnchorType::BOTTOM_LEFT, gcnew EventHandler(this, &TextEditingWindow::OnBtnBackClick));
 	CreateButton(btnSave, L"btnSave", L"Save", 247, 325, BUTTON_WIDTH, BUTTON_HEIGHT, 4, AnchorType::BOTTOM_RIGHT, gcnew EventHandler(this, &TextEditingWindow::OnBtnSaveClick));
@@ -231,7 +217,7 @@ int TextEditingWindow::DeleteTextBackwards(String ^%s, int sStart, int sLength)
 
 	return start;
 }
-void TextEditingWindow::OnCBoxLostFocus(Object ^sender, EventArgs ^e)
+void TextEditingWindow::OnCBoxTranslationLostFocus(Object ^sender, EventArgs ^e)
 {
 	if (cboxTranslation->Text == String::Empty)
 		cboxTranslation->SelectedIndex = -1;
@@ -511,6 +497,7 @@ void TextEditingWindow::Show()
 		Directory::CreateDirectory(TRANSLATION_FILES_FOLDER_NAME);
 	cboxTranslation->EndUpdate();
 	cboxTranslation->SelectedIndex = cboxTranslation->FindStringExact(activeTranslation);
+
 	Window::Show();
 
 	ResumeLayout();
@@ -526,6 +513,7 @@ void TextEditingWindow::Hide()
 	textboxFileName->Hide();
 	tlpanelTextboxContainer->Hide();
 	cboxTranslation->Hide();
+
 	Window::Hide();
 }
 bool TextEditingWindow::Load(String ^fileName)

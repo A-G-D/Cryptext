@@ -24,6 +24,7 @@
 #include "window.h"
 #include "textfileswindow.h"
 #include "aboutwindow.h"
+#include "translatorwindow.h"
 
 /*
 *	MainWindow Class
@@ -31,29 +32,31 @@
 ref class MainWindow : public Window
 {
 public:
+
 	TextFilesWindow ^textFilesWindow;
 	AboutWindow ^aboutWindow;
+	TranslatorWindow ^translatorWindow;
 
 private:
+
 	Button
 		^btnTextFiles,
-		^btnTranslationFiles;
+		^btnTranslationFiles,
+		^btnTranslator;
 
 	LinkLabel ^lnklabelAbout;
 
 	void InitializeComponent();
 	void OnBtnTextFilesClick(Object ^sender, EventArgs ^e);
 	void OnBtnTranslationFilesClick(Object ^sender, EventArgs ^e);
+	void OnBtnTranslatorClick(Object ^sender, EventArgs ^e);
 	void OnLnkLabelAboutClick(Object ^sender, LinkLabelLinkClickedEventArgs ^e);
 
 protected:
 
 	!MainWindow()
 	{
-		delete textFilesWindow;
-		delete aboutWindow;
 	}
-
 	~MainWindow()
 	{
 		this->!MainWindow();

@@ -27,14 +27,16 @@ void MainWindow::InitializeComponent()
 {
 	CreateButton(btnTextFiles, L"btnTextFiles", L"Text Files", 12, 27, 310, 33, 0, AnchorType::CENTER_TOP, gcnew EventHandler(this, &MainWindow::OnBtnTextFilesClick));
 	CreateButton(btnTranslationFiles, L"btnTranslationFiles", L"Translation Files", 12, 66, 310, 33, 1, AnchorType::CENTER_TOP, gcnew EventHandler(this, &MainWindow::OnBtnTranslationFilesClick));
+	CreateButton(btnTranslator, L"btnTranslator", L"Translator", 12, 105, 310, 33, 2, AnchorType::CENTER_TOP, gcnew EventHandler(this, &MainWindow::OnBtnTranslatorClick));
 	CreateLinkLabel(lnklabelAbout, L"lnklabelAbout", L"About", 147, 335, 20, 20, 2, AnchorType::BOTTOM, gcnew LinkLabelLinkClickedEventHandler(this, &MainWindow::OnLnkLabelAboutClick));
 
-	UserDefined::GetProperties(L"MainPage.txt", btnTextFiles, btnTranslationFiles, lnklabelAbout);
+	UserDefined::GetProperties(L"MainPage.txt", btnTextFiles, btnTranslationFiles, btnTranslator, lnklabelAbout);
 
 	PauseLayout();
 
 	Add(btnTextFiles);
 	Add(btnTranslationFiles);
+	Add(btnTranslator);
 	Add(lnklabelAbout);
 
 	ResumeLayout();
@@ -49,6 +51,10 @@ void MainWindow::OnBtnTranslationFilesClick(Object ^sender, EventArgs ^e)
 	textFilesWindow->flag = false;
 	Display(textFilesWindow);
 }
+void MainWindow::OnBtnTranslatorClick(Object ^sender, EventArgs ^e)
+{
+	Display(translatorWindow);
+}
 void MainWindow::OnLnkLabelAboutClick(Object ^sender, LinkLabelLinkClickedEventArgs ^e)
 {
 	Display(aboutWindow);
@@ -56,6 +62,7 @@ void MainWindow::OnLnkLabelAboutClick(Object ^sender, LinkLabelLinkClickedEventA
 MainWindow::MainWindow()
 {
 	textFilesWindow = gcnew TextFilesWindow(this);
+	translatorWindow = gcnew TranslatorWindow(this);
 	aboutWindow = gcnew AboutWindow(this);
 	InitializeComponent();
 }
@@ -63,6 +70,7 @@ void MainWindow::Show()
 {
 	btnTextFiles->Show();
 	btnTranslationFiles->Show();
+	btnTranslator->Show();
 	lnklabelAbout->Show();
 
 	Window::Show();
@@ -71,6 +79,7 @@ void MainWindow::Hide()
 {
 	btnTextFiles->Hide();
 	btnTranslationFiles->Hide();
+	btnTranslator->Hide();
 	lnklabelAbout->Hide();
 
 	Window::Hide();

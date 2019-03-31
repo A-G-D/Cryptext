@@ -6,7 +6,7 @@
 .FontStyle=
 .Text=
 
-[btnImport]
+[btnTranslateToText]
 .BackColor=
 .ForeColor=
 .FontFamily=
@@ -14,23 +14,7 @@
 .FontStyle=
 .Text=
 
-[btnExport]
-.BackColor=
-.ForeColor=
-.FontFamily=
-.FontSize=
-.FontStyle=
-.Text=
-
-[btnSave]
-.BackColor=
-.ForeColor=
-.FontFamily=
-.FontSize=
-.FontStyle=
-.Text=
-
-[labelFileName]
+[btnTranslateToCode]
 .BackColor=
 .ForeColor=
 .FontFamily=
@@ -55,14 +39,6 @@
 .Text=
 
 [labelOutput]
-.BackColor=
-.ForeColor=
-.FontFamily=
-.FontSize=
-.FontStyle=
-.Text=
-
-[textboxFileName]
 .BackColor=
 .ForeColor=
 .FontFamily=
