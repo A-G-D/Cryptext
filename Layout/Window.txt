@@ -5,4 +5,4 @@
 .FontSize=
 .FontStyle=
 .Text=
-.Icon=
+.Icon=Resources\icon.ico

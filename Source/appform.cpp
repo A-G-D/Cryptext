@@ -79,7 +79,7 @@ void AppForm::OnShown(EventArgs ^e)
 void AppForm::OnFormClosed(FormClosedEventArgs ^e)
 {
 	if (!File::Exists(RESOURCES_FOLDER_NAME + L"\\__note__"))
-		File::Create(RESOURCES_FOLDER_NAME + L"\\__note__");
+		File::Create(RESOURCES_FOLDER_NAME + L"\\__note__")->Close();
 
 	File::SetAttributes(RESOURCES_FOLDER_NAME + L"\\__note__", FileAttributes::Normal);
 	File::WriteAllText(RESOURCES_FOLDER_NAME + L"\\__note__", stickyNote->GetText());

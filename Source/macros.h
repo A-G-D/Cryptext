@@ -24,7 +24,7 @@
 #include "namespaces.h"
 
 #define APPLICATION_NAME						L"Cryptext"
-#define VERSION									L"1.2.0"
+#define VERSION									L"1.2.1"
 
 #define TEXT_FILES_FOLDER_NAME					L"Texts"
 #define TRANSLATION_FILES_FOLDER_NAME			L"Translations"

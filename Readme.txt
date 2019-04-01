@@ -1,4 +1,4 @@
-Cryptext v1.2.0
+Cryptext v1.2.1
 
 
 CREATING AN ENCRYPTED TEXT
