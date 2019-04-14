@@ -54,6 +54,7 @@ public:
 	virtual void Hide() override;
 
 	String ^GetText();
+	void WriteText(String ^text);
 };
 #endif
 

@@ -30,6 +30,11 @@
 */
 ref class TextFilesWindow : public Window
 {
+public:
+
+	TextEditingWindow ^textEditingWindow;
+	TranslationEditingWindow ^translationEditingWindow;
+
 private:
 
 	Window ^prevForm;
@@ -39,9 +44,6 @@ private:
 		^btnEditText,
 		^btnDeleteText;
 	ListBox ^listboxTextFiles;
-
-	TextEditingWindow ^textEditingWindow;
-	TranslationEditingWindow ^translationEditingWindow;
 
 	void InitializeComponent();
 	void OnBtnBackClick(Object ^sender, EventArgs ^e);
@@ -67,7 +69,7 @@ public:
 
 	void UpdateList();
 
-	void InitDefaultLoadFile(String ^fileName, String ^fileContent);
+	void LoadTranslationOnInit(String ^filePath);
 
 	virtual void Show() override;
 	virtual void Hide() override;

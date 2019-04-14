@@ -27,15 +27,13 @@ using namespace System::Windows::Forms;
 
 bool ADVANCED_FLAG = false;
 
-gcroot<stringtable^> strtable(gcnew stringtable(RESOURCES_FOLDER_NAME + L"\\stringtable"));
+gcroot<stringtable^> strtable(gcnew stringtable(AppDomain::CurrentDomain->BaseDirectory + L"\\" + RESOURCES_FOLDER_NAME + L"\\" + STRING_TABLE_FILE_NAME));
 gcroot<Window^> currentPage;
 
 [STAThread]
 void Main(array<String^> ^args)
 {
-	Mutex ^mutex(gcnew Mutex(false, APPLICATION_NAME + L".exe"));
-
-	if (mutex->WaitOne(0, false))
+	if ((gcnew Mutex(false, APPLICATION_NAME + L".exe"))->WaitOne(0, false))
 	{
 		bool styled(true);
 
@@ -43,14 +41,18 @@ void Main(array<String^> ^args)
 		{
 			if (args[i] == L"-basicstyle")
 				styled = false;
+
 			else if (args[i] == L"-load" && i < args->Length - 1)
 			{
 				if (File::Exists(args[++i]))
 					AppForm::defaultLoadFile = args[i];
 			}
+			else if (File::Exists(args[i]))
+				AppForm::defaultLoadFile = args[i];
+
 			else if (args[i] == L"-advanced")
 			{
-				// To be continued =======>
+				// To Be Continued =======>
 			}
 		}
 		if (styled)

@@ -65,12 +65,13 @@ void TextFilesWindow::OnBtnEditTextClick(Object ^sender, EventArgs ^e)
 {
 	if (listboxTextFiles->SelectedItem != nullptr)
 	{
+		String ^itemName(listboxTextFiles->SelectedItem->ToString());
 		if (flag)
 		{
-			if (textEditingWindow->Load(listboxTextFiles->SelectedItem->ToString()))
+			if (textEditingWindow->Load(AppDomain::CurrentDomain->BaseDirectory + L"\\" + TEXT_FILES_FOLDER_NAME + L"\\" + itemName + L"\\" + itemName + TEXT_FILE_EXTENSION, true))
 				Display(textEditingWindow);
 		}
-		else if (translationEditingWindow->Load(listboxTextFiles->SelectedItem->ToString()))
+		else if (translationEditingWindow->Load(AppDomain::CurrentDomain->BaseDirectory + L"\\" + TRANSLATION_FILES_FOLDER_NAME + L"\\" + itemName + TRANSLATION_FILE_EXTENSION))
 			Display(translationEditingWindow);
 	}
 }
@@ -79,9 +80,9 @@ void TextFilesWindow::OnBtnDeleteTextClick(Object ^sender, EventArgs ^e)
 	if (listboxTextFiles->SelectedItem != nullptr)
 	{
 		if (flag)
-			Directory::Delete(TEXT_FILES_FOLDER_NAME + L"\\" + listboxTextFiles->SelectedItem->ToString(), true);
+			Directory::Delete(AppDomain::CurrentDomain->BaseDirectory + L"\\" + TEXT_FILES_FOLDER_NAME + L"\\" + listboxTextFiles->SelectedItem->ToString(), true);
 		else
-			File::Delete(TRANSLATION_FILES_FOLDER_NAME + L"\\" + listboxTextFiles->SelectedItem->ToString() + TRANSLATION_FILE_EXTENSION);
+			File::Delete(AppDomain::CurrentDomain->BaseDirectory + L"\\" + TRANSLATION_FILES_FOLDER_NAME + L"\\" + listboxTextFiles->SelectedItem->ToString() + TRANSLATION_FILE_EXTENSION);
 		UpdateList();
 	}
 }
@@ -103,15 +104,15 @@ void TextFilesWindow::UpdateList()
 	if (flag)
 	{
 		if (!GetTextFiles(listboxTextFiles->Items))
-			Directory::CreateDirectory(TEXT_FILES_FOLDER_NAME);
+			Directory::CreateDirectory(AppDomain::CurrentDomain->BaseDirectory + L"\\" + TEXT_FILES_FOLDER_NAME);
 	}
 	else if (!GetTranslations(listboxTextFiles->Items))
-		Directory::CreateDirectory(TRANSLATION_FILES_FOLDER_NAME);
+		Directory::CreateDirectory(AppDomain::CurrentDomain->BaseDirectory + L"\\" + TRANSLATION_FILES_FOLDER_NAME);
 }
-void TextFilesWindow::InitDefaultLoadFile(String ^fileName, String ^fileContent)
+void TextFilesWindow::LoadTranslationOnInit(String ^filePath)
 {
-	Display(textEditingWindow);
-	textEditingWindow->SetupData(fileName, fileContent);
+	translationEditingWindow->Load(filePath);
+	Display(translationEditingWindow);
 }
 void TextFilesWindow::Show()
 {
@@ -124,7 +125,6 @@ void TextFilesWindow::Show()
 	listboxTextFiles->Show();
 
 	UpdateList();
-	Window::Show();
 
 	ResumeLayout();
 }
@@ -135,5 +135,4 @@ void TextFilesWindow::Hide()
 	btnEditText->Hide();
 	btnDeleteText->Hide();
 	listboxTextFiles->Hide();
-	Window::Hide();
 }

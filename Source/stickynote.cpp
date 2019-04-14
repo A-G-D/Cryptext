@@ -31,8 +31,8 @@ StickyNote::StickyNote()
 	CreateTextBox(textboxStickyNote, L"textboxStickyNote", 6, 6, 322, 348, 0, AnchorType::CENTER, true);
 	textboxStickyNote->KeyDown += gcnew KeyEventHandler(this, &StickyNote::OnEscKeyDown);
 
-	if (File::Exists(RESOURCES_FOLDER_NAME + L"\\__note__"))
-		textboxStickyNote->Text = File::ReadAllText(RESOURCES_FOLDER_NAME + L"\\__note__");
+	if (File::Exists(AppDomain::CurrentDomain->BaseDirectory + L"\\" + RESOURCES_FOLDER_NAME + L"\\" + STICKY_NOTE_FILE_NAME))
+		textboxStickyNote->Text = File::ReadAllText(AppDomain::CurrentDomain->BaseDirectory + L"\\" + RESOURCES_FOLDER_NAME + L"\\" + STICKY_NOTE_FILE_NAME);
 
 	UserDefined::GetProperties(L"StickyNotePage.txt", textboxStickyNote);
 
@@ -55,16 +55,16 @@ void StickyNote::Show()
 	prevForm = currentPage;
 
 	textboxStickyNote->Show();
-
-	Window::Show();
 }
 void StickyNote::Hide()
 {
 	textboxStickyNote->Hide();
-
-	Window::Hide();
 }
 String ^StickyNote::GetText()
 {
 	return textboxStickyNote->Text;
+}
+void StickyNote::WriteText(String ^text)
+{
+	textboxStickyNote->Text = text;
 }

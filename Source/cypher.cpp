@@ -283,14 +283,13 @@ String ^Cypher::TranslateAllText(String ^text)
 }
 String ^Cypher::GetEqualTranslation(String ^string)
 {
-	if (Directory::Exists(TRANSLATION_FILES_FOLDER_NAME))
+	String ^directoryPath(AppDomain::CurrentDomain->BaseDirectory + L"\\" + TRANSLATION_FILES_FOLDER_NAME);
+	if (Directory::Exists(directoryPath))
 	{
-		int suffixLength = ((String^)TRANSLATION_FILE_EXTENSION)->Length,
-			dirLength = ((String^)TRANSLATION_FILES_FOLDER_NAME)->Length;
-		array<String^> ^files = Directory::GetFiles(TRANSLATION_FILES_FOLDER_NAME);
+		array<String^> ^files = Directory::GetFiles(directoryPath);
 		for (int i = 0; i < files->Length; ++i)
 			if (files[i]->EndsWith(TRANSLATION_FILE_EXTENSION) && IsEqual(string, File::ReadAllText(files[i])))
-				return files[i]->Substring(dirLength + 1, files[i]->Length - dirLength - (suffixLength + 1));
+				return Path::GetFileNameWithoutExtension(files[i]);
 	}
 	return String::Empty;
 }

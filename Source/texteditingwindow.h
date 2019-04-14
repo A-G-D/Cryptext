@@ -72,8 +72,8 @@ private:
 	void OnBtnImportClick(Object ^sender, EventArgs ^e);
 	void OnBtnExportClick(Object ^sender, EventArgs ^e);
 
-	bool LoadKey(String ^fileName);
-	bool LoadData(String ^fileName);
+	bool LoadKey(String ^filePath);
+	bool LoadData(String ^filePath);
 
 protected:
 
@@ -90,9 +90,7 @@ public:
 	virtual void Show() override;
 	virtual void Hide() override;
 
-	bool Load(String ^fileName);
-
-	void SetupData(String ^fileName, String ^fileContent);
+	bool Load(String ^filePath, bool showError);
 
 	TextEditingWindow(Window ^form);
 };

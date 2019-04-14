@@ -26,7 +26,7 @@
 /*
 *	Parent Window Class
 */
-ref class Window
+ref class Window abstract
 {
 protected:
 
@@ -50,8 +50,8 @@ public:
 	static void ResumeLayout();
 	static void PerformLayout();
 
-	virtual void Show();
-	virtual void Hide();
+	virtual void Show() = 0;
+	virtual void Hide() = 0;
 
 	void Display(Window ^form);
 };

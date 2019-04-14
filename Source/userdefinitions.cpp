@@ -22,10 +22,11 @@
 
 void UserDefined::GetProperties(Form ^form)
 {
-	if (File::Exists(LAYOUT_FOLDER_NAME + L"\\Window.txt"))
+	String ^filePath(AppDomain::CurrentDomain->BaseDirectory + L"\\" + LAYOUT_FOLDER_NAME + L"\\Window.txt");
+	if (File::Exists(filePath))
 	{
 		String
-			^text(File::ReadAllText(LAYOUT_FOLDER_NAME + L"\\Window.txt")),
+			^text(File::ReadAllText(filePath)),
 			^str(String::Empty);
 		short
 			phase(0),
@@ -175,10 +176,11 @@ void UserDefined::GetProperties(Form ^form)
 
 void UserDefined::GetProperties(String ^fileName, ...array<Control^> ^controls)
 {
-	if (File::Exists(LAYOUT_FOLDER_NAME + L"\\" + fileName))
+	String ^filePath(AppDomain::CurrentDomain->BaseDirectory + L"\\" + LAYOUT_FOLDER_NAME + L"\\" + fileName);
+	if (File::Exists(filePath))
 	{
 		String
-			^text(File::ReadAllText(LAYOUT_FOLDER_NAME + L"\\" + fileName)),
+			^text(File::ReadAllText(filePath)),
 			^str(String::Empty);
 		short
 			phase(0),

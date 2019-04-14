@@ -236,7 +236,7 @@ void TextEditingWindow::OnCBoxTranslationLostFocus(Object ^sender, EventArgs ^e)
 	{
 		bool rewriteOutput = activeTranslation != cboxTranslation->Text;
 		activeTranslation = cboxTranslation->Text;
-		Cypher::Load(TRANSLATION_FILES_FOLDER_NAME + L"\\" + activeTranslation + TRANSLATION_FILE_EXTENSION);
+		Cypher::Load(AppDomain::CurrentDomain->BaseDirectory + L"\\" + TRANSLATION_FILES_FOLDER_NAME + L"\\" + activeTranslation + TRANSLATION_FILE_EXTENSION);
 		if (rewriteOutput)
 			textboxOutput->Text = Cypher::TranslateAllText(textboxInput->Text);
 	}
@@ -385,20 +385,20 @@ void TextEditingWindow::OnBtnBackClick(Object ^sender, EventArgs ^e)
 }
 void TextEditingWindow::OnBtnSaveClick(Object ^sender, EventArgs ^e)
 {
-	String ^newName(TEXT_FILES_FOLDER_NAME + L"\\" + textboxFileName->Text + L"\\" + textboxFileName->Text);
+	String ^newName(AppDomain::CurrentDomain->BaseDirectory + L"\\" + TEXT_FILES_FOLDER_NAME + L"\\" + textboxFileName->Text + L"\\" + textboxFileName->Text);
 	if (textboxFileName->Text == String::Empty)
 		MessageBox::Show(MESSAGE_CREATE_FILE_FAILURE, CAPTION_CREATE_FILE_FAILURE, MessageBoxButtons::OK);
 
 	else
 	{
 		String
-			^currentPath(TEXT_FILES_FOLDER_NAME + L"\\" + activeFile + L"\\" + activeFile + KEY_FILE_EXTENSION),
+			^currentPath(AppDomain::CurrentDomain->BaseDirectory + L"\\" + TEXT_FILES_FOLDER_NAME + L"\\" + activeFile + L"\\" + activeFile + KEY_FILE_EXTENSION),
 			^keyOutput(String::Empty);
 
 		if (cboxTranslation->SelectedIndex > -1)
 		{
 			activeTranslation = cboxTranslation->SelectedItem->ToString();
-			String ^translationText(activeTranslation + L"\n\n" + File::ReadAllText(TRANSLATION_FILES_FOLDER_NAME + L"\\" + activeTranslation + TRANSLATION_FILE_EXTENSION));
+			String ^translationText(activeTranslation + L"\n\n" + File::ReadAllText(AppDomain::CurrentDomain->BaseDirectory + L"\\" + TRANSLATION_FILES_FOLDER_NAME + L"\\" + activeTranslation + TRANSLATION_FILE_EXTENSION));
 
 			Cypher::LoadInternal();
 			keyOutput = Cypher::TranslateAllText(translationText);
@@ -406,7 +406,7 @@ void TextEditingWindow::OnBtnSaveClick(Object ^sender, EventArgs ^e)
 		}
 		else if (File::Exists(currentPath))
 		{
-			if (LoadKey(activeFile))
+			if (LoadKey(currentPath))
 				keyOutput = File::ReadAllText(currentPath);
 			else
 			{
@@ -423,8 +423,8 @@ void TextEditingWindow::OnBtnSaveClick(Object ^sender, EventArgs ^e)
 		if (activeFile != textboxFileName->Text)
 		{
 			if (activeFile != String::Empty && activeFile != nullptr)
-				Directory::Delete(TEXT_FILES_FOLDER_NAME + L"\\" + activeFile, true);
-			Directory::CreateDirectory(TEXT_FILES_FOLDER_NAME + L"\\" + textboxFileName->Text);
+				Directory::Delete(AppDomain::CurrentDomain->BaseDirectory + L"\\" + TEXT_FILES_FOLDER_NAME + L"\\" + activeFile, true);
+			Directory::CreateDirectory(AppDomain::CurrentDomain->BaseDirectory + L"\\" + TEXT_FILES_FOLDER_NAME + L"\\" + textboxFileName->Text);
 			activeFile = textboxFileName->Text;
 		}
 		File::WriteAllText(newName + TEXT_FILE_EXTENSION, textboxOutput->Text);
@@ -438,7 +438,7 @@ void TextEditingWindow::OnBtnImportClick(Object ^sender, EventArgs ^e)
 		textboxInput->Text = File::ReadAllText(Path::GetFullPath(dialogImport->FileName));
 		if (cboxTranslation->SelectedIndex > -1)
 		{
-			Cypher::Load(TRANSLATION_FILES_FOLDER_NAME + L"\\" + cboxTranslation->SelectedItem->ToString() + TRANSLATION_FILE_EXTENSION);
+			Cypher::Load(AppDomain::CurrentDomain->BaseDirectory + L"\\" + TRANSLATION_FILES_FOLDER_NAME + L"\\" + cboxTranslation->SelectedItem->ToString() + TRANSLATION_FILE_EXTENSION);
 			textboxOutput->Text = Cypher::TranslateAllText(textboxInput->Text);
 			Cypher::Clear();
 		}
@@ -449,25 +449,25 @@ void TextEditingWindow::OnBtnExportClick(Object ^sender, EventArgs ^e)
 	if (dialogExport->ShowDialog() == System::Windows::Forms::DialogResult::OK)
 		File::WriteAllText(Path::GetFullPath(dialogExport->FileName), textboxOutput->Text);
 }
-bool TextEditingWindow::LoadKey(String ^fileName)
+bool TextEditingWindow::LoadKey(String ^filePath)
 {
 	Cypher::LoadInternal();
-	String ^decrypted(Cypher::ReadAllText(File::ReadAllText(TEXT_FILES_FOLDER_NAME + L"\\" + fileName + L"\\" + fileName + KEY_FILE_EXTENSION)));
+	String ^decrypted(Cypher::ReadAllText(File::ReadAllText(filePath)));
 
 	if (Cypher::LoadFromString(decrypted))
 	{
 		activeTranslation = Cypher::GetEqualTranslation(decrypted);
-		activeFile = fileName;
+		activeFile = Path::GetFileNameWithoutExtension(filePath);
 		return true;
 	}
 	return false;
 }
-bool TextEditingWindow::LoadData(String ^fileName)
+bool TextEditingWindow::LoadData(String ^filePath)
 {
 	Cypher::LoadInternal();
-	String ^outputText(File::ReadAllText(TEXT_FILES_FOLDER_NAME + L"\\" + fileName + L"\\" + fileName + TEXT_FILE_EXTENSION));
+	String ^outputText(File::ReadAllText(filePath));
 
-	if (LoadKey(fileName))
+	if (LoadKey(Path::GetDirectoryName(filePath) + L"\\" + Path::GetFileNameWithoutExtension(filePath) + KEY_FILE_EXTENSION))
 	{
 		textboxFileName->Text = activeFile;
 		textboxInput->Text = Cypher::ReadAllText(outputText)->Replace(L"\n", L"\r\n");
@@ -494,11 +494,9 @@ void TextEditingWindow::Show()
 	cboxTranslation->BeginUpdate();
 	cboxTranslation->Items->Clear();
 	if (!GetTranslations(cboxTranslation->Items))
-		Directory::CreateDirectory(TRANSLATION_FILES_FOLDER_NAME);
+		Directory::CreateDirectory(AppDomain::CurrentDomain->BaseDirectory + L"\\" + TRANSLATION_FILES_FOLDER_NAME);
 	cboxTranslation->EndUpdate();
 	cboxTranslation->SelectedIndex = cboxTranslation->FindStringExact(activeTranslation);
-
-	Window::Show();
 
 	ResumeLayout();
 }
@@ -513,23 +511,17 @@ void TextEditingWindow::Hide()
 	textboxFileName->Hide();
 	tlpanelTextboxContainer->Hide();
 	cboxTranslation->Hide();
-
-	Window::Hide();
 }
-bool TextEditingWindow::Load(String ^fileName)
+bool TextEditingWindow::Load(String ^filePath, bool showError)
 {
-	if (LoadKey(fileName))
+	if (LoadKey(Path::GetDirectoryName(filePath) + L"\\" + Path::GetFileNameWithoutExtension(filePath) + KEY_FILE_EXTENSION))
 	{
-		LoadData(fileName);
+		LoadData(filePath);
 		return true;
 	}
-	MessageBox::Show(MESSAGE_MISSING_KEY_ERROR, CAPTION_MISSING_KEY_ERROR, MessageBoxButtons::OK);
+	if (showError)
+		MessageBox::Show(MESSAGE_MISSING_KEY_ERROR, CAPTION_MISSING_KEY_ERROR, MessageBoxButtons::OK);
 	return false;
-}
-void TextEditingWindow::SetupData(String ^fileName, String ^fileContent)
-{
-	textboxFileName->Text = fileName;
-	textboxInput->Text = fileContent;
 }
 TextEditingWindow::TextEditingWindow(Window ^form)
 	: prevForm(form)

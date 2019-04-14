@@ -105,12 +105,11 @@ bool IsWhitespace(wchar_t c)
 
 bool GetTextFiles(Collections::IList ^%list)
 {
-	if (Directory::Exists(TEXT_FILES_FOLDER_NAME))
+	String ^directoryPath(AppDomain::CurrentDomain->BaseDirectory + L"\\" + TEXT_FILES_FOLDER_NAME);
+	if (Directory::Exists(directoryPath))
 	{
-		int
-			suffixLength(((String^)TEXT_FILE_EXTENSION)->Length),
-			rootLength(((String^)TEXT_FILES_FOLDER_NAME)->Length);
-		array<String^> ^%dirs(Directory::GetDirectories(TEXT_FILES_FOLDER_NAME));
+		int rootLength(directoryPath->Length);
+		array<String^> ^%dirs(Directory::GetDirectories(directoryPath));
 		for (int i = 0; i < dirs->Length; ++i)
 		{
 			String ^foldername(dirs[i]->Substring(rootLength + 1));
@@ -118,9 +117,9 @@ bool GetTextFiles(Collections::IList ^%list)
 			array<String^> ^%files(Directory::GetFiles(dirs[i]));
 			for (int j = 0; j < files->Length; ++j)
 			{
-				String ^filename(files[j]->Substring(dirs[i]->Length + 1, files[j]->Length - dirs[i]->Length - (suffixLength + 1)));
-				if (files[j]->EndsWith(TEXT_FILE_EXTENSION) && foldername->Equals(filename))
-					list->Add(filename);
+				String ^fileName(Path::GetFileNameWithoutExtension(files[j]));
+				if (files[j]->EndsWith(TEXT_FILE_EXTENSION) && foldername->Equals(fileName))
+					list->Add(fileName);
 			}
 		}
 		return true;
@@ -130,14 +129,14 @@ bool GetTextFiles(Collections::IList ^%list)
 
 bool GetTranslations(Collections::IList ^%list)
 {
-	if (Directory::Exists(TRANSLATION_FILES_FOLDER_NAME))
+	String ^directoryPath(AppDomain::CurrentDomain->BaseDirectory + L"\\" + TRANSLATION_FILES_FOLDER_NAME);
+	if (Directory::Exists(directoryPath))
 	{
-		int suffixLength(((String^)TRANSLATION_FILE_EXTENSION)->Length),
-			dirLength(((String^)TRANSLATION_FILES_FOLDER_NAME)->Length);
-		array<String^> ^%files = Directory::GetFiles(TRANSLATION_FILES_FOLDER_NAME);
+		int dirLength(directoryPath->Length);
+		array<String^> ^%files = Directory::GetFiles(directoryPath);
 		for (int i = 0; i < files->Length; ++i)
 			if (files[i]->EndsWith(TRANSLATION_FILE_EXTENSION))
-				list->Add(files[i]->Substring(dirLength + 1, files[i]->Length - dirLength - (suffixLength + 1)));
+				list->Add(Path::GetFileNameWithoutExtension(files[i]));
 		return true;
 	}
 	return false;

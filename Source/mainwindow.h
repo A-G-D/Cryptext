@@ -70,6 +70,7 @@ public:
 	virtual void Hide() override;
 
 	void ClickTextFilesButton();
+	void ClickTranslationFilesButton();
 };
 #endif
 

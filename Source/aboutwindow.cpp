@@ -29,7 +29,7 @@ bool licenseShown = false;
 
 void AboutWindow::InitializeComponent()
 {
-	String ^aboutText(L"\r\nVersion: " + VERSION + L"\r\n\r\nCheck for latest updates at: \r\n" + SOURCE_LINK_TEXT + L"\r\n\r\n\r\n\r\n\r\nCopyright © 2019 Aloever Dulay\r\n\r\nThis program is licensed under the GNU General Public License. For more information, see the license file that you received along with this program, or go to " + LICENSE_LINK_TEXT + L".");
+	String ^aboutText(L"\r\nVersion: " + VERSION + L"\r\n\r\nCheck for latest updates at: \r\n" + SOURCE_LINK_TEXT + L"\r\n\r\n\r\n\r\n\r\nCopyright © " + YEAR + L" " + AUTHOR_NAME + L"\r\n\r\nThis program is licensed under the GNU General Public License. For more information, see the license file that you received along with this program, or go to " + LICENSE_LINK_TEXT + L".");
 
 	CreatePanel(panelAbout, L"panelAbout", 12, 17, 310, 303, 1, AnchorType::CENTER, true);
 	CreateLinkLabel(lnklabelBack, L"btnBack", L"Back", 147, 335, 20, 20, 0, AnchorType::BOTTOM, gcnew LinkLabelLinkClickedEventHandler(this, &AboutWindow::OnLnkLabelBackClick));
@@ -42,14 +42,14 @@ void AboutWindow::InitializeComponent()
 
 	try
 	{
-		textboxLicense->Font = gcnew Font(L"Courier New", textboxLicense->Font->Size);
+		textboxLicense->Font = gcnew Font(LICENSE_TEXT_FONT_FAMILY, textboxLicense->Font->Size);
 	}
 	catch (...)
 	{
 	}
 
-	if (File::Exists(LICENSE_FILE_PATH))
-		textboxLicense->Text = File::ReadAllText(LICENSE_FILE_PATH);
+	if (File::Exists(AppDomain::CurrentDomain->BaseDirectory + L"\\" + LICENSE_FILE_NAME))
+		textboxLicense->Text = File::ReadAllText(AppDomain::CurrentDomain->BaseDirectory + L"\\" + LICENSE_FILE_NAME);
 
 	panelAbout->BackColor = Color::White;
 
@@ -99,7 +99,7 @@ void AboutWindow::OnLnkLabelAboutClick(Object ^sender, LinkLabelLinkClickedEvent
 			break;
 
 		case 1:
-			if (File::Exists(LICENSE_FILE_PATH))
+			if (File::Exists(AppDomain::CurrentDomain->BaseDirectory + L"\\" + LICENSE_FILE_NAME))
 			{
 				panelAbout->Hide();
 				textboxLicense->Show();
@@ -124,13 +124,9 @@ void AboutWindow::Show()
 {
 	lnklabelBack->Show();
 	panelAbout->Show();
-
-	Window::Show();
 }
 void AboutWindow::Hide()
 {
 	lnklabelBack->Hide();
 	panelAbout->Hide();
-
-	Window::Hide();
 }

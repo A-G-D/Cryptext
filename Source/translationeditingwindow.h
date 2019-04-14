@@ -77,7 +77,7 @@ public:
 
 	TranslationEditingWindow(Window ^form);
 
-	bool Load(String ^fileName);
+	bool Load(String ^filePath);
 
 	virtual void Show() override;
 	virtual void Hide() override;

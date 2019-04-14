@@ -72,8 +72,6 @@ void MainWindow::Show()
 	btnTranslationFiles->Show();
 	btnTranslator->Show();
 	lnklabelAbout->Show();
-
-	Window::Show();
 }
 void MainWindow::Hide()
 {
@@ -81,10 +79,12 @@ void MainWindow::Hide()
 	btnTranslationFiles->Hide();
 	btnTranslator->Hide();
 	lnklabelAbout->Hide();
-
-	Window::Hide();
 }
 void MainWindow::ClickTextFilesButton()
 {
 	OnBtnTextFilesClick(nullptr, nullptr);
+}
+void MainWindow::ClickTranslationFilesButton()
+{
+	OnBtnTranslationFilesClick(nullptr, nullptr);
 }

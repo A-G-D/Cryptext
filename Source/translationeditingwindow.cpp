@@ -177,7 +177,9 @@ void TranslationEditingWindow::OnBtnBackClick(Object ^sender, EventArgs ^e)
 }
 void TranslationEditingWindow::OnBtnSaveClick(Object ^sender, EventArgs ^e)
 {
-	String ^fileName = TRANSLATION_FILES_FOLDER_NAME + L"\\" + textboxFileName->Text;
+	String
+		^directoryPath(AppDomain::CurrentDomain->BaseDirectory + L"\\" + TRANSLATION_FILES_FOLDER_NAME),
+		^filePath(directoryPath + L"\\" + textboxFileName->Text);
 
 	if (activeFile == String::Empty)
 		MessageBox::Show(MESSAGE_CREATE_TRANSLATION_SUCCESS, CAPTION_CREATE_TRANSLATION_SUCCESS, MessageBoxButtons::OK);
@@ -189,9 +191,9 @@ void TranslationEditingWindow::OnBtnSaveClick(Object ^sender, EventArgs ^e)
 	}
 	else if (activeFile != textboxFileName->Text)
 	{
-		File::Delete(TRANSLATION_FILES_FOLDER_NAME + L"\\" + activeFile + TRANSLATION_FILE_EXTENSION);
+		File::Delete(directoryPath + L"\\" + activeFile + TRANSLATION_FILE_EXTENSION);
 		activeFile = textboxFileName->Text;
-		fileName = TRANSLATION_FILES_FOLDER_NAME + L"\\" + activeFile;
+		filePath = directoryPath + L"\\" + activeFile;
 	}
 
 	String ^output(String::Empty);
@@ -210,18 +212,15 @@ void TranslationEditingWindow::OnBtnSaveClick(Object ^sender, EventArgs ^e)
 	GetInputChars(labelSymbols, textboxSymbols, output);
 	output += L"@\n\t\t\t{\n}\n";
 
-	File::WriteAllText(fileName + TRANSLATION_FILE_EXTENSION, output);
+	File::WriteAllText(filePath + TRANSLATION_FILE_EXTENSION, output);
 	Display(prevForm);
 }
-TranslationEditingWindow::TranslationEditingWindow(Window ^form)
-	: prevForm(form)
+bool TranslationEditingWindow::Load(String ^filePath)
 {
-	InitializeComponent();
-}
-bool TranslationEditingWindow::Load(String ^fileName)
-{
-	if (Cypher::Load(TRANSLATION_FILES_FOLDER_NAME + L"\\" + fileName + TRANSLATION_FILE_EXTENSION))
+	if (Cypher::Load(filePath))
 	{
+		String ^fileName(Path::GetFileNameWithoutExtension(filePath));
+
 		activeFile = fileName;
 		textboxFileName->Text = fileName;
 
@@ -250,7 +249,6 @@ void TranslationEditingWindow::Show()
 	btnBack->Show();
 	btnSave->Show();
 	cboxSeparatorChar->Show();
-	Window::Show();
 }
 void TranslationEditingWindow::Hide()
 {
@@ -262,9 +260,12 @@ void TranslationEditingWindow::Hide()
 	btnBack->Hide();
 	btnSave->Hide();
 	cboxSeparatorChar->Hide();
-	Window::Hide();
 }
-
+TranslationEditingWindow::TranslationEditingWindow(Window ^form)
+	: prevForm(form)
+{
+	InitializeComponent();
+}
 #undef upper
 #undef lower
 #undef number

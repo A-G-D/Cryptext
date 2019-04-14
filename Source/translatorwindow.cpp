@@ -122,7 +122,7 @@ void TranslatorWindow::OnCBoxTranslationLostFocus(Object ^sender, EventArgs ^e)
 	else
 	{
 		activeTranslation = cboxTranslation->Text;
-		Cypher::Load(TRANSLATION_FILES_FOLDER_NAME + L"\\" + activeTranslation + TRANSLATION_FILE_EXTENSION);
+		Cypher::Load(AppDomain::CurrentDomain->BaseDirectory + L"\\" + TRANSLATION_FILES_FOLDER_NAME + L"\\" + activeTranslation + TRANSLATION_FILE_EXTENSION);
 	}
 }
 
@@ -146,11 +146,9 @@ void TranslatorWindow::Show()
 	cboxTranslation->BeginUpdate();
 	cboxTranslation->Items->Clear();
 	if (!GetTranslations(cboxTranslation->Items))
-		Directory::CreateDirectory(TRANSLATION_FILES_FOLDER_NAME);
+		Directory::CreateDirectory(AppDomain::CurrentDomain->BaseDirectory + L"\\" + TRANSLATION_FILES_FOLDER_NAME);
 	cboxTranslation->EndUpdate();
 	cboxTranslation->SelectedIndex = cboxTranslation->FindStringExact(activeTranslation);
-
-	Window::Show();
 
 	ResumeLayout();
 }
@@ -162,6 +160,4 @@ void TranslatorWindow::Hide()
 	labelTranslation->Hide();
 	tlpanelTextboxContainer->Hide();
 	cboxTranslation->Hide();
-
-	Window::Hide();
 }

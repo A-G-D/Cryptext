@@ -28,12 +28,6 @@ void Window::Display(Window ^form)
 	form->Show();
 	currentPage = form;
 }
-void Window::Show()
-{
-}
-void Window::Hide()
-{
-}
 
 void Window::Add(Control ^control)
 {

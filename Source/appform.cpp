@@ -59,31 +59,77 @@ AppForm::AppForm()
 	Window::tooltip->ReshowDelay = 500;
 	Window::tooltip->ShowAlways = false;
 }
+
+void WriteToStickyNote(String ^filePath)
+{
+	String
+		^output(String::Empty),
+		^fileContent(File::ReadAllText(filePath));
+
+	for (int i(0); i < fileContent->Length; ++i)
+		if (fileContent[i] == (wchar_t)'\n' && (i  && fileContent[i - 1] != (wchar_t)'\r'))
+			output += L"\r\n";
+		else
+			output += fileContent[i];
+
+	AppForm::Instance->stickyNote->WriteText(output);
+	AppForm::Instance->mainWindow->Display(AppForm::Instance->stickyNote);
+}
 void AppForm::OnShown(EventArgs ^e)
 {
 	if (defaultLoadFile != String::Empty)
 	{
-		String
-			^fileName(defaultLoadFile->Substring(defaultLoadFile->LastIndexOf((wchar_t)'\\') + 1)),
-			^fileContent(File::ReadAllText(defaultLoadFile)),
-			^s(String::Empty);
+		String ^extension(Path::GetExtension(defaultLoadFile));
 
-		for (int i(0); i < fileContent->Length; ++i)
-			(fileContent[i] == (wchar_t)'\n') ? s += L"\r\n" : s += fileContent[i];
+		if (extension == TRANSLATION_FILE_EXTENSION)
+		{
+			mainWindow->ClickTranslationFilesButton();
+			mainWindow->textFilesWindow->LoadTranslationOnInit(defaultLoadFile);
+		}
+		else if (extension == TEXT_FILE_EXTENSION)
+		{
+			String ^keyPath(Path::GetDirectoryName(defaultLoadFile) + L"\\" + Path::GetFileNameWithoutExtension(defaultLoadFile) + KEY_FILE_EXTENSION);
 
-		mainWindow->ClickTextFilesButton();
-		mainWindow->textFilesWindow->InitDefaultLoadFile(fileName, s);
+			if (File::Exists(keyPath) && mainWindow->textFilesWindow->textEditingWindow->Load(defaultLoadFile, false))
+			{
+				mainWindow->ClickTextFilesButton();
+				mainWindow->textFilesWindow->Display(mainWindow->textFilesWindow->textEditingWindow);
+			}
+			else
+				WriteToStickyNote(defaultLoadFile);
+		}
+		else if (extension == KEY_FILE_EXTENSION)
+		{
+			String ^textPath(Path::GetDirectoryName(defaultLoadFile) + L"\\" + Path::GetFileNameWithoutExtension(defaultLoadFile) + TEXT_FILE_EXTENSION);
+
+			if (File::Exists(textPath) && mainWindow->textFilesWindow->textEditingWindow->Load(textPath, false))
+			{
+				mainWindow->ClickTextFilesButton();
+				mainWindow->textFilesWindow->Display(mainWindow->textFilesWindow->textEditingWindow);
+			}
+			else
+				WriteToStickyNote(textPath);
+		}
+		else
+			WriteToStickyNote(defaultLoadFile);
 	}
 	Form::OnShown(e);
 }
 void AppForm::OnFormClosed(FormClosedEventArgs ^e)
 {
-	if (!File::Exists(RESOURCES_FOLDER_NAME + L"\\__note__"))
-		File::Create(RESOURCES_FOLDER_NAME + L"\\__note__")->Close();
+	String
+		^directoryPath(AppDomain::CurrentDomain->BaseDirectory + L"\\" + RESOURCES_FOLDER_NAME),
+		^filePath(directoryPath + L"\\" + STICKY_NOTE_FILE_NAME);
 
-	File::SetAttributes(RESOURCES_FOLDER_NAME + L"\\__note__", FileAttributes::Normal);
-	File::WriteAllText(RESOURCES_FOLDER_NAME + L"\\__note__", stickyNote->GetText());
-	File::SetAttributes(RESOURCES_FOLDER_NAME + L"\\__note__", FileAttributes::Hidden | FileAttributes::System);
+	if (Directory::Exists(directoryPath))
+	{
+		if (!File::Exists(filePath))
+			File::Create(filePath)->Close();
+
+		File::SetAttributes(filePath, FileAttributes::Normal);
+		File::WriteAllText(filePath, stickyNote->GetText());
+		File::SetAttributes(filePath, FileAttributes::Hidden | FileAttributes::System);
+	}
 }
 void AppForm::OnKeyDown(KeyEventArgs ^e)
 {

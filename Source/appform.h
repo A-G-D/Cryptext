@@ -29,10 +29,6 @@
 */
 ref class AppForm : public Form
 {
-private:
-
-	MainWindow ^mainWindow;
-
 protected:
 
 	!AppForm()
@@ -48,6 +44,7 @@ public:
 	static String ^defaultLoadFile = String::Empty;
 	static AppForm ^Instance;
 
+	MainWindow ^mainWindow;
 	StickyNote ^stickyNote;
 
 	AppForm();
