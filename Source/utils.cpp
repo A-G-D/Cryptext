@@ -109,12 +109,12 @@ bool GetTextFiles(Collections::IList ^%list)
 	if (Directory::Exists(directoryPath))
 	{
 		int rootLength(directoryPath->Length);
-		array<String^> ^%dirs(Directory::GetDirectories(directoryPath));
+		array<String^> ^dirs(Directory::GetDirectories(directoryPath));
 		for (int i = 0; i < dirs->Length; ++i)
 		{
 			String ^foldername(dirs[i]->Substring(rootLength + 1));
 
-			array<String^> ^%files(Directory::GetFiles(dirs[i]));
+			array<String^> ^files(Directory::GetFiles(dirs[i]));
 			for (int j = 0; j < files->Length; ++j)
 			{
 				String ^fileName(Path::GetFileNameWithoutExtension(files[j]));
@@ -133,7 +133,7 @@ bool GetTranslations(Collections::IList ^%list)
 	if (Directory::Exists(directoryPath))
 	{
 		int dirLength(directoryPath->Length);
-		array<String^> ^%files = Directory::GetFiles(directoryPath);
+		array<String^> ^files(Directory::GetFiles(directoryPath));
 		for (int i = 0; i < files->Length; ++i)
 			if (files[i]->EndsWith(TRANSLATION_FILE_EXTENSION))
 				list->Add(Path::GetFileNameWithoutExtension(files[i]));
