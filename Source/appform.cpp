@@ -15,125 +15,36 @@
 *	If not, see <https://www.gnu.org/licenses/>.
 *
 */
-#include "appform.h"
-#include "stickynote.h"
-#include "mainwindow.h"
-#include "namespaces.h"
-#include "userdefinitions.h"
-#include "macros.h"
-#include "stringtable.h"
-#include <gcroot.h>
+#include "winformstemplate.h"
 
-extern gcroot<stringtable^> strtable;
-extern gcroot<Window^> currentPage;
+using namespace WinFormsTemplate;
 
 AppForm::AppForm()
+	: pages(gcnew ArrayList), ___p__currentPage(nullptr)
 {
-	Instance = this;
-	Name = APPLICATION_NAME;
-	Text = APPLICATION_NAME;
 	SetStyle(ControlStyles::SupportsTransparentBackColor, true);
-	MinimizeBox = true;
-	MaximizeBox = true;
-	ShowInTaskbar = true;
-	StartPosition = FormStartPosition::CenterScreen;
-	FormBorderStyle = ::FormBorderStyle::Sizable;
-	AutoScaleDimensions = SizeF(6, 13);
-	AutoScaleMode = ::AutoScaleMode::None;
-	MinimumSize = ::Size(350, 400);
-	Size = ::Size(350, 400);
-	ControlBox = true;
-	KeyPreview = true;
-
-	UserDefined::GetProperties(this);
-
-	ResumeLayout(false);
-
-	stickyNote = gcnew StickyNote;
-	mainWindow = gcnew MainWindow;
-	mainWindow->Show();
-	currentPage = mainWindow;
-
-	Window::tooltip->AutoPopDelay = 5000;
-	Window::tooltip->InitialDelay = 1000;
-	Window::tooltip->ReshowDelay = 500;
-	Window::tooltip->ShowAlways = false;
+}
+AppForm::~AppForm()
+{
 }
 
-void WriteToStickyNote(String ^filePath)
+ArrayList ^AppForm::GetPages()
 {
-	String
-		^output(String::Empty),
-		^fileContent(File::ReadAllText(filePath));
-
-	for (int i(0); i < fileContent->Length; ++i)
-		if (fileContent[i] == (wchar_t)'\n' && (i  && fileContent[i - 1] != (wchar_t)'\r'))
-			output += L"\r\n";
-		else
-			output += fileContent[i];
-
-	AppForm::Instance->stickyNote->WriteText(output);
-	AppForm::Instance->mainWindow->Display(AppForm::Instance->stickyNote);
+	return pages;
 }
-void AppForm::OnShown(EventArgs ^e)
+AppPage ^AppForm::GetCurrentPage()
 {
-	if (defaultLoadFile != String::Empty)
-	{
-		String ^extension(Path::GetExtension(defaultLoadFile));
-
-		if (extension == TRANSLATION_FILE_EXTENSION)
-		{
-			mainWindow->ClickTranslationFilesButton();
-			mainWindow->textFilesWindow->LoadTranslationOnInit(defaultLoadFile);
-		}
-		else if (extension == TEXT_FILE_EXTENSION)
-		{
-			String ^keyPath(Path::GetDirectoryName(defaultLoadFile) + L"\\" + Path::GetFileNameWithoutExtension(defaultLoadFile) + KEY_FILE_EXTENSION);
-
-			if (File::Exists(keyPath) && mainWindow->textFilesWindow->textEditingWindow->Load(defaultLoadFile, false))
-			{
-				mainWindow->ClickTextFilesButton();
-				mainWindow->textFilesWindow->Display(mainWindow->textFilesWindow->textEditingWindow);
-			}
-			else
-				WriteToStickyNote(defaultLoadFile);
-		}
-		else if (extension == KEY_FILE_EXTENSION)
-		{
-			String ^textPath(Path::GetDirectoryName(defaultLoadFile) + L"\\" + Path::GetFileNameWithoutExtension(defaultLoadFile) + TEXT_FILE_EXTENSION);
-
-			if (File::Exists(textPath) && mainWindow->textFilesWindow->textEditingWindow->Load(textPath, false))
-			{
-				mainWindow->ClickTextFilesButton();
-				mainWindow->textFilesWindow->Display(mainWindow->textFilesWindow->textEditingWindow);
-			}
-			else
-				WriteToStickyNote(textPath);
-		}
-		else
-			WriteToStickyNote(defaultLoadFile);
-	}
-	Form::OnShown(e);
+	return ___p__currentPage;
 }
-void AppForm::OnFormClosed(FormClosedEventArgs ^e)
+
+void AppForm::Add(AppPage ^page)
 {
-	String
-		^directoryPath(AppDomain::CurrentDomain->BaseDirectory + L"\\" + RESOURCES_FOLDER_NAME),
-		^filePath(directoryPath + L"\\" + STICKY_NOTE_FILE_NAME);
-
-	if (Directory::Exists(directoryPath))
-	{
-		if (!File::Exists(filePath))
-			File::Create(filePath)->Close();
-
-		File::SetAttributes(filePath, FileAttributes::Normal);
-		File::WriteAllText(filePath, stickyNote->GetText());
-		File::SetAttributes(filePath, FileAttributes::Hidden | FileAttributes::System);
-	}
+	page->___p__appForm = this;
+	page->Initialize();
+	Controls->AddRange(static_cast<array<Control^>^>(page->GetControls()->ToArray()));
+	pages->Add(page);
 }
-void AppForm::OnKeyDown(KeyEventArgs ^e)
+void AppForm::Add(...array<AppPage^> ^pages)
 {
-	if (((Window^)currentPage) != stickyNote && e->KeyCode == Keys::N && ((Control::ModifierKeys & Keys::Alt) == Keys::Alt))
-		((Window^)currentPage)->Display((Window^)stickyNote);
-	Form::OnKeyDown(e);
+	for (int i(pages->Length); i; Add(pages[--i]));
 }

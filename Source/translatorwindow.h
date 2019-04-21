@@ -21,16 +21,15 @@
 #define __TRANSLATORWINDOW_H__
 
 #include "namespaces.h"
-#include "window.h"
+#include "winformstemplate.h"
 
 /*
 *	TranslatorWindow Class
 */
-ref class TranslatorWindow : public Window
+ref class TranslatorWindow : public WinFormsTemplate::AppPage
 {
 private:
 
-	Window ^prevForm;
 	ComboBox ^cboxTranslation;
 	TableLayoutPanel ^tlpanelTextboxContainer;
 	Label
@@ -46,8 +45,6 @@ private:
 		^btnTranslateToText;
 
 	String ^activeTranslation;
-
-	void InitializeComponent();
 
 	void OnBtnBackClick(Object ^sender, EventArgs ^e);
 	void OnBtnTranslateToCodeClick(Object ^sender, EventArgs ^e);
@@ -65,12 +62,13 @@ protected:
 		this->!TranslatorWindow();
 	}
 
+	virtual void InitializeComponent() override;
+
+	virtual void OnShow() override;
+
 public:
 
-	TranslatorWindow(Window ^form);
-
-	virtual void Show() override;
-	virtual void Hide() override;
+	TranslatorWindow();
 };
 #endif
 

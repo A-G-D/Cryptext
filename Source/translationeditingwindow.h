@@ -21,16 +21,15 @@
 #define _TRANSLATIONEDITINGWINDOW_H_
 
 #include "namespaces.h"
-#include "window.h"
+#include "winformstemplate.h"
 
 /*
 *	TranslationEditingWindow Class
 */
-ref class TranslationEditingWindow : public Window
+ref class TranslationEditingWindow : public WinFormsTemplate::AppPage
 {
 private:
 
-	Window ^prevForm;
 	Panel ^panelTranslations;
 	TextBox ^textboxFileName;
 	ComboBox ^cboxSeparatorChar;
@@ -53,12 +52,6 @@ private:
 		^textboxSymbols;
 	String ^activeFile;
 
-	void CreateColumnElements(array<Label^> ^%label, array<TextBox^> ^%textbox, int size, int x, int charOffset, int tabOffset);
-
-	void InitializeComponent();
-	static void GetInputChars(array<Label^> ^label, array<TextBox^> ^textbox, String ^%output);
-	static void LoadTranslations(array<Label^> ^label, array<TextBox^> ^textbox);
-
 	void OnCBoxLostFocus(Object ^sender, EventArgs ^e);
 	void OnBtnBackClick(Object ^sender, EventArgs ^e);
 	void OnBtnSaveClick(Object ^sender, EventArgs ^e);
@@ -73,14 +66,13 @@ protected:
 		this->!TranslationEditingWindow();
 	}
 
+	virtual void InitializeComponent() override;
+
 public:
 
-	TranslationEditingWindow(Window ^form);
+	TranslationEditingWindow();
 
 	bool Load(String ^filePath);
-
-	virtual void Show() override;
-	virtual void Hide() override;
 };
 #endif
 

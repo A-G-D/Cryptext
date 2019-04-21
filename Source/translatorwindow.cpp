@@ -21,21 +21,31 @@
 #include "utils.h"
 #include "userdefinitions.h"
 #include "cypher.h"
-#include "window.h"
+#include "winformstemplate.h"
+#include "mainwindow.h"
 #include <gcroot.h>
 
+using namespace WinFormsTemplate;
+
+extern gcroot<MainWindow^> mainWindow;
+
+/*
+*	TranslatorWindow Class Definitions
+*/
 void TranslatorWindow::InitializeComponent()
 {
 	CreateComboBox(cboxTranslation, L"cboxTranslation", 12, 26, 145, 20, 1, AnchorType::TOP_LEFT, gcnew EventHandler(this, &TranslatorWindow::OnCBoxTranslationLostFocus));
 	cboxTranslation->SelectedText = L"< Select Translation >";
 
 	CreateTextBox(textboxInput, L"textboxInput", 12, 78, 310, 104, 2, AnchorType::CENTER, true);
+	textboxInput->WordWrap = false;
 	textboxInput->AcceptsReturn = true;
 	textboxInput->AcceptsTab = true;
 	textboxInput->MaxLength = 67108864 - 1;
 	textboxInput->ScrollBars = ScrollBars::Both;
 
 	CreateTextBox(textboxOutput, L"textboxOutput", 12, 68 + 145, 310, 104, 3, AnchorType::CENTER, true);
+	textboxOutput->WordWrap = false;
 	textboxOutput->AcceptsReturn = true;
 	textboxOutput->AcceptsTab = true;
 	textboxOutput->MaxLength = (textboxInput->MaxLength + 1)*32 - 1;
@@ -71,14 +81,16 @@ void TranslatorWindow::InitializeComponent()
 
 	PauseLayout();
 
-	Add(btnBack);
-	Add(btnTranslateToCode);
-	Add(btnTranslateToText);
-	Add(labelTranslation);
-	Add(tlpanelTextboxContainer);
-	Add(cboxTranslation);
+	AddControl(
+		btnBack,
+		btnTranslateToCode,
+		btnTranslateToText,
+		labelTranslation,
+		tlpanelTextboxContainer,
+		cboxTranslation
+	);
 
-	Hide();
+	OnHide();
 
 	ResumeLayout();
 }
@@ -93,7 +105,7 @@ void TranslatorWindow::OnBtnBackClick(Object ^sender, EventArgs ^e)
 	textboxInput->Clear();
 	textboxOutput->Clear();
 
-	Display(prevForm);
+	mainWindow->Display();
 }
 void TranslatorWindow::OnBtnTranslateToCodeClick(Object ^sender, EventArgs ^e)
 {
@@ -126,38 +138,18 @@ void TranslatorWindow::OnCBoxTranslationLostFocus(Object ^sender, EventArgs ^e)
 	}
 }
 
-TranslatorWindow::TranslatorWindow(Window ^form)
-	: prevForm(form)
+TranslatorWindow::TranslatorWindow()
 {
-	InitializeComponent();
 }
 
-void TranslatorWindow::Show()
+void TranslatorWindow::OnShow()
 {
-	PauseLayout();
-
-	btnBack->Show();
-	btnTranslateToCode->Show();
-	btnTranslateToText->Show();
-	labelTranslation->Show();
-	tlpanelTextboxContainer->Show();
-	cboxTranslation->Show();
-
 	cboxTranslation->BeginUpdate();
 	cboxTranslation->Items->Clear();
 	if (!GetTranslations(cboxTranslation->Items))
 		Directory::CreateDirectory(AppDomain::CurrentDomain->BaseDirectory + L"\\" + TRANSLATION_FILES_FOLDER_NAME);
-	cboxTranslation->EndUpdate();
 	cboxTranslation->SelectedIndex = cboxTranslation->FindStringExact(activeTranslation);
+	cboxTranslation->EndUpdate();
 
-	ResumeLayout();
-}
-void TranslatorWindow::Hide()
-{
-	btnBack->Hide();
-	btnTranslateToCode->Hide();
-	btnTranslateToText->Hide();
-	labelTranslation->Hide();
-	tlpanelTextboxContainer->Hide();
-	cboxTranslation->Hide();
+	AppPage::OnShow();
 }

@@ -48,7 +48,7 @@ void CreateLabel(Label ^%object, String ^name, String ^label, int x, int y, int 
 	object->TabIndex = tabIndex;
 	object->Text = label;
 }
-void CreateLinkLabel(LinkLabel ^%object, String ^name, String ^label, int x, int y, int width, int height, int tabIndex, AnchorType anchor, System::Windows::Forms::LinkLabelLinkClickedEventHandler ^onClickHandler)
+void CreateLinkLabel(LinkLabel ^%object, String ^name, String ^label, int x, int y, int width, int height, int tabIndex, AnchorType anchor, LinkLabelLinkClickedEventHandler ^onClickHandler)
 {
 	object = gcnew LinkLabel;
 	object->AutoSize = true;

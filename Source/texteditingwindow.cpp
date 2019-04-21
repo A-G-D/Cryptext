@@ -16,7 +16,8 @@
 *
 */
 #include "texteditingwindow.h"
-#include "window.h"
+#include "winformstemplate.h"
+#include "textfileswindow.h"
 #include "namespaces.h"
 #include "macros.h"
 #include "utils.h"
@@ -25,8 +26,15 @@
 #include "stringtable.h"
 #include <gcroot.h>
 
-extern gcroot<stringtable^> strtable;
+using namespace WinFormsTemplate;
 
+extern gcroot<stringtable^> strtable;
+extern gcroot<TextFilesWindow^> textFilesWindow;
+extern gcroot<ToolTip^> toolTip;
+
+/*
+*	TextEditingWindow Class Definitions
+*/
 void TextEditingWindow::InitializeComponent()
 {
 	CreateTextBox(textboxFileName, L"textboxFileName", 12, 26, 145, 20, 0, AnchorType::TOP_LEFT, false);
@@ -35,6 +43,7 @@ void TextEditingWindow::InitializeComponent()
 	cboxTranslation->SelectedText = L"< Select Translation >";
 
 	CreateTextBox(textboxInput, L"textboxInput", 12, 78, 310, 104, 2, AnchorType::CENTER, true);
+	textboxInput->WordWrap = false;
 	textboxInput->AcceptsReturn = true;
 	textboxInput->AcceptsTab = true;
 	textboxInput->MaxLength = 67108864 - 1;
@@ -44,6 +53,7 @@ void TextEditingWindow::InitializeComponent()
 
 	CreateTextBox(textboxOutput, L"textboxOutput", 12, 68 + 145, 310, 104, 3, AnchorType::CENTER, true);
 	textboxOutput->ReadOnly = true;
+	textboxOutput->WordWrap = false;
 	textboxOutput->AcceptsReturn = true;
 	textboxOutput->AcceptsTab = true;
 	textboxOutput->MaxLength = (textboxInput->MaxLength + 1)*32 - 1;
@@ -95,22 +105,24 @@ void TextEditingWindow::InitializeComponent()
 	dialogExport->FilterIndex = 1;
 	dialogExport->RestoreDirectory = true;
 
-	Window::tooltip->SetToolTip(btnImport, L"Import a file as the input text");
-	Window::tooltip->SetToolTip(btnExport, L"Export the output text as a file");
-
+	toolTip->SetToolTip(btnImport, L"Import a file as the input text");
+	toolTip->SetToolTip(btnExport, L"Export the output text as a file");
+	
 	PauseLayout();
 
-	Add(btnBack);
-	Add(btnSave);
-	Add(btnImport);
-	Add(btnExport);
-	Add(labelFileName);
-	Add(labelTranslation);
-	Add(textboxFileName);
-	Add(tlpanelTextboxContainer);
-	Add(cboxTranslation);
+	AddControl(
+		btnBack,
+		btnSave,
+		btnImport,
+		btnExport,
+		labelFileName,
+		labelTranslation,
+		textboxFileName,
+		tlpanelTextboxContainer,
+		cboxTranslation
+	);
 
-	Hide();
+	OnHide();
 
 	ResumeLayout();
 }
@@ -381,7 +393,7 @@ void TextEditingWindow::OnBtnBackClick(Object ^sender, EventArgs ^e)
 	textboxInput->Clear();
 	textboxOutput->Clear();
 
-	Display(prevForm);
+	textFilesWindow->Display();
 }
 void TextEditingWindow::OnBtnSaveClick(Object ^sender, EventArgs ^e)
 {
@@ -477,11 +489,11 @@ bool TextEditingWindow::LoadData(String ^filePath)
 	}
 	return false;
 }
-void TextEditingWindow::Show()
+void TextEditingWindow::OnShow()
 {
 	PauseLayout();
 
-	btnBack->Show();
+	/*btnBack->Show();
 	btnSave->Show();
 	btnImport->Show();
 	btnExport->Show();
@@ -489,7 +501,7 @@ void TextEditingWindow::Show()
 	labelTranslation->Show();
 	textboxFileName->Show();
 	tlpanelTextboxContainer->Show();
-	cboxTranslation->Show();
+	cboxTranslation->Show();*/
 
 	cboxTranslation->BeginUpdate();
 	cboxTranslation->Items->Clear();
@@ -499,18 +511,8 @@ void TextEditingWindow::Show()
 	cboxTranslation->SelectedIndex = cboxTranslation->FindStringExact(activeTranslation);
 
 	ResumeLayout();
-}
-void TextEditingWindow::Hide()
-{
-	btnBack->Hide();
-	btnSave->Hide();
-	btnImport->Hide();
-	btnExport->Hide();
-	labelFileName->Hide();
-	labelTranslation->Hide();
-	textboxFileName->Hide();
-	tlpanelTextboxContainer->Hide();
-	cboxTranslation->Hide();
+
+	AppPage::OnShow();
 }
 bool TextEditingWindow::Load(String ^filePath, bool showError)
 {
@@ -523,8 +525,6 @@ bool TextEditingWindow::Load(String ^filePath, bool showError)
 		MessageBox::Show(MESSAGE_MISSING_KEY_ERROR, CAPTION_MISSING_KEY_ERROR, MessageBoxButtons::OK);
 	return false;
 }
-TextEditingWindow::TextEditingWindow(Window ^form)
-	: prevForm(form)
+TextEditingWindow::TextEditingWindow()
 {
-	InitializeComponent();
 }

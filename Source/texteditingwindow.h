@@ -21,16 +21,15 @@
 #define _TEXTEDITINGWINDOW_H_
 
 #include "namespaces.h"
-#include "window.h"
+#include "winformstemplate.h"
 
 /*
 *	TextEditingWindow Class
 */
-ref class TextEditingWindow : public Window
+ref class TextEditingWindow : public WinFormsTemplate::AppPage
 {
 private:
 
-	Window ^prevForm;
 	Label
 		^labelFileName,
 		^labelTranslation,
@@ -53,8 +52,6 @@ private:
 	String
 		^activeFile,
 		^activeTranslation;
-
-	void InitializeComponent();
 
 	int FindSelectionForwards(int &sStart, int &sLength);
 	int FindSelectionBackwards(int &end, int &sStart, int &sLength);
@@ -85,14 +82,15 @@ protected:
 		this->!TextEditingWindow();
 	}
 
-public:
+	virtual void InitializeComponent() override;
 
-	virtual void Show() override;
-	virtual void Hide() override;
+	virtual void OnShow() override;
+
+public:
 
 	bool Load(String ^filePath, bool showError);
 
-	TextEditingWindow(Window ^form);
+	TextEditingWindow();
 };
 #endif
 

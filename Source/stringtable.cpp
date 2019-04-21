@@ -16,7 +16,6 @@
 *
 */
 #include <stdexcept>
-#include <string>
 #include "stringtable.h"
 #include "namespaces.h"
 #include "macros.h"

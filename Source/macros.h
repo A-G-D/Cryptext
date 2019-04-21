@@ -24,7 +24,7 @@
 #include "namespaces.h"
 
 #define APPLICATION_NAME						L"Cryptext"
-#define VERSION									L"1.3.0"
+#define VERSION									L"1.3.1"
 #define YEAR									L"2019"
 #define AUTHOR_NAME								L"Aloever Dulay"
 #define AUTHOR_PSEUDONYM						L"AGD"
@@ -41,7 +41,7 @@
 #define LICENSE_FILE_NAME						L"LICENSE.txt"
 #define LICENSE_TEXT_FONT_FAMILY				L"Courier New"
 #define LICENSE_LINK_TEXT						L"https://www.gnu.org/licenses/gpl-3.0.html/"
-#define LICENSE_LINK_URL						L"https://www.gnu.org/licenses/gpl-3.0.html/"
+#define LICENSE_LINK_URL						L"https://www.gnu.org/licenses/gpl-3.0.html"
 #define SOURCE_LINK_TEXT						L"https://github.com/A-G-D/Cryptext/"
 #define SOURCE_LINK_URL							L"https://github.com/A-G-D/Cryptext/"
 

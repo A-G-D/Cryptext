@@ -21,7 +21,7 @@
 #define _MAINWINDOW_H_
 
 #include "namespaces.h"
-#include "window.h"
+#include "winformstemplate.h"
 #include "textfileswindow.h"
 #include "aboutwindow.h"
 #include "translatorwindow.h"
@@ -29,14 +29,8 @@
 /*
 *	MainWindow Class
 */
-ref class MainWindow : public Window
+ref class MainWindow : public WinFormsTemplate::AppPage
 {
-public:
-
-	TextFilesWindow ^textFilesWindow;
-	AboutWindow ^aboutWindow;
-	TranslatorWindow ^translatorWindow;
-
 private:
 
 	Button
@@ -45,12 +39,6 @@ private:
 		^btnTranslator;
 
 	LinkLabel ^lnklabelAbout;
-
-	void InitializeComponent();
-	void OnBtnTextFilesClick(Object ^sender, EventArgs ^e);
-	void OnBtnTranslationFilesClick(Object ^sender, EventArgs ^e);
-	void OnBtnTranslatorClick(Object ^sender, EventArgs ^e);
-	void OnLnkLabelAboutClick(Object ^sender, LinkLabelLinkClickedEventArgs ^e);
 
 protected:
 
@@ -62,12 +50,11 @@ protected:
 		this->!MainWindow();
 	}
 
+	virtual void InitializeComponent() override;
+
 public:
 
 	MainWindow();
-
-	virtual void Show() override;
-	virtual void Hide() override;
 
 	void ClickTextFilesButton();
 	void ClickTranslationFilesButton();

@@ -21,12 +21,12 @@
 #define __STICKYNOTE_H__
 
 #include "namespaces.h"
-#include "window.h"
+#include "winformstemplate.h"
 
 /*
 *	StickyNote Class
 */
-ref class StickyNote : public Window
+ref class StickyNote : public WinFormsTemplate::AppPage
 {
 private:
 
@@ -44,14 +44,15 @@ protected:
 		this->!StickyNote();
 	}
 
+	virtual void InitializeComponent() override;
+
 public:
 
-	Window ^prevForm;
+	WinFormsTemplate::AppPage ^prevForm;
 
 	StickyNote();
 
-	virtual void Show() override;
-	virtual void Hide() override;
+	virtual void OnShow() override;
 
 	String ^GetText();
 	void WriteText(String ^text);

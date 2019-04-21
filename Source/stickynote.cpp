@@ -17,18 +17,23 @@
 */
 #include "stickynote.h"
 #include "namespaces.h"
-#include "window.h"
+#include "winformstemplate.h"
 #include "utils.h"
 #include "userdefinitions.h"
 #include "macros.h"
 #include <gcroot.h>
 
-extern gcroot<Window^> currentPage;
+using namespace WinFormsTemplate;
 
-StickyNote::StickyNote()
+extern gcroot<AppForm^> appForm;
+
+/*
+*	StickyNote Class Definitions
+*/
+void StickyNote::InitializeComponent()
 {
-
 	CreateTextBox(textboxStickyNote, L"textboxStickyNote", 6, 6, 322, 348, 0, AnchorType::CENTER, true);
+	textboxStickyNote->WordWrap = false;
 	textboxStickyNote->KeyDown += gcnew KeyEventHandler(this, &StickyNote::OnEscKeyDown);
 
 	if (File::Exists(AppDomain::CurrentDomain->BaseDirectory + L"\\" + RESOURCES_FOLDER_NAME + L"\\" + STICKY_NOTE_FILE_NAME))
@@ -38,27 +43,27 @@ StickyNote::StickyNote()
 
 	PauseLayout();
 
-	Add(textboxStickyNote);
-	Hide();
+	AddControl(textboxStickyNote);
+	OnHide();
 
 	ResumeLayout();
+}
+
+StickyNote::StickyNote()
+{
 }
 
 void StickyNote::OnEscKeyDown(Object ^sender, KeyEventArgs ^e)
 {
 	if (e->KeyCode == Keys::Escape)
-		Display(prevForm);
+		prevForm->Display();
 }
 
-void StickyNote::Show()
+void StickyNote::OnShow()
 {
-	prevForm = currentPage;
+	prevForm = appForm->GetCurrentPage();
 
-	textboxStickyNote->Show();
-}
-void StickyNote::Hide()
-{
-	textboxStickyNote->Hide();
+	AppPage::OnShow();
 }
 String ^StickyNote::GetText()
 {

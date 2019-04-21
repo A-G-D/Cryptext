@@ -155,7 +155,7 @@ void UserDefined::GetProperties(Form ^form)
 										form->Text = str;
 										break;
 									case 7:
-										form->Icon = gcnew Icon(str);
+										form->Icon = gcnew Icon((Path::IsPathRooted(str)) ? str : AppDomain::CurrentDomain->BaseDirectory + L"\\" + str);
 										break;
 								}
 							}

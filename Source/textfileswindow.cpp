@@ -17,7 +17,8 @@
 */
 #include "textfileswindow.h"
 #include "namespaces.h"
-#include "window.h"
+#include "winformstemplate.h"
+#include "mainwindow.h"
 #include "texteditingwindow.h"
 #include "translationeditingwindow.h"
 #include "utils.h"
@@ -26,11 +27,21 @@
 #include "stringtable.h"
 #include <gcroot.h>
 
-extern gcroot<stringtable^> strtable;
+using namespace WinFormsTemplate;
 
+extern gcroot<stringtable^> strtable;
+extern gcroot<MainWindow^> mainWindow;
+extern gcroot<TextEditingWindow^> textEditingWindow;
+extern gcroot<TranslationEditingWindow^> translationEditingWindow;
+
+void OnBtnBackClick(Object ^sender, EventArgs ^e);
+
+/*
+*	TextFilesWindow Class Definitions
+*/
 void TextFilesWindow::InitializeComponent()
 {
-	CreateButton(btnBack, L"btnBack", L"Back", 12, 325, BUTTON_WIDTH, BUTTON_HEIGHT, 4, AnchorType::BOTTOM_LEFT, gcnew EventHandler(this, &TextFilesWindow::OnBtnBackClick));
+	CreateButton(btnBack, L"btnBack", L"Back", 12, 325, BUTTON_WIDTH, BUTTON_HEIGHT, 4, AnchorType::BOTTOM_LEFT, gcnew EventHandler(&OnBtnBackClick));
 	CreateButton(btnCreateText, L"btnCreateText", L"Create", 93, 325, BUTTON_WIDTH, BUTTON_HEIGHT, 0, AnchorType::BOTTOM_RIGHT, gcnew EventHandler(this, &TextFilesWindow::OnBtnCreateTextClick));
 	CreateButton(btnEditText, L"btnEditText", L"Edit", 170, 325, BUTTON_WIDTH, BUTTON_HEIGHT, 1, AnchorType::BOTTOM_RIGHT, gcnew EventHandler(this, &TextFilesWindow::OnBtnEditTextClick));
 	CreateButton(btnDeleteText, L"btnDeleteText", L"Delete", 247, 325, BUTTON_WIDTH, BUTTON_HEIGHT, 2, AnchorType::BOTTOM_RIGHT, gcnew EventHandler(this, &TextFilesWindow::OnBtnDeleteTextClick));
@@ -47,19 +58,21 @@ void TextFilesWindow::InitializeComponent()
 
 	PauseLayout();
 
-	Add(btnBack);
-	Add(btnCreateText);
-	Add(btnEditText);
-	Add(btnDeleteText);
-	Add(listboxTextFiles);
+	AddControl(
+		btnBack,
+		btnCreateText,
+		btnEditText,
+		btnDeleteText,
+		listboxTextFiles
+	);
 
-	Hide();
+	OnHide();
 
 	ResumeLayout();
 }
-void TextFilesWindow::OnBtnBackClick(Object ^sender, EventArgs ^e)
+void OnBtnBackClick(Object ^sender, EventArgs ^e)
 {
-	Display(prevForm);
+	mainWindow->Display();
 }
 void TextFilesWindow::OnBtnEditTextClick(Object ^sender, EventArgs ^e)
 {
@@ -69,10 +82,10 @@ void TextFilesWindow::OnBtnEditTextClick(Object ^sender, EventArgs ^e)
 		if (flag)
 		{
 			if (textEditingWindow->Load(AppDomain::CurrentDomain->BaseDirectory + L"\\" + TEXT_FILES_FOLDER_NAME + L"\\" + itemName + L"\\" + itemName + TEXT_FILE_EXTENSION, true))
-				Display(textEditingWindow);
+				textEditingWindow->Display();
 		}
 		else if (translationEditingWindow->Load(AppDomain::CurrentDomain->BaseDirectory + L"\\" + TRANSLATION_FILES_FOLDER_NAME + L"\\" + itemName + TRANSLATION_FILE_EXTENSION))
-			Display(translationEditingWindow);
+			translationEditingWindow->Display();
 	}
 }
 void TextFilesWindow::OnBtnDeleteTextClick(Object ^sender, EventArgs ^e)
@@ -88,14 +101,11 @@ void TextFilesWindow::OnBtnDeleteTextClick(Object ^sender, EventArgs ^e)
 }
 void TextFilesWindow::OnBtnCreateTextClick(Object ^sender, EventArgs ^e)
 {
-	Display(flag ? (Window^%)textEditingWindow : (Window^%)translationEditingWindow);
+	(flag ? (AppPage^)textEditingWindow : (AppPage^)translationEditingWindow)->Display();
 }
-TextFilesWindow::TextFilesWindow(Window ^form)
-	: prevForm(form), flag(false)
+TextFilesWindow::TextFilesWindow()
+	: flag(false)
 {
-	textEditingWindow = gcnew TextEditingWindow(this);
-	translationEditingWindow = gcnew TranslationEditingWindow(this);
-	InitializeComponent();
 }
 void TextFilesWindow::UpdateList()
 {
@@ -112,27 +122,15 @@ void TextFilesWindow::UpdateList()
 void TextFilesWindow::LoadTranslationOnInit(String ^filePath)
 {
 	translationEditingWindow->Load(filePath);
-	Display(translationEditingWindow);
+	translationEditingWindow->Display();
 }
-void TextFilesWindow::Show()
+void TextFilesWindow::OnShow()
 {
 	PauseLayout();
-
-	btnBack->Show();
-	btnCreateText->Show();
-	btnEditText->Show();
-	btnDeleteText->Show();
-	listboxTextFiles->Show();
 
 	UpdateList();
 
 	ResumeLayout();
-}
-void TextFilesWindow::Hide()
-{
-	btnBack->Hide();
-	btnCreateText->Hide();
-	btnEditText->Hide();
-	btnDeleteText->Hide();
-	listboxTextFiles->Hide();
+
+	AppPage::OnShow();
 }

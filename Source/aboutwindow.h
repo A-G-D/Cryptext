@@ -21,24 +21,20 @@
 #define _ABOUTWINDOW_H_
 
 #include "namespaces.h"
-#include "window.h"
+#include "winformstemplate.h"
 
 /*
 *	AboutWindow Class
 */
-ref class AboutWindow : public Window
+ref class AboutWindow : public WinFormsTemplate::AppPage
 {
 private:
 
-	Window ^prevForm;
 	Panel ^panelAbout;
-	TextBox ^textboxLicense;
 	LinkLabel
 		^lnklabelBack,
 		^lnklabelAboutInfo;
 
-	void InitializeComponent();
-	void OnLnkLabelBackClick(Object ^sender, LinkLabelLinkClickedEventArgs ^e);
 	void OnLnkLabelAboutClick(Object ^sender, LinkLabelLinkClickedEventArgs ^e);
 
 protected:
@@ -51,12 +47,43 @@ protected:
 		this->!AboutWindow();
 	}
 
+	virtual void InitializeComponent() override;
+
 public:
 
-	AboutWindow(Window ^form);
+	AboutWindow();
+};
 
-	virtual void Show() override;
-	virtual void Hide() override;
+/*
+*	LicenseWindow Class
+*/
+ref class LicenseWindow : public WinFormsTemplate::AppPage
+{
+private:
+
+	LinkLabel ^lnklabelBack;
+	TextBox ^textboxLicense;
+	
+	void OnLnkLabelBackClick(Object ^sender, LinkLabelLinkClickedEventArgs ^e);
+
+protected:
+
+	!LicenseWindow()
+	{
+	}
+	~LicenseWindow()
+	{
+		this->!LicenseWindow();
+	}
+
+	virtual void InitializeComponent() override;
+
+	virtual void OnShow() override;
+	virtual void OnHide() override;
+
+public:
+
+	LicenseWindow();
 };
 #endif
 

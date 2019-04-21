@@ -17,7 +17,8 @@
 */
 #include "translationeditingwindow.h"
 #include "namespaces.h"
-#include "window.h"
+#include "winformstemplate.h"
+#include "textfileswindow.h"
 #include "cypher.h"
 #include "utils.h"
 #include "userdefinitions.h"
@@ -25,14 +26,20 @@
 #include "stringtable.h"
 #include <gcroot.h>
 
+using namespace WinFormsTemplate;
+
 extern gcroot<stringtable^> strtable;
+extern gcroot<TextFilesWindow^> textFilesWindow;
 
 #define upper(x) labelUppercase[x], textboxUppercase[x]
 #define lower(x) labelLowercase[x], textboxLowercase[x]
 #define number(x) labelNumerals[x], textboxNumerals[x]
 #define symbol(x) labelSymbols[x], textboxSymbols[x]
 
-void TranslationEditingWindow::CreateColumnElements(array<Label^> ^%label, array<TextBox^> ^%textbox, int size, int x, int charOffset, int tabOffset)
+/*
+*	TranslationEditingWindow Class Definitions
+*/
+void CreateColumnElements(array<Label^> ^%label, array<TextBox^> ^%textbox, int size, int x, int charOffset, int tabOffset)
 {
 	label = gcnew array<Label^>(size);
 	textbox = gcnew array<TextBox^>(size);
@@ -120,21 +127,23 @@ void TranslationEditingWindow::InitializeComponent()
 	panelTranslations->ResumeLayout(false);
 	panelTranslations->PerformLayout();
 
-	Add(panelTranslations);
-	Add(textboxFileName);
-	Add(labelFileName);
-	Add(labelSeparatorChar);
-	Add(labelTranslationTable);
-	Add(btnBack);
-	Add(btnSave);
-	Add(cboxSeparatorChar);
+	AddControl(
+		panelTranslations,
+		textboxFileName,
+		labelFileName,
+		labelSeparatorChar,
+		labelTranslationTable,
+		btnBack,
+		btnSave,
+		cboxSeparatorChar
+	);
 
-	Hide();
+	OnHide();
 
 	ResumeLayout();
 	PerformLayout();
 }
-void TranslationEditingWindow::GetInputChars(array<Label^> ^label, array<TextBox^> ^textbox, String ^%output)
+void GetInputChars(array<Label^> ^label, array<TextBox^> ^textbox, String ^%output)
 {
 	output += L"\n";
 	for (int i(0); i < textbox->Length; ++i)
@@ -145,7 +154,7 @@ void TranslationEditingWindow::GetInputChars(array<Label^> ^label, array<TextBox
 		else
 			output += (L"@" + label[i]->Text + L"\t\t\t{" + textbox[i]->Text + L"}\n");
 }
-void TranslationEditingWindow::LoadTranslations(array<Label^> ^label, array<TextBox^> ^textbox)
+void LoadTranslations(array<Label^> ^label, array<TextBox^> ^textbox)
 {
 	for (int i(0); i < textbox->Length; ++i)
 		textbox[i]->Text = (String^)(Cypher::Translate((wchar_t)((label[i]->Text == L"Tab") ? '\t' : label[i]->Text[0])));
@@ -169,11 +178,13 @@ void TranslationEditingWindow::OnBtnBackClick(Object ^sender, EventArgs ^e)
 	activeFile = String::Empty;
 	textboxFileName->Clear();
 	cboxSeparatorChar->SelectedIndex = cboxSeparatorChar->FindStringExact(L"Space");
+
 	LoadTranslations(labelUppercase, textboxUppercase);
 	LoadTranslations(labelLowercase, textboxLowercase);
 	LoadTranslations(labelNumerals, textboxNumerals);
 	LoadTranslations(labelSymbols, textboxSymbols);
-	Display(prevForm);
+
+	textFilesWindow->Display();
 }
 void TranslationEditingWindow::OnBtnSaveClick(Object ^sender, EventArgs ^e)
 {
@@ -213,7 +224,7 @@ void TranslationEditingWindow::OnBtnSaveClick(Object ^sender, EventArgs ^e)
 	output += L"@\n\t\t\t{\n}\n";
 
 	File::WriteAllText(filePath + TRANSLATION_FILE_EXTENSION, output);
-	Display(prevForm);
+	textFilesWindow->Display();
 }
 bool TranslationEditingWindow::Load(String ^filePath)
 {
@@ -239,32 +250,8 @@ bool TranslationEditingWindow::Load(String ^filePath)
 	}
 	return false;
 }
-void TranslationEditingWindow::Show()
+TranslationEditingWindow::TranslationEditingWindow()
 {
-	panelTranslations->Show();
-	textboxFileName->Show();
-	labelFileName->Show();
-	labelSeparatorChar->Show();
-	labelTranslationTable->Show();
-	btnBack->Show();
-	btnSave->Show();
-	cboxSeparatorChar->Show();
-}
-void TranslationEditingWindow::Hide()
-{
-	panelTranslations->Hide();
-	textboxFileName->Hide();
-	labelFileName->Hide();
-	labelSeparatorChar->Hide();
-	labelTranslationTable->Hide();
-	btnBack->Hide();
-	btnSave->Hide();
-	cboxSeparatorChar->Hide();
-}
-TranslationEditingWindow::TranslationEditingWindow(Window ^form)
-	: prevForm(form)
-{
-	InitializeComponent();
 }
 #undef upper
 #undef lower

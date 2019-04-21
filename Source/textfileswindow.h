@@ -21,23 +21,17 @@
 #define _TEXTFILESWINDOW_H_
 
 #include "namespaces.h"
-#include "window.h"
+#include "winformstemplate.h"
 #include "texteditingwindow.h"
 #include "translationeditingwindow.h"
 
 /*
 *	TextFilesWindow Class
 */
-ref class TextFilesWindow : public Window
+ref class TextFilesWindow : public WinFormsTemplate::AppPage
 {
-public:
-
-	TextEditingWindow ^textEditingWindow;
-	TranslationEditingWindow ^translationEditingWindow;
-
 private:
 
-	Window ^prevForm;
 	Button
 		^btnBack,
 		^btnCreateText,
@@ -45,8 +39,6 @@ private:
 		^btnDeleteText;
 	ListBox ^listboxTextFiles;
 
-	void InitializeComponent();
-	void OnBtnBackClick(Object ^sender, EventArgs ^e);
 	void OnBtnEditTextClick(Object ^sender, EventArgs ^e);
 	void OnBtnDeleteTextClick(Object ^sender, EventArgs ^e);
 	void OnBtnCreateTextClick(Object ^sender, EventArgs ^e);
@@ -61,18 +53,19 @@ protected:
 		this->!TextFilesWindow();
 	}
 
+	virtual void InitializeComponent() override;
+
+	virtual void OnShow() override;
+
 public:
 
 	bool flag;
 
-	TextFilesWindow(Window ^form);
+	TextFilesWindow();
 
 	void UpdateList();
 
 	void LoadTranslationOnInit(String ^filePath);
-
-	virtual void Show() override;
-	virtual void Hide() override;
 };
 #endif
 
