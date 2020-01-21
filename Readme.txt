@@ -1,4 +1,4 @@
-Cryptext v1.4.0
+Cryptext v1.4.1
 
 
 FILE EXTENSIONS
