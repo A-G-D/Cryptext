@@ -2,7 +2,7 @@
 *	<texteditingwindow.cpp>
 *
 *
-*	Copyright (C) 2019 Aloever Dulay
+*	Copyright (C) 2020 Aloever Dulay
 *
 *	This program is free software: you can redistribute it and/or modify it under the terms
 *	of the GNU General Public License as published by the Free Software Foundation, version 3.
@@ -67,12 +67,16 @@ void TextEditingWindow::InitializeComponent()
 	CreateLabel(labelFileName, L"labelFileName", L"File Name", 12, 9, 54, 13, 4, AnchorType::TOP_LEFT);
 	CreateLabel(labelTranslation, L"labelTranslation", L"Translation", 177, 9, 54, 13, 4, AnchorType::TOP_RIGHT);
 	CreateLabel(labelInput, L"labelInput", L"Input Text", 12, 61, 54, 13, 4, AnchorType::TOP_LEFT);
-	CreateLabel(labelOutput, L"labelOuput", L"\r\nOutput Text", 12, 196, 54, 13, 4, AnchorType::TOP_LEFT);
+	CreateLabel(labelOutput, L"labelOutput", L"\r\nOutput Text", 12, 196, 54, 13, 4, AnchorType::TOP_LEFT);
 
 	tlpanelTextboxContainer = gcnew TableLayoutPanel;
 	tlpanelTextboxContainer->Location = Point(9, 78);
 	tlpanelTextboxContainer->Size = Size(316, 220);
 	tlpanelTextboxContainer->RowCount = 4;
+	tlpanelTextboxContainer->Anchor = (AnchorStyles)AnchorType::CENTER;
+
+	tlpanelTextboxContainer->SuspendLayout();
+
 	tlpanelTextboxContainer->RowStyles->Add(gcnew RowStyle(SizeType::AutoSize));
 	tlpanelTextboxContainer->RowStyles->Add(gcnew RowStyle(SizeType::Percent, 50));
 	tlpanelTextboxContainer->RowStyles->Add(gcnew RowStyle(SizeType::AutoSize));
@@ -85,9 +89,8 @@ void TextEditingWindow::InitializeComponent()
 	tlpanelTextboxContainer->SetRow(textboxInput, 1);
 	tlpanelTextboxContainer->SetRow(labelOutput, 2);
 	tlpanelTextboxContainer->SetRow(textboxOutput, 3);
-	tlpanelTextboxContainer->Anchor = (AnchorStyles)AnchorType::CENTER;
 
-	UserDefined::GetProperties(L"TextEditingPage.txt", btnBack, btnImport, btnExport, btnSave, labelFileName, labelTranslation, labelInput, labelOutput, textboxFileName, textboxInput, textboxOutput, cboxTranslation, tlpanelTextboxContainer);
+	tlpanelTextboxContainer->ResumeLayout();
 
 	dialogImport = gcnew OpenFileDialog;
 	dialogImport->CheckFileExists = true;
@@ -121,8 +124,9 @@ void TextEditingWindow::InitializeComponent()
 		tlpanelTextboxContainer,
 		cboxTranslation
 	);
-
 	OnHide();
+
+	UserDefined::GetProperties(L"TextEditingPage.txt", btnBack, btnImport, btnExport, btnSave, labelFileName, labelTranslation, labelInput, labelOutput, textboxFileName, textboxInput, textboxOutput, cboxTranslation, tlpanelTextboxContainer);
 
 	ResumeLayout();
 }
@@ -147,7 +151,7 @@ int TextEditingWindow::FindSelectionForwards(int &sStart, int &sLength)
 		if (i < textboxInput->Text->Length - 1)
 		{
 			nextC = textboxInput->Text[i + 1];
-			if (c != (wchar_t)'\r' && c != (wchar_t)'\n' && nextC != (wchar_t)'\r' && nextC != (wchar_t)'\n')
+			if (!Cypher::FixedLength() && c != (wchar_t)'\r' && c != (wchar_t)'\n' && nextC != (wchar_t)'\r' && nextC != (wchar_t)'\n')
 				++start;
 		}
 	}
@@ -157,6 +161,7 @@ int TextEditingWindow::FindSelectionBackwards(int &end, int &sStart, int &sLengt
 {
 	int start;
 	wchar_t c, prevC;
+
 	for (int i(textboxInput->Text->Length - 1); i > (sStart + sLength - 1); --i)
 	{
 		c = textboxInput->Text[i];
@@ -165,7 +170,7 @@ int TextEditingWindow::FindSelectionBackwards(int &end, int &sStart, int &sLengt
 		if (i)
 		{
 			prevC = textboxInput->Text[i - 1];
-			if (c != (wchar_t)'\r' && c != (wchar_t)'\n' && prevC != (wchar_t)'\r' && prevC != (wchar_t)'\n')
+			if (!Cypher::FixedLength() && c != (wchar_t)'\r' && c != (wchar_t)'\n' && prevC != (wchar_t)'\r' && prevC != (wchar_t)'\n')
 				--end;
 		}
 	}
@@ -176,17 +181,29 @@ int TextEditingWindow::FindSelectionBackwards(int &end, int &sStart, int &sLengt
 		--sStart;
 	}
 	start = end + 1;
+	int currentIndex;
 	for (int i(sLength); i; --i)
 	{
-		c = textboxInput->Text[sStart + i - 1];
+		currentIndex = sStart + i - 1;
+		c = textboxInput->Text[currentIndex];
 		if (c != (wchar_t)'\r')
 		{
-			--start;
-			start -= Cypher::GetTranslationLength(c);
-			if (c == (wchar_t)'\n')
+			if (Cypher::FixedLength())
+			{
+				if (c == (wchar_t)'\n')
+					start -= 2;
+				else
+					start -= Cypher::FixedLength();
+			}
+			else
+			{
 				--start;
-			if ((sStart + i - 1) == 0 || (c == (wchar_t)'\n' || textboxInput->Text[sStart + i - 2] == (wchar_t)'\n'))
-				++start;
+				start -= Cypher::GetTranslationLength(c);
+				if (c == (wchar_t)'\n')
+					--start;
+				if (currentIndex == 0 || (c == (wchar_t)'\n' || textboxInput->Text[currentIndex - 1] == (wchar_t)'\n'))
+					++start;
+			}
 		}
 	}
 	return start;
@@ -200,19 +217,20 @@ int TextEditingWindow::DeleteTextForwards(String ^%s, int sStart, int sLength)
 		c = textboxInput->Text[sStart + sLength - i];
 		if (c != (wchar_t)'\n')
 		{
-			++end;
+			if (!Cypher::FixedLength())
+				++end;
 			end += Cypher::GetTranslationLength(c);
 			if (c == (wchar_t)'\r')
 				end += 2;
-			if ((sStart + sLength - i) == textboxInput->Text->Length || (c == (wchar_t)'\r' || textboxInput->Text[sStart + sLength - i + 1] == (wchar_t)'\r'))
+			if ((sStart + sLength - i) == textboxInput->Text->Length || (c == (wchar_t)'\r' || ((sStart + sLength - i + 1) < textboxInput->Text->Length && textboxInput->Text[sStart + sLength - i + 1] == (wchar_t)'\r')))
 				--end;
 		}
 	}
 	if (start && s[start - 1] == Cypher::LetterSeparator() && (end < s->Length - 1) && s[end + 1] == (wchar_t)'\r')
 		--start;
 
-	s = s->Remove(start, end - start + 1);
-	if ((start && s[start - 1] != (wchar_t)'\n') && (start < s->Length && s[start] != (wchar_t)'\r') && s[start - 1] != Cypher::LetterSeparator())
+	s = s->Remove(start, MIN(end - start + 1, s->Length));
+	if (!Cypher::FixedLength() && (start && s[start - 1] != (wchar_t)'\n') && (start < s->Length && s[start] != (wchar_t)'\r') && s[start - 1] != Cypher::LetterSeparator())
 		s = s->Insert(start, String::Empty + Cypher::LetterSeparator());
 
 	return start;
@@ -220,22 +238,18 @@ int TextEditingWindow::DeleteTextForwards(String ^%s, int sStart, int sLength)
 int TextEditingWindow::DeleteTextBackwards(String ^%s, int sStart, int sLength)
 {
 	int end(s->Length - 1), start(FindSelectionBackwards(end, sStart, sLength));
-	if (end < s->Length - 1 && s[end + 1] == Cypher::LetterSeparator() && start && s[start - 1] == (wchar_t)'\n')
+	if (!Cypher::FixedLength() && end < s->Length - 1 && s[end + 1] == Cypher::LetterSeparator() && start && s[start - 1] == (wchar_t)'\n')
 		++end;
 
 	s = s->Remove(start, end - start + 1);
-	if ((start && s[start - 1] != (wchar_t)'\n') && (start < s->Length && s[start] != (wchar_t)'\r') && s[start] != Cypher::LetterSeparator())
+	if (!Cypher::FixedLength() && (start && s[start - 1] != (wchar_t)'\n') && (start < s->Length && s[start] != (wchar_t)'\r') && s[start] != Cypher::LetterSeparator())
 		s = s->Insert(start, String::Empty + Cypher::LetterSeparator());
 
 	return start;
 }
 void TextEditingWindow::OnCBoxTranslationLostFocus(Object ^sender, EventArgs ^e)
 {
-	if (cboxTranslation->Text == String::Empty)
-		cboxTranslation->SelectedIndex = -1;
-	else
-		cboxTranslation->SelectedIndex = cboxTranslation->FindString(cboxTranslation->Text);
-
+	cboxTranslation->SelectedIndex = (cboxTranslation->Text == String::Empty) ? -1 : cboxTranslation->FindString(cboxTranslation->Text);
 	if (cboxTranslation->SelectedIndex == -1)
 		if (activeTranslation == nullptr)
 			cboxTranslation->Text = L"< Select Translation >";
@@ -248,9 +262,18 @@ void TextEditingWindow::OnCBoxTranslationLostFocus(Object ^sender, EventArgs ^e)
 	{
 		bool rewriteOutput = activeTranslation != cboxTranslation->Text;
 		activeTranslation = cboxTranslation->Text;
-		Cypher::Load(AppDomain::CurrentDomain->BaseDirectory + L"\\" + TRANSLATION_FILES_FOLDER_NAME + L"\\" + activeTranslation + TRANSLATION_FILE_EXTENSION);
+		Cypher::LoadFromString(ReadTranslationFile(activeTranslation + TRANSLATION_FILE_EXTENSION));
 		if (rewriteOutput)
+		{
 			textboxOutput->Text = Cypher::TranslateAllText(textboxInput->Text);
+
+			String ^newInput(String::Empty);
+			for (int i(0); i < textboxInput->Text->Length; ++i)
+				if (textboxInput->Text[i] == (wchar_t)'\r' || textboxInput->Text[i] == (wchar_t)'\n' || Cypher::GetTranslationLength(textboxInput->Text[i]))
+					newInput += textboxInput->Text[i];
+
+			textboxInput->Text = newInput;
+		}
 	}
 }
 void TextEditingWindow::OnTextboxInputKeyDown(Object ^sender, KeyEventArgs ^e)
@@ -267,9 +290,15 @@ void TextEditingWindow::OnTextboxInputKeyPress(Object ^sender, KeyPressEventArgs
 	wchar_t c(0);
 
 	if ((Control::ModifierKeys & Keys::Control) == Keys::Control)
+	/*
+	*	If the <Ctrl> key is held
+	*/
 	{
 		if (deletePressed)
-			sLength = textboxInput->Text->Length - sStart;
+		{
+			if (!sLength)
+				sLength = textboxInput->Text->Length - sStart;
+		}
 		else
 		{
 			switch ((wchar_t)e->KeyChar)
@@ -312,11 +341,14 @@ void TextEditingWindow::OnTextboxInputKeyPress(Object ^sender, KeyPressEventArgs
 
 	String ^%internOutput(textboxOutput->Text);
 	if ((deletePressed && sLength) || (!deletePressed && e->KeyChar == (wchar_t)Keys::Back))
+	/*
+	*	If <Delete> or <Backspace> is pressed
+	*/
 	{
 		if (!textboxInput->SelectionStart && !sLength)
 			return;
 
-		if (textboxInput->Text->Length - (sStart + sLength) > sStart)
+		if (textboxInput->Text->Length - (sStart + sLength) >= sStart)
 			DeleteTextForwards(internOutput, sStart, sLength);
 		else
 			DeleteTextBackwards(internOutput, sStart, sLength);
@@ -362,7 +394,7 @@ void TextEditingWindow::OnTextboxInputKeyPress(Object ^sender, KeyPressEventArgs
 		else if (internOutput->Length == 0)
 			internOutput = internOutput->Insert(start, input);
 		else if (start == 0)
-			internOutput = internOutput->Insert(0, input + Cypher::LetterSeparator());
+			internOutput = internOutput->Insert(0, Cypher::FixedLength() ? input : input + Cypher::LetterSeparator());
 		else if (internOutput[start - 1] == (wchar_t)'\n')
 		{
 			if (start < internOutput->Length)
@@ -370,13 +402,13 @@ void TextEditingWindow::OnTextboxInputKeyPress(Object ^sender, KeyPressEventArgs
 				if (internOutput[start] == (wchar_t)'\r')
 					internOutput = internOutput->Insert(start, input);
 				else
-					internOutput = internOutput->Insert(start, input + Cypher::LetterSeparator());
+					internOutput = internOutput->Insert(start, Cypher::FixedLength() ? input : input + Cypher::LetterSeparator());
 			}
 			else
 				internOutput = internOutput->Insert(start, input);
 		}
 		else
-			internOutput = internOutput->Insert(start, Cypher::LetterSeparator() + input);
+			internOutput = internOutput->Insert(start, Cypher::FixedLength() ? input : Cypher::LetterSeparator() + input);
 	}
 	textboxOutput->Text = internOutput;
 }
@@ -393,24 +425,24 @@ void TextEditingWindow::OnBtnBackClick(Object ^sender, EventArgs ^e)
 	textboxInput->Clear();
 	textboxOutput->Clear();
 
-	textFilesWindow->Display();
+	textFilesWindow->Display(true);
 }
 void TextEditingWindow::OnBtnSaveClick(Object ^sender, EventArgs ^e)
 {
-	String ^newName(AppDomain::CurrentDomain->BaseDirectory + L"\\" + TEXT_FILES_FOLDER_NAME + L"\\" + textboxFileName->Text + L"\\" + textboxFileName->Text);
+	String ^newName(AppDomain::CurrentDomain->BaseDirectory + TEXT_FILES_FOLDER_NAME + L"\\" + textboxFileName->Text + L"\\" + textboxFileName->Text);
 	if (textboxFileName->Text == String::Empty)
 		MessageBox::Show(MESSAGE_CREATE_FILE_FAILURE, CAPTION_CREATE_FILE_FAILURE, MessageBoxButtons::OK);
 
 	else
 	{
 		String
-			^currentPath(AppDomain::CurrentDomain->BaseDirectory + L"\\" + TEXT_FILES_FOLDER_NAME + L"\\" + activeFile + L"\\" + activeFile + KEY_FILE_EXTENSION),
+			^currentPath(AppDomain::CurrentDomain->BaseDirectory + TEXT_FILES_FOLDER_NAME + L"\\" + activeFile + L"\\" + activeFile + KEY_FILE_EXTENSION),
 			^keyOutput(String::Empty);
 
 		if (cboxTranslation->SelectedIndex > -1)
 		{
 			activeTranslation = cboxTranslation->SelectedItem->ToString();
-			String ^translationText(activeTranslation + L"\n\n" + File::ReadAllText(AppDomain::CurrentDomain->BaseDirectory + L"\\" + TRANSLATION_FILES_FOLDER_NAME + L"\\" + activeTranslation + TRANSLATION_FILE_EXTENSION));
+			String ^translationText(activeTranslation + L"\n\n" + ReadTranslationFile(activeTranslation + TRANSLATION_FILE_EXTENSION));
 
 			Cypher::LoadInternal();
 			keyOutput = Cypher::TranslateAllText(translationText);
@@ -435,9 +467,10 @@ void TextEditingWindow::OnBtnSaveClick(Object ^sender, EventArgs ^e)
 		if (activeFile != textboxFileName->Text)
 		{
 			if (activeFile != String::Empty && activeFile != nullptr)
-				Directory::Delete(AppDomain::CurrentDomain->BaseDirectory + L"\\" + TEXT_FILES_FOLDER_NAME + L"\\" + activeFile, true);
-			Directory::CreateDirectory(AppDomain::CurrentDomain->BaseDirectory + L"\\" + TEXT_FILES_FOLDER_NAME + L"\\" + textboxFileName->Text);
+				Directory::Delete(AppDomain::CurrentDomain->BaseDirectory + TEXT_FILES_FOLDER_NAME + L"\\" + activeFile, true);
+			Directory::CreateDirectory(AppDomain::CurrentDomain->BaseDirectory + TEXT_FILES_FOLDER_NAME + L"\\" + textboxFileName->Text);
 			activeFile = textboxFileName->Text;
+			MessageBox::Show(MESSAGE_CREATE_FILE_SUCCESS, CAPTION_CREATE_FILE_SUCCESS, MessageBoxButtons::OK);
 		}
 		File::WriteAllText(newName + TEXT_FILE_EXTENSION, textboxOutput->Text);
 		File::WriteAllText(newName + KEY_FILE_EXTENSION, keyOutput);
@@ -450,7 +483,7 @@ void TextEditingWindow::OnBtnImportClick(Object ^sender, EventArgs ^e)
 		textboxInput->Text = File::ReadAllText(Path::GetFullPath(dialogImport->FileName));
 		if (cboxTranslation->SelectedIndex > -1)
 		{
-			Cypher::Load(AppDomain::CurrentDomain->BaseDirectory + L"\\" + TRANSLATION_FILES_FOLDER_NAME + L"\\" + cboxTranslation->SelectedItem->ToString() + TRANSLATION_FILE_EXTENSION);
+			Cypher::LoadFromString(ReadTranslationFile(cboxTranslation->SelectedItem->ToString() + TRANSLATION_FILE_EXTENSION));
 			textboxOutput->Text = Cypher::TranslateAllText(textboxInput->Text);
 			Cypher::Clear();
 		}
@@ -493,26 +526,15 @@ void TextEditingWindow::OnShow()
 {
 	PauseLayout();
 
-	/*btnBack->Show();
-	btnSave->Show();
-	btnImport->Show();
-	btnExport->Show();
-	labelFileName->Show();
-	labelTranslation->Show();
-	textboxFileName->Show();
-	tlpanelTextboxContainer->Show();
-	cboxTranslation->Show();*/
-
 	cboxTranslation->BeginUpdate();
 	cboxTranslation->Items->Clear();
-	if (!GetTranslations(cboxTranslation->Items))
-		Directory::CreateDirectory(AppDomain::CurrentDomain->BaseDirectory + L"\\" + TRANSLATION_FILES_FOLDER_NAME);
+	GetTranslations(cboxTranslation->Items);
 	cboxTranslation->EndUpdate();
 	cboxTranslation->SelectedIndex = cboxTranslation->FindStringExact(activeTranslation);
 
-	ResumeLayout();
-
 	AppPage::OnShow();
+
+	ResumeLayout();
 }
 bool TextEditingWindow::Load(String ^filePath, bool showError)
 {

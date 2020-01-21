@@ -2,7 +2,7 @@
 *	<cypher.cpp>
 *
 *
-*	Copyright (C) 2019 Aloever Dulay
+*	Copyright (C) 2020 Aloever Dulay
 *
 *	This program is free software: you can redistribute it and/or modify it under the terms
 *	of the GNU General Public License as published by the Free Software Foundation, version 3.
@@ -45,9 +45,12 @@ bool Cypher::IsEqual(String ^string1, String ^string2)
 	wchar_t
 		separator1(0),
 		separator2(0);
+	unsigned short
+		fixedLength1(0),
+		fixedLength2(0);
 
-	LoadFromString(string1, *(Hashtable^)nullptr, tempAlphaTable1, *(Hashtable^)nullptr, nullptr, separator1);
-	LoadFromString(string2, *(Hashtable^)nullptr, tempAlphaTable2, *(Hashtable^)nullptr, nullptr, separator2);
+	LoadFromString(string1, *(Hashtable^)nullptr, tempAlphaTable1, *(Hashtable^)nullptr, nullptr, separator1, fixedLength1);
+	LoadFromString(string2, *(Hashtable^)nullptr, tempAlphaTable2, *(Hashtable^)nullptr, nullptr, separator2, fixedLength2);
 
 	if (separator1 != separator2 || tempAlphaTable1.Count != tempAlphaTable2.Count)
 		return false;
@@ -67,12 +70,13 @@ void Cypher::Pair(wchar_t c, String ^s)
 	if (c != (wchar_t)'{' && c != (wchar_t)' ')
 		translationFlag[c] = true;
 }
-bool Cypher::LoadFromString(String ^text, Hashtable %translationTable, Hashtable %alphaTable, Hashtable %translationFlag, int lengths[], wchar_t %separator)
+bool Cypher::LoadFromString(String ^text, Hashtable %translationTable, Hashtable %alphaTable, Hashtable %translationFlag, int lengths[], wchar_t %separator, unsigned short %length)
 {
 	String ^str(String::Empty);
 	short phase(0);
+	bool lengthFixed(false);
 	/*
-	*	Look for the user-definition of the morse letter separator character
+	*	Look for the user-definition of the letter separator character
 	*/
 	for (int i(0); i < text->Length; ++i)
 	{
@@ -91,13 +95,24 @@ bool Cypher::LoadFromString(String ^text, Hashtable %translationTable, Hashtable
 				{
 					str += text[i];
 					if (str == L"LETTER_SEPARATOR")
+					{
 						phase = 2;
+						str = String::Empty;
+					}
+					else if (str == L"TRANSLATION_LENGTH")
+					{
+						lengthFixed = true;
+						phase = 2;
+						str = String::Empty;
+					}
 				}
 				break;
 
 			case 2:
 				if (text[i] == (wchar_t)'=')
-					phase = 3;
+				{
+					phase = (lengthFixed) ? 5 : 3;
+				}
 				else if (text[i] != (wchar_t)' ' && text[i] != (wchar_t)'\t')
 					phase = 0;
 				break;
@@ -113,11 +128,32 @@ bool Cypher::LoadFromString(String ^text, Hashtable %translationTable, Hashtable
 				if ((i + 1) < text->Length && text[i + 1] == (wchar_t)'\'')
 					separator = text[i];
 				phase = 0;
-				str = String::Empty;
+				break;
+
+			case 5:
+				if (text[i] == (wchar_t)' ' || text[i] == (wchar_t)'\t')
+				{
+					if ((i + 1) < text->Length && text[i + 1] != (wchar_t)' ' && text[i + 1] != (wchar_t)'\t' && text[i + 1] != (wchar_t)'\n')
+						phase = 6;
+				}
+				else if (text[i] == (wchar_t)'\n')
+					phase = 0;
+				break;
+
+			case 6:
+				if (text[i] == (wchar_t)' ' || text[i] == (wchar_t)'\t' || text[i] == (wchar_t)'\n')
+				{
+					length = Convert::ToByte(str);
+					str = String::Empty;
+					phase = 0;
+				}
+				else
+					str += text[i];
 				break;
 		}
 	}
-	if (separator == 0)
+
+	if (separator == 0 && !lengthFixed)
 		separator = LETTER_SEPARATOR;
 
 	phase = 0;
@@ -192,6 +228,10 @@ wchar_t Cypher::LetterSeparator()
 {
 	return letterSeparator;
 }
+unsigned short Cypher::FixedLength()
+{
+	return fixedLength;
+}
 wchar_t Cypher::ToAlpha(String ^key)
 {
 	return (alphaTable.Contains(key)) ? (wchar_t)(alphaTable[key]) : (wchar_t)'\0';
@@ -211,15 +251,12 @@ void Cypher::Clear()
 	translationFlag.Clear();
 	ClearLengths(LengthStorage());
 	letterSeparator = 0;
+	fixedLength = 0;
 }
 bool Cypher::LoadFromString(String ^text)
 {
 	Clear();
-	return LoadFromString(text, translationTable, alphaTable, translationFlag, LengthStorage(), letterSeparator);
-}
-bool Cypher::Load(String ^filePath)
-{
-	return LoadFromString(File::ReadAllText(filePath));
+	return LoadFromString(text, translationTable, alphaTable, translationFlag, LengthStorage(), letterSeparator, fixedLength);
 }
 void Cypher::LoadInternal()
 {
@@ -238,22 +275,46 @@ String ^Cypher::ReadAllText(String ^text)
 		^letter(String::Empty);
 	wchar_t alpha;
 
-	for (int i(0); i < text->Length; ++i)
+	if (fixedLength)
 	{
-		if (!IsTranslationChar(text[i]) || text[i] == letterSeparator || text[i] == (wchar_t)'\n')
+		unsigned short length(0);
+		for (int i(0); i < text->Length; ++i)
 		{
-			if (letter != String::Empty)
-			{
-				alpha = ToAlpha(letter);
-				if (alpha != (wchar_t)'\0')
-					output += alpha;
-			}
-			if (text[i] == (wchar_t)'\n')
-				output += ToAlpha(L"\n");
-			letter = String::Empty;
-		}
-		else
 			letter += text[i];
+			if (++length == fixedLength || text[i] == (wchar_t)'\n')
+			{
+				if (letter != String::Empty)
+				{
+					alpha = ToAlpha(letter);
+					if (alpha != (wchar_t)'\0')
+						output += alpha;
+				}
+				if (text[i] == (wchar_t)'\n')
+					output += ToAlpha(L"\n");
+				letter = String::Empty;
+				length = 0;
+			}
+		}
+	}
+	else
+	{
+		for (int i(0); i < text->Length; ++i)
+		{
+			if (!IsTranslationChar(text[i]) || text[i] == letterSeparator || text[i] == (wchar_t)'\n')
+			{
+				if (letter != String::Empty)
+				{
+					alpha = ToAlpha(letter);
+					if (alpha != (wchar_t)'\0')
+						output += alpha;
+				}
+				if (text[i] == (wchar_t)'\n')
+					output += ToAlpha(L"\n");
+				letter = String::Empty;
+			}
+			else
+				letter += text[i];
+		}
 	}
 
 	if (letter != String::Empty)
@@ -274,6 +335,8 @@ String ^Cypher::TranslateAllText(String ^text)
 		{
 			if (output == String::Empty || output[output->Length - 1] == (wchar_t)'\n' || s == L"\n")
 				output += (s == L"\n") ? L"\r\n" : s;
+			else if (fixedLength)
+				output += s;
 			else
 				(output += letterSeparator) += s;
 		}
@@ -283,13 +346,27 @@ String ^Cypher::TranslateAllText(String ^text)
 }
 String ^Cypher::GetEqualTranslation(String ^string)
 {
-	String ^directoryPath(AppDomain::CurrentDomain->BaseDirectory + L"\\" + TRANSLATION_FILES_FOLDER_NAME);
-	if (Directory::Exists(directoryPath))
+	String
+		^archivePath(AppDomain::CurrentDomain->BaseDirectory + TRANSLATION_ARCHIVE_NAME + TRANSLATION_ARCHIVE_EXTENSION),
+		^matchedString(String::Empty);
+
+	if (File::Exists(archivePath))
 	{
-		array<String^> ^files = Directory::GetFiles(directoryPath);
-		for (int i = 0; i < files->Length; ++i)
-			if (files[i]->EndsWith(TRANSLATION_FILE_EXTENSION) && IsEqual(string, File::ReadAllText(files[i])))
-				return Path::GetFileNameWithoutExtension(files[i]);
+		ZipArchive ^archive(ZipFile::Open(archivePath, ZipArchiveMode::Read));
+		for (int i(archive->Entries->Count - 1); i >= 0; --i)
+			if (Path::GetExtension(archive->Entries[i]->FullName) == TRANSLATION_FILE_EXTENSION)
+			{
+				StreamReader ^sReader(gcnew StreamReader(archive->Entries[i]->Open()));
+				if (IsEqual(string, sReader->ReadToEnd()))
+				{
+					sReader->Close();
+					matchedString = Path::GetFileNameWithoutExtension(archive->Entries[i]->Name);
+					break;
+				}
+				else
+					sReader->Close();
+			}
+		archive->~ZipArchive();
 	}
-	return String::Empty;
+	return matchedString;
 }

@@ -2,7 +2,7 @@
 *	<aboutwindow.cpp>
 *
 *
-*	Copyright (C) 2019 Aloever Dulay
+*	Copyright (C) 2020 Aloever Dulay
 *
 *	This program is free software: you can redistribute it and/or modify it under the terms
 *	of the GNU General Public License as published by the Free Software Foundation, version 3.
@@ -35,7 +35,7 @@ extern gcroot<LicenseWindow^> licenseWindow;
 void OnLnkLabelBackClick(Object ^sender, LinkLabelLinkClickedEventArgs ^e);
 
 /*
-*	AboutWindow Class Definitiona
+*	AboutWindow Class Definitions
 */
 void AboutWindow::InitializeComponent()
 {
@@ -52,15 +52,13 @@ void AboutWindow::InitializeComponent()
 	lnklabelAboutInfo->Links->Add(aboutText->IndexOf(L"license "), 7);
 	lnklabelAboutInfo->Links->Add(aboutText->IndexOf(LICENSE_LINK_TEXT), ((String^)LICENSE_LINK_TEXT)->Length);
 
-	UserDefined::GetProperties(L"AboutPage.txt", lnklabelBack, lnklabelAboutInfo, panelAbout);
-
 	PauseLayout();
 
 	panelAbout->Controls->Add(lnklabelAboutInfo);
-
 	AddControl(lnklabelBack, panelAbout);
-
 	OnHide();
+
+	UserDefined::GetProperties(L"AboutPage.txt", lnklabelBack, lnklabelAboutInfo, panelAbout);
 
 	ResumeLayout();
 }
@@ -95,7 +93,7 @@ AboutWindow::AboutWindow()
 }
 
 /*
-*	LicenseWindow Class
+*	LicenseWindow Class Definitions
 */
 void LicenseWindow::InitializeComponent()
 {
@@ -114,22 +112,25 @@ void LicenseWindow::InitializeComponent()
 	{
 	}
 
-	UserDefined::GetProperties(L"AboutPage.txt", textboxLicense);
-
 	PauseLayout();
 
 	AddControl(
 		lnklabelBack,
 		textboxLicense
 	);
-
 	OnHide();
+
+	UserDefined::GetProperties(L"AboutPage.txt", textboxLicense);
 
 	ResumeLayout();
 }
 void LicenseWindow::OnLnkLabelBackClick(Object ^sender, LinkLabelLinkClickedEventArgs ^e)
 {
+	PauseLayout();
+
 	aboutWindow->Display();
+
+	ResumeLayout();
 }
 
 LicenseWindow::LicenseWindow()
@@ -137,13 +138,23 @@ LicenseWindow::LicenseWindow()
 }
 void LicenseWindow::OnShow()
 {
+	PauseLayout();
+
+	textboxLicense->SuspendLayout();
 	textboxLicense->Text = File::ReadAllText(AppDomain::CurrentDomain->BaseDirectory + L"\\" + LICENSE_FILE_NAME);
+	textboxLicense->ResumeLayout();
 
 	AppPage::OnShow();
+
+	ResumeLayout();
 }
 void LicenseWindow::OnHide()
 {
+	PauseLayout();
+
 	textboxLicense->Text = String::Empty;
 
 	AppPage::OnHide();
+
+	ResumeLayout();
 }

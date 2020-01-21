@@ -2,7 +2,7 @@
 *	<translatorwindow.cpp>
 *
 *
-*	Copyright (C) 2019 Aloever Dulay
+*	Copyright (C) 2020 Aloever Dulay
 *
 *	This program is free software: you can redistribute it and/or modify it under the terms
 *	of the GNU General Public License as published by the Free Software Foundation, version 3.
@@ -57,12 +57,17 @@ void TranslatorWindow::InitializeComponent()
 
 	CreateLabel(labelTranslation, L"labelTranslation", L"Translation", 12, 9, 54, 13, 4, AnchorType::TOP_LEFT);
 	CreateLabel(labelInput, L"labelInput", L"Text", 12, 61, 54, 13, 4, AnchorType::TOP_LEFT);
-	CreateLabel(labelOutput, L"labelOuput", L"\r\nTranslation", 12, 196, 54, 13, 4, AnchorType::TOP_LEFT);
+	CreateLabel(labelOutput, L"labelOutput", L"\r\nTranslation", 12, 196, 54, 13, 4, AnchorType::TOP_LEFT);
 
 	tlpanelTextboxContainer = gcnew TableLayoutPanel;
+	tlpanelTextboxContainer->Name = L"tlpanelTextboxContainer";
 	tlpanelTextboxContainer->Location = Point(9, 78);
 	tlpanelTextboxContainer->Size = Size(316, 220);
 	tlpanelTextboxContainer->RowCount = 4;
+	tlpanelTextboxContainer->Anchor = (AnchorStyles)AnchorType::CENTER;
+
+	tlpanelTextboxContainer->SuspendLayout();
+
 	tlpanelTextboxContainer->RowStyles->Add(gcnew RowStyle(SizeType::AutoSize));
 	tlpanelTextboxContainer->RowStyles->Add(gcnew RowStyle(SizeType::Percent, 50));
 	tlpanelTextboxContainer->RowStyles->Add(gcnew RowStyle(SizeType::AutoSize));
@@ -75,9 +80,8 @@ void TranslatorWindow::InitializeComponent()
 	tlpanelTextboxContainer->SetRow(textboxInput, 1);
 	tlpanelTextboxContainer->SetRow(labelOutput, 2);
 	tlpanelTextboxContainer->SetRow(textboxOutput, 3);
-	tlpanelTextboxContainer->Anchor = (AnchorStyles)AnchorType::CENTER;
 
-	UserDefined::GetProperties(L"TranslatorPage.txt", btnBack, btnTranslateToCode, btnTranslateToText, labelTranslation, labelInput, labelOutput, textboxInput, textboxOutput, cboxTranslation, tlpanelTextboxContainer);
+	tlpanelTextboxContainer->ResumeLayout();
 
 	PauseLayout();
 
@@ -89,8 +93,9 @@ void TranslatorWindow::InitializeComponent()
 		tlpanelTextboxContainer,
 		cboxTranslation
 	);
-
 	OnHide();
+
+	UserDefined::GetProperties(L"TranslatorPage.txt", btnBack, btnTranslateToCode, btnTranslateToText, labelTranslation, labelInput, labelOutput, textboxInput, textboxOutput, cboxTranslation, tlpanelTextboxContainer);
 
 	ResumeLayout();
 }
@@ -105,7 +110,7 @@ void TranslatorWindow::OnBtnBackClick(Object ^sender, EventArgs ^e)
 	textboxInput->Clear();
 	textboxOutput->Clear();
 
-	mainWindow->Display();
+	mainWindow->Display(true);
 }
 void TranslatorWindow::OnBtnTranslateToCodeClick(Object ^sender, EventArgs ^e)
 {
@@ -118,11 +123,7 @@ void TranslatorWindow::OnBtnTranslateToTextClick(Object ^sender, EventArgs ^e)
 
 void TranslatorWindow::OnCBoxTranslationLostFocus(Object ^sender, EventArgs ^e)
 {
-	if (cboxTranslation->Text == String::Empty)
-		cboxTranslation->SelectedIndex = -1;
-	else
-		cboxTranslation->SelectedIndex = cboxTranslation->FindString(cboxTranslation->Text);
-
+	cboxTranslation->SelectedIndex = (cboxTranslation->Text == String::Empty) ? -1 : cboxTranslation->FindString(cboxTranslation->Text);
 	if (cboxTranslation->SelectedIndex == -1)
 		if (activeTranslation == nullptr)
 			cboxTranslation->Text = L"< Select Translation >";
@@ -134,7 +135,7 @@ void TranslatorWindow::OnCBoxTranslationLostFocus(Object ^sender, EventArgs ^e)
 	else
 	{
 		activeTranslation = cboxTranslation->Text;
-		Cypher::Load(AppDomain::CurrentDomain->BaseDirectory + L"\\" + TRANSLATION_FILES_FOLDER_NAME + L"\\" + activeTranslation + TRANSLATION_FILE_EXTENSION);
+		Cypher::LoadFromString(ReadTranslationFile(activeTranslation + TRANSLATION_FILE_EXTENSION));
 	}
 }
 
@@ -146,8 +147,7 @@ void TranslatorWindow::OnShow()
 {
 	cboxTranslation->BeginUpdate();
 	cboxTranslation->Items->Clear();
-	if (!GetTranslations(cboxTranslation->Items))
-		Directory::CreateDirectory(AppDomain::CurrentDomain->BaseDirectory + L"\\" + TRANSLATION_FILES_FOLDER_NAME);
+	GetTranslations(cboxTranslation->Items);
 	cboxTranslation->SelectedIndex = cboxTranslation->FindStringExact(activeTranslation);
 	cboxTranslation->EndUpdate();
 

@@ -4,7 +4,12 @@
 .FontFamily=
 .FontSize=
 .FontStyle=
-.Text=
+.Text=&Back
+.Width=75
+.Height=28
+.Left=12
+.Top=328
+.Anchor=BottomLeft
 
 [btnSave]
 .BackColor=
@@ -12,7 +17,25 @@
 .FontFamily=
 .FontSize=
 .FontStyle=
+.Text=&Save
+.Width=75
+.Height=28
+.Left=247
+.Top=328
+.Anchor=BottomRight
+
+[chkboxFixedLength]
+.BackColor=
+.ForeColor=
+.FontFamily=
+.FontSize=
+.FontStyle=
 .Text=
+.Width=20
+.Height=20
+.Left=210
+.Top=70
+.Anchor=TopRight
 
 [labelFileName]
 .BackColor=
@@ -20,7 +43,12 @@
 .FontFamily=
 .FontSize=
 .FontStyle=
-.Text=
+.Text=Translation Name
+.Width=54
+.Height=13
+.Left=12
+.Top=9
+.Anchor=TopLeft
 
 [labelSeparatorChar]
 .BackColor=
@@ -28,7 +56,25 @@
 .FontFamily=
 .FontSize=
 .FontStyle=
-.Text=
+.Text=Letter Separator
+.Width=54
+.Height=13
+.Left=12
+.Top=56
+.Anchor=TopLeft
+
+[labelFixedLength]
+.BackColor=
+.ForeColor=
+.FontFamily=
+.FontSize=
+.FontStyle=
+.Text=Fixed Length
+.Width=54
+.Height=13
+.Left=227
+.Top=72
+.Anchor=TopRight
 
 [labelTranslationTable]
 .BackColor=
@@ -36,7 +82,12 @@
 .FontFamily=
 .FontSize=
 .FontStyle=
-.Text=
+.Text=Translation Table
+.Width=89
+.Height=13
+.Left=9
+.Top=112
+.Anchor=TopLeft
 
 [textboxFileName]
 .BackColor=
@@ -45,6 +96,11 @@
 .FontSize=
 .FontStyle=
 .Text=
+.Width=145
+.Height=20
+.Left=12
+.Top=26
+.Anchor=TopLeft
 
 [cboxSeparatorChar]
 .BackColor=
@@ -53,6 +109,24 @@
 .FontSize=
 .FontStyle=
 .Text=
+.Width=145
+.Height=20
+.Left=12
+.Top=70
+.Anchor=TopLeft
+
+[cboxFixedLength]
+.BackColor=
+.ForeColor=
+.FontFamily=
+.FontSize=
+.FontStyle=
+.Text=
+.Width=30
+.Height=20
+.Left=300
+.Top=70
+.Anchor=TopRight
 
 [panelTranslations]
 .BackColor=
@@ -61,3 +135,8 @@
 .FontSize=
 .FontStyle=
 .Text=
+.Width=318
+.Height=190
+.Left=12
+.Top=132
+.Anchor=Center

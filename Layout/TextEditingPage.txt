@@ -4,7 +4,12 @@
 .FontFamily=
 .FontSize=
 .FontStyle=
-.Text=
+.Text=&Back
+.Width=75
+.Height=28
+.Left=12
+.Top=325
+.Anchor=BottomLeft
 
 [btnImport]
 .BackColor=
@@ -12,7 +17,12 @@
 .FontFamily=
 .FontSize=
 .FontStyle=
-.Text=
+.Text=&Import
+.Width=75
+.Height=28
+.Left=93
+.Top=325
+.Anchor=BottomRight
 
 [btnExport]
 .BackColor=
@@ -20,7 +30,12 @@
 .FontFamily=
 .FontSize=
 .FontStyle=
-.Text=
+.Text=&Export
+.Width=75
+.Height=28
+.Left=170
+.Top=325
+.Anchor=BottomRight
 
 [btnSave]
 .BackColor=
@@ -28,7 +43,12 @@
 .FontFamily=
 .FontSize=
 .FontStyle=
-.Text=
+.Text=&Save
+.Width=75
+.Height=28
+.Left=247
+.Top=325
+.Anchor=BottomRight
 
 [labelFileName]
 .BackColor=
@@ -36,7 +56,12 @@
 .FontFamily=
 .FontSize=
 .FontStyle=
-.Text=
+.Text=File Name
+.Width=54
+.Height=13
+.Left=12
+.Top=9
+.Anchor=TopLeft
 
 [labelTranslation]
 .BackColor=
@@ -44,7 +69,12 @@
 .FontFamily=
 .FontSize=
 .FontStyle=
-.Text=
+.Text=Translation
+.Width=54
+.Height=13
+.Left=177
+.Top=9
+.Anchor=TopRight
 
 [labelInput]
 .BackColor=
@@ -52,7 +82,12 @@
 .FontFamily=
 .FontSize=
 .FontStyle=
-.Text=
+.Text=Input Text
+.Width=54
+.Height=13
+.Left=12
+.Top=61
+.Anchor=TopLeft
 
 [labelOutput]
 .BackColor=
@@ -60,7 +95,12 @@
 .FontFamily=
 .FontSize=
 .FontStyle=
-.Text=
+.Text=Output Text
+.Width=54
+.Height=13
+.Left=12
+.Top=196
+.Anchor=TopLeft
 
 [textboxFileName]
 .BackColor=
@@ -69,6 +109,11 @@
 .FontSize=
 .FontStyle=
 .Text=
+.Width=145
+.Height=20
+.Left=12
+.Top=26
+.Anchor=TopLeft
 
 [textboxInput]
 .BackColor=
@@ -77,6 +122,11 @@
 .FontSize=
 .FontStyle=
 .Text=
+.Width=310
+.Height=104
+.Left=12
+.Top=78
+.Anchor=Center
 
 [textboxOutput]
 .BackColor=
@@ -85,6 +135,11 @@
 .FontSize=
 .FontStyle=
 .Text=
+.Width=310
+.Height=104
+.Left=12
+.Top=213
+.Anchor=Center
 
 [cboxTranslation]
 .BackColor=
@@ -92,12 +147,22 @@
 .FontFamily=
 .FontSize=
 .FontStyle=
-.Text=
+.Text=< Select Translation >
+.Width=145
+.Height=20
+.Left=177
+.Top=26
+.Anchor=TopRight
 
 [tlpanelTextboxContainer]
-.BackColor=
-.ForeColor=
+.BackColor=0x00FFFFFF
+.ForeColor=0x00FFFFFF
 .FontFamily=
 .FontSize=
 .FontStyle=
 .Text=
+.Width=316
+.Height=220
+.Left=9
+.Top=78
+.Anchor=Center

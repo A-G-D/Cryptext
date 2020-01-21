@@ -2,7 +2,7 @@
 *	<translationeditingwindow.h>
 *
 *
-*	Copyright (C) 2019 Aloever Dulay
+*	Copyright (C) 2020 Aloever Dulay
 *
 *	This program is free software: you can redistribute it and/or modify it under the terms
 *	of the GNU General Public License as published by the Free Software Foundation, version 3.
@@ -31,11 +31,15 @@ ref class TranslationEditingWindow : public WinFormsTemplate::AppPage
 private:
 
 	Panel ^panelTranslations;
+	CheckBox ^chkboxFixedLength;
 	TextBox ^textboxFileName;
-	ComboBox ^cboxSeparatorChar;
+	ComboBox
+		^cboxSeparatorChar,
+		^cboxFixedLength;
 	Label
 		^labelFileName,
 		^labelSeparatorChar,
+		^labelFixedLength,
 		^labelTranslationTable;
 	Button
 		^btnBack,
@@ -52,7 +56,11 @@ private:
 		^textboxSymbols;
 	String ^activeFile;
 
-	void OnCBoxLostFocus(Object ^sender, EventArgs ^e);
+	unsigned short UpdateTextboxesCharLimit();
+
+	void OnCBoxSeparatorCharLostFocus(Object ^sender, EventArgs ^e);
+	void OnCBoxFixedLengthLostFocus(Object ^sender, EventArgs ^e);
+	void OnChkBoxCheckStateChanged(Object ^sender, EventArgs ^e);
 	void OnBtnBackClick(Object ^sender, EventArgs ^e);
 	void OnBtnSaveClick(Object ^sender, EventArgs ^e);
 
@@ -72,7 +80,7 @@ public:
 
 	TranslationEditingWindow();
 
-	bool Load(String ^filePath);
+	bool Load(String ^name, String ^text);
 };
 #endif
 

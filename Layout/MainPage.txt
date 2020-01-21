@@ -4,7 +4,12 @@
 .FontFamily=
 .FontSize=
 .FontStyle=
-.Text=
+.Text=&Text Files
+.Width=310
+.Height=33
+.Left=12
+.Top=27
+.Anchor=CenterTop
 
 [btnTranslationFiles]
 .BackColor=
@@ -12,7 +17,25 @@
 .FontFamily=
 .FontSize=
 .FontStyle=
-.Text=
+.Text=T&ranslation Files
+.Width=310
+.Height=33
+.Left=12
+.Top=66
+.Anchor=CenterTop
+
+[btnTranslator]
+.BackColor=
+.ForeColor=
+.FontFamily=
+.FontSize=
+.FontStyle=
+.Text=Tr&anslator
+.Width=310
+.Height=33
+.Left=12
+.Top=105
+.Anchor=CenterTop
 
 [lnklabelAbout]
 .BackColor=
@@ -20,4 +43,9 @@
 .FontFamily=
 .FontSize=
 .FontStyle=
-.Text=
+.Text=About
+.Width=20
+.Height=20
+.Left=147
+.Top=335
+.Anchor=Bottom

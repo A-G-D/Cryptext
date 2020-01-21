@@ -1,8 +1,13 @@
 [Window]
-.BackColor=0xFFCCCCFF
+.BackColor=0x70707070
 .ForeColor=
 .FontFamily=
-.FontSize=
+.FontSize=8
 .FontStyle=
 .Text=
 .Icon=Resources\icon.ico
+.BackImage=Resources\background.jpg
+.BackImageLayout=Stretch
+.BorderStyle=Sizable
+.Width=350
+.Height=400

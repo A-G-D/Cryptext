@@ -2,7 +2,7 @@
 *	<textfileswindow.cpp>
 *
 *
-*	Copyright (C) 2019 Aloever Dulay
+*	Copyright (C) 2020 Aloever Dulay
 *
 *	This program is free software: you can redistribute it and/or modify it under the terms
 *	of the GNU General Public License as published by the Free Software Foundation, version 3.
@@ -47,14 +47,13 @@ void TextFilesWindow::InitializeComponent()
 	CreateButton(btnDeleteText, L"btnDeleteText", L"Delete", 247, 325, BUTTON_WIDTH, BUTTON_HEIGHT, 2, AnchorType::BOTTOM_RIGHT, gcnew EventHandler(this, &TextFilesWindow::OnBtnDeleteTextClick));
 
 	listboxTextFiles = gcnew ListBox;
+	listboxTextFiles->Sorted = true;
 	listboxTextFiles->FormattingEnabled = true;
 	listboxTextFiles->Location = Point(12, 17);
 	listboxTextFiles->Name = L"listboxTextFiles";
 	listboxTextFiles->Size = Size(310, 303);
 	listboxTextFiles->Anchor = (AnchorStyles)AnchorType::CENTER;
 	listboxTextFiles->TabIndex = 3;
-
-	UserDefined::GetProperties(L"TextFilesPage.txt", btnBack, btnCreateText, btnEditText, btnDeleteText, listboxTextFiles);
 
 	PauseLayout();
 
@@ -65,14 +64,15 @@ void TextFilesWindow::InitializeComponent()
 		btnDeleteText,
 		listboxTextFiles
 	);
-
 	OnHide();
+
+	UserDefined::GetProperties(L"TextFilesPage.txt", btnBack, btnCreateText, btnEditText, btnDeleteText, listboxTextFiles);
 
 	ResumeLayout();
 }
 void OnBtnBackClick(Object ^sender, EventArgs ^e)
 {
-	mainWindow->Display();
+	mainWindow->Display(true);
 }
 void TextFilesWindow::OnBtnEditTextClick(Object ^sender, EventArgs ^e)
 {
@@ -81,27 +81,59 @@ void TextFilesWindow::OnBtnEditTextClick(Object ^sender, EventArgs ^e)
 		String ^itemName(listboxTextFiles->SelectedItem->ToString());
 		if (flag)
 		{
-			if (textEditingWindow->Load(AppDomain::CurrentDomain->BaseDirectory + L"\\" + TEXT_FILES_FOLDER_NAME + L"\\" + itemName + L"\\" + itemName + TEXT_FILE_EXTENSION, true))
-				textEditingWindow->Display();
+			if (File::Exists(AppDomain::CurrentDomain->BaseDirectory + TEXT_FILES_FOLDER_NAME + L"\\" + itemName + L"\\" + itemName + TEXT_FILE_EXTENSION))
+			{
+				if (textEditingWindow->Load(AppDomain::CurrentDomain->BaseDirectory + TEXT_FILES_FOLDER_NAME + L"\\" + itemName + L"\\" + itemName + TEXT_FILE_EXTENSION, true))
+					textEditingWindow->Display(true);
+			}
+			else
+				UpdateList();
 		}
-		else if (translationEditingWindow->Load(AppDomain::CurrentDomain->BaseDirectory + L"\\" + TRANSLATION_FILES_FOLDER_NAME + L"\\" + itemName + TRANSLATION_FILE_EXTENSION))
-			translationEditingWindow->Display();
+		else
+		{
+			ZipArchive ^archive(ZipFile::Open(AppDomain::CurrentDomain->BaseDirectory + TRANSLATION_ARCHIVE_NAME + TRANSLATION_ARCHIVE_EXTENSION, ZipArchiveMode::Read));
+			ZipArchiveEntry ^entry(archive->GetEntry(itemName + TRANSLATION_FILE_EXTENSION));
+			String ^text;
+
+			bool exists(entry != nullptr);
+			if (exists)
+			{
+				StreamReader ^sReader(gcnew StreamReader(entry->Open()));
+				text = sReader->ReadToEnd();
+				sReader->Close();
+			}
+
+			archive->~ZipArchive();
+			if (exists)
+			{
+				if (translationEditingWindow->Load(itemName, text))
+					translationEditingWindow->Display(true);
+			}
+			else
+				UpdateList();
+		}
 	}
 }
 void TextFilesWindow::OnBtnDeleteTextClick(Object ^sender, EventArgs ^e)
 {
-	if (listboxTextFiles->SelectedItem != nullptr)
+	if (listboxTextFiles->SelectedItem != nullptr && MessageBox::Show((MESSAGE_FILE_DELETE_CONFIRM)->Replace(L"<FILE_NAME>", listboxTextFiles->SelectedItem->ToString()), CAPTION_FILE_DELETE_CONFIRM, MessageBoxButtons::YesNo, MessageBoxIcon::Question) == DialogResult::Yes)
 	{
 		if (flag)
-			Directory::Delete(AppDomain::CurrentDomain->BaseDirectory + L"\\" + TEXT_FILES_FOLDER_NAME + L"\\" + listboxTextFiles->SelectedItem->ToString(), true);
+			Directory::Delete(AppDomain::CurrentDomain->BaseDirectory + TEXT_FILES_FOLDER_NAME + L"\\" + listboxTextFiles->SelectedItem->ToString(), true);
 		else
-			File::Delete(AppDomain::CurrentDomain->BaseDirectory + L"\\" + TRANSLATION_FILES_FOLDER_NAME + L"\\" + listboxTextFiles->SelectedItem->ToString() + TRANSLATION_FILE_EXTENSION);
+		{
+			ZipArchive ^archive(ZipFile::Open(AppDomain::CurrentDomain->BaseDirectory + TRANSLATION_ARCHIVE_NAME + TRANSLATION_ARCHIVE_EXTENSION, ZipArchiveMode::Update));
+			ZipArchiveEntry ^entry(archive->GetEntry(listboxTextFiles->SelectedItem->ToString() + TRANSLATION_FILE_EXTENSION));
+			if (entry != nullptr)
+				entry->Delete();
+			archive->~ZipArchive();
+		}
 		UpdateList();
 	}
 }
 void TextFilesWindow::OnBtnCreateTextClick(Object ^sender, EventArgs ^e)
 {
-	(flag ? (AppPage^)textEditingWindow : (AppPage^)translationEditingWindow)->Display();
+	(flag ? (AppPage^)textEditingWindow : (AppPage^)translationEditingWindow)->Display(true);
 }
 TextFilesWindow::TextFilesWindow()
 	: flag(false)
@@ -114,15 +146,15 @@ void TextFilesWindow::UpdateList()
 	if (flag)
 	{
 		if (!GetTextFiles(listboxTextFiles->Items))
-			Directory::CreateDirectory(AppDomain::CurrentDomain->BaseDirectory + L"\\" + TEXT_FILES_FOLDER_NAME);
+			Directory::CreateDirectory(AppDomain::CurrentDomain->BaseDirectory + TEXT_FILES_FOLDER_NAME);
 	}
-	else if (!GetTranslations(listboxTextFiles->Items))
-		Directory::CreateDirectory(AppDomain::CurrentDomain->BaseDirectory + L"\\" + TRANSLATION_FILES_FOLDER_NAME);
+	else
+		GetTranslations(listboxTextFiles->Items);
 }
 void TextFilesWindow::LoadTranslationOnInit(String ^filePath)
 {
-	translationEditingWindow->Load(filePath);
-	translationEditingWindow->Display();
+	translationEditingWindow->Load(Path::GetFileNameWithoutExtension(filePath), File::ReadAllText(filePath));
+	translationEditingWindow->Display(true);
 }
 void TextFilesWindow::OnShow()
 {
@@ -130,7 +162,7 @@ void TextFilesWindow::OnShow()
 
 	UpdateList();
 
-	ResumeLayout();
-
 	AppPage::OnShow();
+
+	ResumeLayout();
 }

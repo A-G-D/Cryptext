@@ -2,7 +2,7 @@
 *	<userdefinitions.h>
 *
 *
-*	Copyright (C) 2019 Aloever Dulay
+*	Copyright (C) 2020 Aloever Dulay
 *
 *	This program is free software: you can redistribute it and/or modify it under the terms
 *	of the GNU General Public License as published by the Free Software Foundation, version 3.
@@ -27,8 +27,8 @@
 */
 namespace UserDefined
 {
-	void GetProperties(Form^);
-	void GetProperties(String^, ...array<Control^>^);
+	bool GetProperties(Form^);
+	bool GetProperties(String^, ...array<Control^>^);
 }
 #endif
 

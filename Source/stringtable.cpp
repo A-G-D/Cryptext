@@ -2,7 +2,7 @@
 *	<stringtable.cpp>
 *
 *
-*	Copyright (C) 2019 Aloever Dulay
+*	Copyright (C) 2020 Aloever Dulay
 *
 *	This program is free software: you can redistribute it and/or modify it under the terms
 *	of the GNU General Public License as published by the Free Software Foundation, version 3.
@@ -20,12 +20,10 @@
 #include "namespaces.h"
 #include "macros.h"
 
-using namespace std;
-
 String ^stringtable::operator[](unsigned int i)
 {
 	if (i >= STRING_TABLE_SIZE)
-		throw out_of_range("Index Out of Range");
+		throw std::out_of_range("Index Out of Range");
 	else if (i >= size())
 		return String::Empty;
 	return __table[i];

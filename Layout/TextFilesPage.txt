@@ -4,7 +4,12 @@
 .FontFamily=
 .FontSize=
 .FontStyle=
-.Text=
+.Text=&Back
+.Width=75
+.Height=28
+.Left=12
+.Top=325
+.Anchor=BottomLeft
 
 [btnCreateText]
 .BackColor=
@@ -12,7 +17,12 @@
 .FontFamily=
 .FontSize=
 .FontStyle=
-.Text=
+.Text=&Create
+.Width=75
+.Height=28
+.Left=93
+.Top=325
+.Anchor=BottomRight
 
 [btnEditText]
 .BackColor=
@@ -20,7 +30,12 @@
 .FontFamily=
 .FontSize=
 .FontStyle=
-.Text=
+.Text=&Edit
+.Width=75
+.Height=28
+.Left=170
+.Top=325
+.Anchor=BottomRight
 
 [btnDeleteText]
 .BackColor=
@@ -28,7 +43,12 @@
 .FontFamily=
 .FontSize=
 .FontStyle=
-.Text=
+.Text=&Delete
+.Width=75
+.Height=28
+.Left=247
+.Top=325
+.Anchor=BottomRight
 
 [listboxTextFiles]
 .BackColor=
@@ -37,3 +57,8 @@
 .FontSize=
 .FontStyle=
 .Text=
+.Width=310
+.Height=303
+.Left=12
+.Top=17
+.Anchor=Center

@@ -2,7 +2,7 @@
 *	<utils.cpp>
 *
 *
-*	Copyright (C) 2019 Aloever Dulay
+*	Copyright (C) 2020 Aloever Dulay
 *
 *	This program is free software: you can redistribute it and/or modify it under the terms
 *	of the GNU General Public License as published by the Free Software Foundation, version 3.
@@ -86,6 +86,18 @@ void CreateComboBox(ComboBox ^%object, String ^name, int x, int y, int width, in
 	object->LostFocus += onLostFocus;
 	object->ContextMenu = gcnew ContextMenu;
 }
+void CreateCheckBox(CheckBox ^%object, String ^name, int x, int y, int width, int height, int tabIndex, AnchorType anchor, Appearance look, bool autoCheck, EventHandler ^onCheckStateChanged)
+{
+	object = gcnew CheckBox;
+	object->Name = name;
+	object->Location = Point(x, y);
+	object->Size = Size(width, height);
+	object->Anchor = (AnchorStyles)anchor;
+	object->TabIndex = tabIndex;
+	object->Appearance = look;
+	object->AutoCheck = autoCheck;
+	object->CheckStateChanged += onCheckStateChanged;
+}
 void CreatePanel(Panel ^%object, String ^name, int x, int y, int width, int height, int tabIndex, AnchorType anchor, bool autoScroll)
 {
 	object = gcnew Panel;
@@ -129,15 +141,25 @@ bool GetTextFiles(Collections::IList ^%list)
 
 bool GetTranslations(Collections::IList ^%list)
 {
-	String ^directoryPath(AppDomain::CurrentDomain->BaseDirectory + L"\\" + TRANSLATION_FILES_FOLDER_NAME);
-	if (Directory::Exists(directoryPath))
+	String ^archivePath(AppDomain::CurrentDomain->BaseDirectory + TRANSLATION_ARCHIVE_NAME + TRANSLATION_ARCHIVE_EXTENSION);
+	if (File::Exists(archivePath))
 	{
-		int dirLength(directoryPath->Length);
-		array<String^> ^files(Directory::GetFiles(directoryPath));
-		for (int i = 0; i < files->Length; ++i)
-			if (files[i]->EndsWith(TRANSLATION_FILE_EXTENSION))
-				list->Add(Path::GetFileNameWithoutExtension(files[i]));
+		ZipArchive ^archive(ZipFile::Open(archivePath, ZipArchiveMode::Update));
+		for (int i(archive->Entries->Count - 1); i >= 0; --i)
+			if (Path::GetExtension(archive->Entries[i]->FullName) == TRANSLATION_FILE_EXTENSION)
+				list->Add(Path::GetFileNameWithoutExtension(archive->Entries[i]->FullName));
+		archive->~ZipArchive();
 		return true;
 	}
 	return false;
+}
+
+String ^ReadTranslationFile(String ^entryName)
+{
+	ZipArchive ^archive(ZipFile::Open(AppDomain::CurrentDomain->BaseDirectory + TRANSLATION_ARCHIVE_NAME + TRANSLATION_ARCHIVE_EXTENSION, ZipArchiveMode::Read));
+	StreamReader ^sReader(gcnew StreamReader(archive->GetEntry(entryName)->Open()));
+	String ^text(sReader->ReadToEnd());
+	sReader->Close();
+	archive->~ZipArchive();
+	return text;
 }

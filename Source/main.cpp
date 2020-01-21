@@ -2,7 +2,7 @@
 *	<main.cpp>
 *
 *
-*	Copyright (C) 2019 Aloever Dulay
+*	Copyright (C) 2020 Aloever Dulay
 *
 *	This program is free software: you can redistribute it and/or modify it under the terms
 *	of the GNU General Public License as published by the Free Software Foundation, version 3.
@@ -39,7 +39,7 @@ void OnFormClosed(Object ^sender, FormClosedEventArgs ^e);
 void OnKeyDown(Object ^sender, KeyEventArgs ^e);
 void WriteToStickyNote(String ^filePath);
 
-gcroot<stringtable^> strtable(gcnew stringtable(AppDomain::CurrentDomain->BaseDirectory + L"\\" + RESOURCES_FOLDER_NAME + L"\\" + STRING_TABLE_FILE_NAME));
+gcroot<stringtable^> strtable(gcnew stringtable(AppDomain::CurrentDomain->BaseDirectory + RESOURCES_FOLDER_NAME + L"\\" + STRING_TABLE_FILE_NAME));
 gcroot<String^> initFilePath(String::Empty);
 gcroot<ToolTip^> toolTip(gcnew ToolTip);
 gcroot<MainWindow^> mainWindow(gcnew MainWindow);
@@ -111,8 +111,8 @@ void OnFormInit()
 	appForm->Size					= Size(350, 400);
 	appForm->FormClosed				+= gcnew FormClosedEventHandler(&OnFormClosed);
 	appForm->KeyDown				+= gcnew KeyEventHandler(&OnKeyDown);
-	
-	UserDefined::GetProperties(appForm);
+
+	appForm->SuspendLayout();
 
 	appForm->Add(
 		mainWindow,
@@ -124,6 +124,10 @@ void OnFormInit()
 		licenseWindow,
 		stickyNote
 	);
+
+	appForm->ResumeLayout();
+
+	UserDefined::GetProperties(appForm);
 
 	mainWindow->Display();
 
@@ -172,7 +176,7 @@ void OnFormInit()
 void OnFormClosed(Object ^sender, FormClosedEventArgs ^e)
 {
 	String
-		^directoryPath(AppDomain::CurrentDomain->BaseDirectory + L"\\" + RESOURCES_FOLDER_NAME),
+		^directoryPath(AppDomain::CurrentDomain->BaseDirectory + RESOURCES_FOLDER_NAME),
 		^filePath(directoryPath + L"\\" + STICKY_NOTE_FILE_NAME);
 	
 	if (Directory::Exists(directoryPath))

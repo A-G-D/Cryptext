@@ -4,7 +4,12 @@
 .FontFamily=
 .FontSize=
 .FontStyle=
-.Text=
+.Text=Back
+.Width=20
+.Height=20
+.Left=147
+.Top=335
+.Anchor=Bottom
 
 [panelAbout]
 .BackColor=
@@ -13,6 +18,11 @@
 .FontSize=
 .FontStyle=
 .Text=
+.Width=310
+.Height=300
+.Left=12
+.Top=17
+.Anchor=Center
 
 [lnklabelAboutInfo]
 .BackColor=
@@ -21,6 +31,11 @@
 .FontSize=
 .FontStyle=
 .Text=
+.Width=280
+.Height=260
+.Left=8
+.Top=8
+.Anchor=Center
 
 [textboxLicense]
 .BackColor=
@@ -29,3 +44,8 @@
 .FontSize=
 .FontStyle=
 .Text=
+.Width=310
+.Height=303
+.Left=12
+.Top=17
+.Anchor=Center

@@ -2,7 +2,7 @@
 *	<cypher.h>
 *
 *
-*	Copyright (C) 2019 Aloever Dulay
+*	Copyright (C) 2020 Aloever Dulay
 *
 *	This program is free software: you can redistribute it and/or modify it under the terms
 *	of the GNU General Public License as published by the Free Software Foundation, version 3.
@@ -32,6 +32,7 @@ private:
 		translationFlag;
 
 	static wchar_t letterSeparator = 0;
+	static unsigned short fixedLength = 0;
 
 	Cypher()
 	{
@@ -46,11 +47,12 @@ private:
 
 	static void Pair(wchar_t c, String ^s);
 
-	static bool LoadFromString(String ^text, Hashtable %translationTable, Hashtable %alphaTable, Hashtable %translationFlag, int lengths[], wchar_t %separator);
+	static bool LoadFromString(String ^text, Hashtable %translationTable, Hashtable %alphaTable, Hashtable %translationFlag, int lengths[], wchar_t %separator, unsigned short %length);
 
 public:
 
 	static wchar_t LetterSeparator();
+	static unsigned short FixedLength();
 
 	static wchar_t ToAlpha(String ^key);
 	static String ^Translate(wchar_t key);
@@ -60,8 +62,6 @@ public:
 	static void Clear();
 
 	static bool LoadFromString(String ^text);
-
-	static bool Load(String ^filePath);
 
 	static void LoadInternal();
 

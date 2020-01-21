@@ -2,7 +2,7 @@
 *	<mainwindow.cpp>
 *
 *
-*	Copyright (C) 2019 Aloever Dulay
+*	Copyright (C) 2020 Aloever Dulay
 *
 *	This program is free software: you can redistribute it and/or modify it under the terms
 *	of the GNU General Public License as published by the Free Software Foundation, version 3.
@@ -46,8 +46,6 @@ void MainWindow::InitializeComponent()
 	CreateButton(btnTranslator, L"btnTranslator", L"Translator", 12, 105, 310, 33, 2, AnchorType::CENTER_TOP, gcnew EventHandler(&OnBtnTranslatorClick));
 	CreateLinkLabel(lnklabelAbout, L"lnklabelAbout", L"About", 147, 335, 20, 20, 2, AnchorType::BOTTOM, gcnew LinkLabelLinkClickedEventHandler(&OnLnkLabelAboutClick));
 
-	UserDefined::GetProperties(L"MainPage.txt", btnTextFiles, btnTranslationFiles, btnTranslator, lnklabelAbout);
-
 	PauseLayout();
 
 	AddControl(
@@ -56,26 +54,28 @@ void MainWindow::InitializeComponent()
 		btnTranslator,
 		lnklabelAbout
 	);
-	
+
+	UserDefined::GetProperties(L"MainPage.txt", btnTextFiles, btnTranslationFiles, btnTranslator, lnklabelAbout);
+
 	ResumeLayout();
 }
 void OnBtnTextFilesClick(Object ^sender, EventArgs ^e)
 {
 	textFilesWindow->flag = true;
-	textFilesWindow->Display();
+	textFilesWindow->Display(true);
 }
 void OnBtnTranslationFilesClick(Object ^sender, EventArgs ^e)
 {
 	textFilesWindow->flag = false;
-	textFilesWindow->Display();
+	textFilesWindow->Display(true);
 }
 void OnBtnTranslatorClick(Object ^sender, EventArgs ^e)
 {
-	translatorWindow->Display();
+	translatorWindow->Display(true);
 }
 void OnLnkLabelAboutClick(Object ^sender, LinkLabelLinkClickedEventArgs ^e)
 {
-	aboutWindow->Display();
+	aboutWindow->Display(true);
 }
 MainWindow::MainWindow()
 {

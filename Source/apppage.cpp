@@ -2,7 +2,7 @@
 *	<apppage.cpp>
 *
 *
-*	Copyright (C) 2019 Aloever Dulay
+*	Copyright (C) 2020 Aloever Dulay
 *
 *	This program is free software: you can redistribute it and/or modify it under the terms
 *	of the GNU General Public License as published by the Free Software Foundation, version 3.
@@ -38,15 +38,11 @@ void AppPage::Initialize()
 
 void AppPage::OnHide()
 {
-	PauseLayout();
 	for (int i = controls->Count; i; static_cast<Control^>(controls[--i])->Hide());
-	ResumeLayout();
 }
 void AppPage::OnShow()
 {
-	PauseLayout();
 	for (int i = controls->Count; i; static_cast<Control^>(controls[--i])->Show());
-	ResumeLayout();
 }
 
 bool AppPage::IsVisible()
@@ -67,6 +63,17 @@ bool AppPage::Display()
 	OnShow();
 	GetForm()->___p__currentPage = this;
 	return true;
+}
+bool AppPage::Display(bool suspendLayout)
+{
+	if (suspendLayout)
+	{
+		PauseLayout();
+		bool result(Display());
+		ResumeLayout();
+		return result;
+	}
+	return Display();
 }
 
 void AppPage::PauseLayout()

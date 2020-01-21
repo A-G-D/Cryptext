@@ -4,7 +4,12 @@
 .FontFamily=
 .FontSize=
 .FontStyle=
-.Text=
+.Text=&Back
+.Width=75
+.Height=28
+.Left=12
+.Top=325
+.Anchor=BottomLeft
 
 [btnTranslateToText]
 .BackColor=
@@ -12,7 +17,12 @@
 .FontFamily=
 .FontSize=
 .FontStyle=
-.Text=
+.Text=Translate To &Text
+.Width=105
+.Height=28
+.Left=110
+.Top=325
+.Anchor=BottomRight
 
 [btnTranslateToCode]
 .BackColor=
@@ -20,7 +30,12 @@
 .FontFamily=
 .FontSize=
 .FontStyle=
-.Text=
+.Text=Translate To &Code
+.Width=105
+.Height=28
+.Left=217
+.Top=325
+.Anchor=BottomRight
 
 [labelTranslation]
 .BackColor=
@@ -28,7 +43,12 @@
 .FontFamily=
 .FontSize=
 .FontStyle=
-.Text=
+.Text=Translation
+.Width=54
+.Height=13
+.Left=12
+.Top=9
+.Anchor=TopLeft
 
 [labelInput]
 .BackColor=
@@ -36,7 +56,12 @@
 .FontFamily=
 .FontSize=
 .FontStyle=
-.Text=
+.Text=Input Text
+.Width=54
+.Height=13
+.Left=12
+.Top=61
+.Anchor=TopLeft
 
 [labelOutput]
 .BackColor=
@@ -44,7 +69,12 @@
 .FontFamily=
 .FontSize=
 .FontStyle=
-.Text=
+.Text=Output Text
+.Width=54
+.Height=13
+.Left=12
+.Top=196
+.Anchor=TopLeft
 
 [textboxInput]
 .BackColor=
@@ -53,6 +83,11 @@
 .FontSize=
 .FontStyle=
 .Text=
+.Width=310
+.Height=104
+.Left=12
+.Top=78
+.Anchor=Center
 
 [textboxOutput]
 .BackColor=
@@ -61,6 +96,11 @@
 .FontSize=
 .FontStyle=
 .Text=
+.Width=310
+.Height=104
+.Left=12
+.Top=213
+.Anchor=Center
 
 [cboxTranslation]
 .BackColor=
@@ -68,7 +108,12 @@
 .FontFamily=
 .FontSize=
 .FontStyle=
-.Text=
+.Text=< Select Translation >
+.Width=145
+.Height=20
+.Left=12
+.Top=26
+.Anchor=TopRight
 
 [tlpanelTextboxContainer]
 .BackColor=
@@ -77,3 +122,8 @@
 .FontSize=
 .FontStyle=
 .Text=
+.Width=316
+.Height=220
+.Left=9
+.Top=78
+.Anchor=Center
