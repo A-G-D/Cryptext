@@ -1,14 +1,15 @@
-Created text files can be found under the 'Texts' subfolder
-Successfully Created File
-Failed to create file
-Invalid Filename
-Successfully Created Translation
+Successfully created file
+Success
+Invalid file name!
+Error
+Successfully created translation
 Success
 Failed to create translation
-Operation Failed
-No Valid Key File Found!
+Error
+No valid key file found!
 Error
 Cannot find license file!
 Error
 '<FILE_NAME>' will be deleted. Continue?
 Confirm
+\nVersion: <VERSION>\n\nCheck for latest updates at: \n<SOURCE_LINK_TEXT>\n\n\n\n\nCopyright © <YEAR> <AUTHOR_NAME>\n\nThis program is licensed under the GNU General Public License. For more information, see the license file that you received along with this program, or go to <LICENSE_LINK_TEXT>.

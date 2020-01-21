@@ -24,7 +24,7 @@
 #include "namespaces.h"
 
 #define APPLICATION_NAME						L"Cryptext"
-#define VERSION									L"1.4.0"
+#define VERSION									L"1.4.1"
 #define YEAR									L"2020"
 #define AUTHOR_NAME								L"Aloever Dulay"
 #define AUTHOR_PSEUDONYM						L"AGD"
@@ -46,23 +46,24 @@
 #define SOURCE_LINK_TEXT						L"https://github.com/A-G-D/Cryptext/"
 #define SOURCE_LINK_URL							L"https://github.com/A-G-D/Cryptext/"
 
-#define MESSAGE_CREATE_FILE_SUCCESS				gcnew String(((stringtable^)(strtable))[0])
-#define CAPTION_CREATE_FILE_SUCCESS				gcnew String(((stringtable^)(strtable))[1])
-#define MESSAGE_CREATE_FILE_FAILURE				gcnew String(((stringtable^)(strtable))[2])
-#define CAPTION_CREATE_FILE_FAILURE				gcnew String(((stringtable^)(strtable))[3])
-#define MESSAGE_CREATE_TRANSLATION_SUCCESS		gcnew String(((stringtable^)(strtable))[4])
-#define CAPTION_CREATE_TRANSLATION_SUCCESS		gcnew String(((stringtable^)(strtable))[5])
-#define MESSAGE_CREATE_TRANSLATION_FAILURE		gcnew String(((stringtable^)(strtable))[6])
-#define CAPTION_CREATE_TRANSLATION_FAILURE		gcnew String(((stringtable^)(strtable))[7])
-#define MESSAGE_MISSING_KEY_ERROR				gcnew String(((stringtable^)(strtable))[8])
-#define CAPTION_MISSING_KEY_ERROR				gcnew String(((stringtable^)(strtable))[9])
-#define MESSAGE_MISSING_LICENSE_ERROR			gcnew String(((stringtable^)(strtable))[10])
-#define CAPTION_MISSING_LICENSE_ERROR			gcnew String(((stringtable^)(strtable))[11])
-#define MESSAGE_FILE_DELETE_CONFIRM				gcnew String(((stringtable^)(strtable))[12])
-#define CAPTION_FILE_DELETE_CONFIRM				gcnew String(((stringtable^)(strtable))[13])
+#define MESSAGE_CREATE_FILE_SUCCESS				gcnew String(((StringTable^)(strtable))[0])
+#define CAPTION_CREATE_FILE_SUCCESS				gcnew String(((StringTable^)(strtable))[1])
+#define MESSAGE_CREATE_FILE_FAILURE				gcnew String(((StringTable^)(strtable))[2])
+#define CAPTION_CREATE_FILE_FAILURE				gcnew String(((StringTable^)(strtable))[3])
+#define MESSAGE_CREATE_TRANSLATION_SUCCESS		gcnew String(((StringTable^)(strtable))[4])
+#define CAPTION_CREATE_TRANSLATION_SUCCESS		gcnew String(((StringTable^)(strtable))[5])
+#define MESSAGE_CREATE_TRANSLATION_FAILURE		gcnew String(((StringTable^)(strtable))[6])
+#define CAPTION_CREATE_TRANSLATION_FAILURE		gcnew String(((StringTable^)(strtable))[7])
+#define MESSAGE_MISSING_KEY_ERROR				gcnew String(((StringTable^)(strtable))[8])
+#define CAPTION_MISSING_KEY_ERROR				gcnew String(((StringTable^)(strtable))[9])
+#define MESSAGE_MISSING_LICENSE_ERROR			gcnew String(((StringTable^)(strtable))[10])
+#define CAPTION_MISSING_LICENSE_ERROR			gcnew String(((StringTable^)(strtable))[11])
+#define MESSAGE_FILE_DELETE_CONFIRM				gcnew String(((StringTable^)(strtable))[12])
+#define CAPTION_FILE_DELETE_CONFIRM				gcnew String(((StringTable^)(strtable))[13])
+#define ABOUT_TEXT								gcnew String(((StringTable^)(strtable))[14])
 
 
-#define STRING_TABLE_SIZE						14
+#define STRING_TABLE_SIZE						15
 #define BUTTON_HEIGHT							28
 #define BUTTON_WIDTH							75
 #define BACKGROUND_IMAGE_HEIGHT					200

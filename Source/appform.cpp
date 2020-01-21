@@ -22,7 +22,7 @@ using namespace WinFormsTemplate;
 AppForm::AppForm()
 	: pages(gcnew ArrayList), ___p__currentPage(nullptr)
 {
-	SetStyle(ControlStyles::SupportsTransparentBackColor, true);
+	SetStyle(ControlStyles::SupportsTransparentBackColor | ControlStyles::UserPaint | ControlStyles::AllPaintingInWmPaint, true);
 }
 AppForm::~AppForm()
 {

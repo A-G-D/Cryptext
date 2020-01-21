@@ -29,7 +29,7 @@
 
 using namespace WinFormsTemplate;
 
-extern gcroot<stringtable^> strtable;
+extern gcroot<StringTable^> strtable;
 extern gcroot<MainWindow^> mainWindow;
 extern gcroot<TextEditingWindow^> textEditingWindow;
 extern gcroot<TranslationEditingWindow^> translationEditingWindow;

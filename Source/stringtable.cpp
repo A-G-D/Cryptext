@@ -20,7 +20,7 @@
 #include "namespaces.h"
 #include "macros.h"
 
-String ^stringtable::operator[](unsigned int i)
+String ^StringTable::operator[](unsigned int i)
 {
 	if (i >= STRING_TABLE_SIZE)
 		throw std::out_of_range("Index Out of Range");
@@ -28,26 +28,34 @@ String ^stringtable::operator[](unsigned int i)
 		return String::Empty;
 	return __table[i];
 }
-unsigned int stringtable::size()
+unsigned int StringTable::size()
 {
 	return __table->Count;
 }
 
-stringtable::stringtable()
+StringTable::StringTable()
 {
 }
-stringtable::stringtable(String ^path)
+StringTable::StringTable(String ^path)
 	: __table(gcnew List<String^>)
 {
 	if (File::Exists(path))
 	{
 		String
-			^text(File::ReadAllText(path)),
+			^text(Encoding::Default->GetString(File::ReadAllBytes(path))),
 			^temp;
 
 		for (int i(0); i < text->Length; ++i)
 			if (text[i] != (wchar_t)'\n' && text[i] != (wchar_t)'\r')
-				temp += text[i];
+			{
+				if (i + 1 == text->Length)
+				{
+					__table->Add(temp);
+					temp = String::Empty;
+				}
+				else
+					temp += text[i];
+			}
 			else if (text[i] == (wchar_t)'\n' && !(temp == String::Empty))
 			{
 				__table->Add(temp);
@@ -55,6 +63,6 @@ stringtable::stringtable(String ^path)
 			}
 	}
 }
-stringtable::~stringtable()
+StringTable::~StringTable()
 {
 }

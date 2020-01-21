@@ -22,7 +22,7 @@
 #include "macros.h"
 #include <gcroot.h>
 
-extern gcroot<stringtable^> strtable;
+extern gcroot<StringTable^> strtable;
 
 int *Cypher::LengthStorage()
 {

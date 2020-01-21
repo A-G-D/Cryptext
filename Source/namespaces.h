@@ -29,6 +29,7 @@ using namespace System::Drawing;
 using namespace System::IO;
 using namespace System::IO::Compression;
 using namespace System::Windows::Forms;
+using namespace System::Text;
 
 #endif
 

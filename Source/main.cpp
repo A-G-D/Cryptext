@@ -39,7 +39,7 @@ void OnFormClosed(Object ^sender, FormClosedEventArgs ^e);
 void OnKeyDown(Object ^sender, KeyEventArgs ^e);
 void WriteToStickyNote(String ^filePath);
 
-gcroot<stringtable^> strtable(gcnew stringtable(AppDomain::CurrentDomain->BaseDirectory + RESOURCES_FOLDER_NAME + L"\\" + STRING_TABLE_FILE_NAME));
+gcroot<StringTable^> strtable(gcnew StringTable(AppDomain::CurrentDomain->BaseDirectory + RESOURCES_FOLDER_NAME + L"\\" + STRING_TABLE_FILE_NAME));
 gcroot<String^> initFilePath(String::Empty);
 gcroot<ToolTip^> toolTip(gcnew ToolTip);
 gcroot<MainWindow^> mainWindow(gcnew MainWindow);

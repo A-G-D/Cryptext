@@ -22,24 +22,24 @@
 
 #include "namespaces.h"
 
-ref class stringtable
+ref class StringTable
 {
 private:
 
 	List<System::String^> ^__table;
 
-	stringtable();
+	StringTable();
 
 protected:
 
-	~stringtable();
+	~StringTable();
 
 public:
 
 	String ^operator[](unsigned int i);
 	unsigned int size();
 
-	stringtable(String ^path);
+	StringTable(String ^path);
 };
 #endif
 

@@ -27,7 +27,7 @@
 
 using namespace WinFormsTemplate;
 
-extern gcroot<stringtable^> strtable;
+extern gcroot<StringTable^> strtable;
 extern gcroot<MainWindow^> mainWindow;
 extern gcroot<AboutWindow^> aboutWindow;
 extern gcroot<LicenseWindow^> licenseWindow;
@@ -39,7 +39,17 @@ void OnLnkLabelBackClick(Object ^sender, LinkLabelLinkClickedEventArgs ^e);
 */
 void AboutWindow::InitializeComponent()
 {
-	String ^aboutText(L"\r\nVersion: " + VERSION + L"\r\n\r\nCheck for latest updates at: \r\n" + SOURCE_LINK_TEXT + L"\r\n\r\n\r\n\r\n\r\nCopyright © " + YEAR + L" " + AUTHOR_NAME + L"\r\n\r\nThis program is licensed under the GNU General Public License. For more information, see the license file that you received along with this program, or go to " + LICENSE_LINK_TEXT + L".");
+	//String ^aboutText(L"\r\nVersion: " + VERSION + L"\r\n\r\nCheck for latest updates at: \r\n" + SOURCE_LINK_TEXT + L"\r\n\r\n\r\n\r\n\r\nCopyright © " + YEAR + L" " + AUTHOR_NAME + L"\r\n\r\nThis program is licensed under the GNU General Public License. For more information, see the license file that you received along with this program, or go to " + LICENSE_LINK_TEXT + L".");
+	String  ^aboutText
+	(
+		(ABOUT_TEXT)
+			->Replace(L"\\n", L"\r\n")
+			->Replace(L"<VERSION>", VERSION)
+			->Replace(L"<SOURCE_LINK_TEXT>", SOURCE_LINK_TEXT)
+			->Replace(L"<YEAR>", YEAR)
+			->Replace(L"<AUTHOR_NAME>", AUTHOR_NAME)
+			->Replace(L"<LICENSE_LINK_TEXT>", LICENSE_LINK_TEXT)
+	);
 
 	CreatePanel(panelAbout, L"panelAbout", 12, 17, 310, 303, 1, AnchorType::CENTER, true);
 	CreateLinkLabel(lnklabelBack, L"lnklabelBack", L"Back", 147, 335, 20, 20, 0, AnchorType::BOTTOM, gcnew LinkLabelLinkClickedEventHandler(&OnLnkLabelBackClick));

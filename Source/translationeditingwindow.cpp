@@ -28,7 +28,7 @@
 
 using namespace WinFormsTemplate;
 
-extern gcroot<stringtable^> strtable;
+extern gcroot<StringTable^> strtable;
 extern gcroot<TextFilesWindow^> textFilesWindow;
 
 wchar_t separatorCharInput(0);

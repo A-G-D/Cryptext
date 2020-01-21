@@ -28,7 +28,7 @@
 
 using namespace WinFormsTemplate;
 
-extern gcroot<stringtable^> strtable;
+extern gcroot<StringTable^> strtable;
 extern gcroot<TextFilesWindow^> textFilesWindow;
 extern gcroot<ToolTip^> toolTip;
 
@@ -159,7 +159,7 @@ int TextEditingWindow::FindSelectionForwards(int &sStart, int &sLength)
 }
 int TextEditingWindow::FindSelectionBackwards(int &end, int &sStart, int &sLength)
 {
-	int start;
+	int start, currentIndex;
 	wchar_t c, prevC;
 
 	for (int i(textboxInput->Text->Length - 1); i > (sStart + sLength - 1); --i)
@@ -180,8 +180,8 @@ int TextEditingWindow::FindSelectionBackwards(int &end, int &sStart, int &sLengt
 		++sLength;
 		--sStart;
 	}
+
 	start = end + 1;
-	int currentIndex;
 	for (int i(sLength); i; --i)
 	{
 		currentIndex = sStart + i - 1;
@@ -210,11 +210,12 @@ int TextEditingWindow::FindSelectionBackwards(int &end, int &sStart, int &sLengt
 }
 int TextEditingWindow::DeleteTextForwards(String ^%s, int sStart, int sLength)
 {
-	int start(FindSelectionForwards(sStart, sLength)), end(start - 1);
+	int start(FindSelectionForwards(sStart, sLength)), end(start - 1), currentIndex;
 	wchar_t c(0);
 	for (int i(sLength); i; --i)
 	{
-		c = textboxInput->Text[sStart + sLength - i];
+		currentIndex = sStart + sLength - i;
+		c = textboxInput->Text[currentIndex];
 		if (c != (wchar_t)'\n')
 		{
 			if (!Cypher::FixedLength())
@@ -222,7 +223,7 @@ int TextEditingWindow::DeleteTextForwards(String ^%s, int sStart, int sLength)
 			end += Cypher::GetTranslationLength(c);
 			if (c == (wchar_t)'\r')
 				end += 2;
-			if ((sStart + sLength - i) == textboxInput->Text->Length || (c == (wchar_t)'\r' || ((sStart + sLength - i + 1) < textboxInput->Text->Length && textboxInput->Text[sStart + sLength - i + 1] == (wchar_t)'\r')))
+			if (!Cypher::FixedLength() && (currentIndex == textboxInput->Text->Length || (c == (wchar_t)'\r' || ((currentIndex + 1) < textboxInput->Text->Length && textboxInput->Text[currentIndex + 1] == (wchar_t)'\r'))))
 				--end;
 		}
 	}
@@ -394,7 +395,12 @@ void TextEditingWindow::OnTextboxInputKeyPress(Object ^sender, KeyPressEventArgs
 		else if (internOutput->Length == 0)
 			internOutput = internOutput->Insert(start, input);
 		else if (start == 0)
-			internOutput = internOutput->Insert(0, Cypher::FixedLength() ? input : input + Cypher::LetterSeparator());
+		{
+			if (Cypher::FixedLength() || (internOutput->Length > 0 && internOutput[start + 1]))
+				internOutput = internOutput->Insert(0, input);
+			else
+				internOutput = internOutput->Insert(0, input + Cypher::LetterSeparator());
+		}
 		else if (internOutput[start - 1] == (wchar_t)'\n')
 		{
 			if (start < internOutput->Length)
@@ -410,6 +416,7 @@ void TextEditingWindow::OnTextboxInputKeyPress(Object ^sender, KeyPressEventArgs
 		else
 			internOutput = internOutput->Insert(start, Cypher::FixedLength() ? input : Cypher::LetterSeparator() + input);
 	}
+
 	textboxOutput->Text = internOutput;
 }
 void TextEditingWindow::OnBtnBackClick(Object ^sender, EventArgs ^e)

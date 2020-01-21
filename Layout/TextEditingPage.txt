@@ -95,7 +95,7 @@
 .FontFamily=
 .FontSize=
 .FontStyle=
-.Text=Output Text
+.Text=\nOutput Text
 .Width=54
 .Height=13
 .Left=12

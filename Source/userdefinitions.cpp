@@ -426,7 +426,7 @@ bool UserDefined::GetProperties(String ^fileName, ...array<Control^> ^controls)
 											controls[index]->Font = gcnew Font(controls[index]->Font, FontStyle::Strikeout);
 										break;
 									case Property::Text:
-										controls[index]->Text = str->Replace(L"&&", L"&");
+										controls[index]->Text = str->Replace(L"&&", L"&")->Replace(L"\\n", L"\r\n");
 										break;
 									case Property::Height:
 										controls[index]->Height = Convert::ToInt32(str);
