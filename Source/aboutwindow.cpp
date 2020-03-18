@@ -37,6 +37,17 @@ void OnLnkLabelBackClick(Object ^sender, LinkLabelLinkClickedEventArgs ^e);
 /*
 *	AboutWindow Class Definitions
 */
+AboutWindow::AboutWindow()
+{
+}
+AboutWindow::~AboutWindow()
+{
+	this->!AboutWindow();
+}
+AboutWindow::!AboutWindow()
+{
+}
+
 void AboutWindow::InitializeComponent()
 {
 	//String ^aboutText(L"\r\nVersion: " + VERSION + L"\r\n\r\nCheck for latest updates at: \r\n" + SOURCE_LINK_TEXT + L"\r\n\r\n\r\n\r\n\r\nCopyright © " + YEAR + L" " + AUTHOR_NAME + L"\r\n\r\nThis program is licensed under the GNU General Public License. For more information, see the license file that you received along with this program, or go to " + LICENSE_LINK_TEXT + L".");
@@ -98,13 +109,21 @@ void AboutWindow::OnLnkLabelAboutClick(Object ^sender, LinkLabelLinkClickedEvent
 			break;
 	}
 }
-AboutWindow::AboutWindow()
-{
-}
 
 /*
 *	LicenseWindow Class Definitions
 */
+LicenseWindow::LicenseWindow()
+{
+}
+LicenseWindow::~LicenseWindow()
+{
+	this->!LicenseWindow();
+}
+LicenseWindow::!LicenseWindow()
+{
+}
+
 void LicenseWindow::InitializeComponent()
 {
 	CreateLinkLabel(lnklabelBack, L"lnklabelBack", L"Back", 147, 335, 20, 20, 0, AnchorType::BOTTOM, gcnew LinkLabelLinkClickedEventHandler(this, &LicenseWindow::OnLnkLabelBackClick));
@@ -143,9 +162,6 @@ void LicenseWindow::OnLnkLabelBackClick(Object ^sender, LinkLabelLinkClickedEven
 	ResumeLayout();
 }
 
-LicenseWindow::LicenseWindow()
-{
-}
 void LicenseWindow::OnShow()
 {
 	PauseLayout();

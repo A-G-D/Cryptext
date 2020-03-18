@@ -61,7 +61,7 @@ bool AppPage::Display()
 	if (GetForm()->GetCurrentPage() != nullptr)
 		GetForm()->GetCurrentPage()->OnHide();
 	OnShow();
-	GetForm()->___p__currentPage = this;
+	GetForm()->__currentPage = this;
 	return true;
 }
 bool AppPage::Display(bool suspendLayout)
@@ -104,5 +104,5 @@ ArrayList ^AppPage::GetControls()
 }
 AppForm ^AppPage::GetForm()
 {
-	return ___p__appForm;
+	return __appForm;
 }

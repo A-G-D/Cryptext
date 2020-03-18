@@ -19,7 +19,7 @@
 #include "namespaces.h"
 #include "winformstemplate.h"
 #include "textfileswindow.h"
-#include "cypher.h"
+#include "cypher.hpp"
 #include "utils.h"
 #include "userdefinitions.h"
 #include "macros.h"
@@ -51,6 +51,18 @@ void CreateColumnElements(array<Label^> ^%label, array<TextBox^> ^%textbox, int 
 		CreateTextBox(textbox[i], L"textbox_" + (wchar_t)(charOffset + i), x + 20, 9 + 26*i, 31, 20, tabOffset + i, AnchorType::TOP_LEFT, false);
 	}
 }
+
+TranslationEditingWindow::TranslationEditingWindow()
+{
+}
+TranslationEditingWindow::~TranslationEditingWindow()
+{
+	this->!TranslationEditingWindow();
+}
+TranslationEditingWindow::!TranslationEditingWindow()
+{
+}
+
 void TranslationEditingWindow::InitializeComponent()
 {
 	PauseLayout();
@@ -162,7 +174,7 @@ void GetInputChars(array<Label^> ^label, array<TextBox^> ^textbox, String ^%outp
 {
 	output += L"\n";
 
-	array<String^> ^suffix = gcnew array<String^>(length + 1);
+	array<String^> ^suffix(gcnew array<String^>(length + 1));
 
 	if (length)
 		for (unsigned short i(length + 1); i--;)
@@ -199,7 +211,7 @@ void GetInputChars(array<Label^> ^label, array<TextBox^> ^textbox, String ^%outp
 void LoadTranslations(array<Label^> ^label, array<TextBox^> ^textbox)
 {
 	for (int i(0); i < textbox->Length; ++i)
-		textbox[i]->Text = (String^)(Cypher::Translate((wchar_t)((label[i]->Text == L"Tab") ? '\t' : label[i]->Text[0])));
+		textbox[i]->Text = CharArrayToString(Cypher::Translate((wchar_t)((label[i]->Text == L"Tab") ? '\t' : label[i]->Text[0])));
 }
 unsigned short TranslationEditingWindow::UpdateTextboxesCharLimit()
 {
@@ -356,7 +368,7 @@ void TranslationEditingWindow::OnBtnSaveClick(Object ^sender, EventArgs ^e)
 }
 bool TranslationEditingWindow::Load(String ^name, String ^text)
 {
-	if (Cypher::LoadFromString(text))
+	if (Cypher::LoadFromString(StringToCharArray(text)))
 	{
 		String ^fileName(Path::GetFileNameWithoutExtension(name));
 
@@ -387,9 +399,6 @@ bool TranslationEditingWindow::Load(String ^name, String ^text)
 		return true;
 	}
 	return false;
-}
-TranslationEditingWindow::TranslationEditingWindow()
-{
 }
 #undef upper
 #undef lower

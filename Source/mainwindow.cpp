@@ -39,6 +39,17 @@ void OnLnkLabelAboutClick(Object ^sender, LinkLabelLinkClickedEventArgs ^e);
 /*
 *	MainWindow Class Definitions
 */
+MainWindow::MainWindow()
+{
+}
+MainWindow::~MainWindow()
+{
+	this->!MainWindow();
+}
+MainWindow::!MainWindow()
+{
+}
+
 void MainWindow::InitializeComponent()
 {
 	CreateButton(btnTextFiles, L"btnTextFiles", L"Text Files", 12, 27, 310, 33, 0, AnchorType::CENTER_TOP, gcnew EventHandler(&OnBtnTextFilesClick));
@@ -76,9 +87,6 @@ void OnBtnTranslatorClick(Object ^sender, EventArgs ^e)
 void OnLnkLabelAboutClick(Object ^sender, LinkLabelLinkClickedEventArgs ^e)
 {
 	aboutWindow->Display(true);
-}
-MainWindow::MainWindow()
-{
 }
 void MainWindow::ClickTextFilesButton()
 {

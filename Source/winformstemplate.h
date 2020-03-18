@@ -46,7 +46,7 @@ namespace WinFormsTemplate
 
 	public:
 
-		AppForm ^___p__appForm;
+		AppForm ^__appForm;
 
 		AppPage();
 
@@ -80,7 +80,7 @@ namespace WinFormsTemplate
 
 	public:
 
-		AppPage ^___p__currentPage;
+		AppPage ^__currentPage;
 
 		AppForm();
 

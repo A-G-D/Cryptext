@@ -20,7 +20,7 @@
 #include "macros.h"
 #include "utils.h"
 #include "userdefinitions.h"
-#include "cypher.h"
+#include "cypher.hpp"
 #include "winformstemplate.h"
 #include "mainwindow.h"
 #include <gcroot.h>
@@ -32,6 +32,17 @@ extern gcroot<MainWindow^> mainWindow;
 /*
 *	TranslatorWindow Class Definitions
 */
+TranslatorWindow::TranslatorWindow()
+{
+}
+TranslatorWindow::~TranslatorWindow()
+{
+	this->!TranslatorWindow();
+}
+TranslatorWindow::!TranslatorWindow()
+{
+}
+
 void TranslatorWindow::InitializeComponent()
 {
 	CreateComboBox(cboxTranslation, L"cboxTranslation", 12, 26, 145, 20, 1, AnchorType::TOP_LEFT, gcnew EventHandler(this, &TranslatorWindow::OnCBoxTranslationLostFocus));
@@ -114,11 +125,11 @@ void TranslatorWindow::OnBtnBackClick(Object ^sender, EventArgs ^e)
 }
 void TranslatorWindow::OnBtnTranslateToCodeClick(Object ^sender, EventArgs ^e)
 {
-	textboxOutput->Text = Cypher::TranslateAllText(textboxInput->Text);
+	textboxOutput->Text = CharArrayToString(Cypher::TranslateAllText(StringToCharArray(textboxInput->Text)));
 }
 void TranslatorWindow::OnBtnTranslateToTextClick(Object ^sender, EventArgs ^e)
 {
-	textboxInput->Text = Cypher::ReadAllText(textboxOutput->Text);
+	textboxInput->Text = CharArrayToString(Cypher::ReadAllText(StringToCharArray(textboxOutput->Text)));
 }
 
 void TranslatorWindow::OnCBoxTranslationLostFocus(Object ^sender, EventArgs ^e)
@@ -135,12 +146,8 @@ void TranslatorWindow::OnCBoxTranslationLostFocus(Object ^sender, EventArgs ^e)
 	else
 	{
 		activeTranslation = cboxTranslation->Text;
-		Cypher::LoadFromString(ReadTranslationFile(activeTranslation + TRANSLATION_FILE_EXTENSION));
+		Cypher::LoadFromString(StringToCharArray(ReadTranslationFile(activeTranslation + TRANSLATION_FILE_EXTENSION)));
 	}
-}
-
-TranslatorWindow::TranslatorWindow()
-{
 }
 
 void TranslatorWindow::OnShow()

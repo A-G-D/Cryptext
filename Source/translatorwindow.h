@@ -54,13 +54,8 @@ private:
 
 protected:
 
-	!TranslatorWindow()
-	{
-	}
-	~TranslatorWindow()
-	{
-		this->!TranslatorWindow();
-	}
+	!TranslatorWindow();
+	~TranslatorWindow();
 
 	virtual void InitializeComponent() override;
 

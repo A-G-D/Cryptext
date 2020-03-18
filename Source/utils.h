@@ -21,10 +21,11 @@
 #define _UTILS_H_
 
 #include "namespaces.h"
-#include "utils.h"
+#include <string>
 
 
-#define MIN(a, b) (a < b) ? a : b
+#define MIN(a, b) ((a < b) ? a : b)
+#define CharArrayToString(pwc) static_cast<String^>(gcnew String((pwc).data()))
 
 enum AnchorType
 {
@@ -52,6 +53,8 @@ bool IsWhitespace(wchar_t c);
 bool GetTextFiles(Collections::IList ^%list);
 bool GetTranslations(Collections::IList ^%list);
 String ^ReadTranslationFile(String ^entryName);
+String ^GetEqualTranslation(String ^string);
+std::wstring StringToCharArray(String ^str);
 
 #endif
 

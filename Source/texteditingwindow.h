@@ -74,13 +74,8 @@ private:
 
 protected:
 
-	!TextEditingWindow()
-	{
-	}
-	~TextEditingWindow()
-	{
-		this->!TextEditingWindow();
-	}
+	!TextEditingWindow();
+	~TextEditingWindow();
 
 	virtual void InitializeComponent() override;
 

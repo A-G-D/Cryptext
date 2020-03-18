@@ -66,13 +66,8 @@ private:
 
 protected:
 
-	!TranslationEditingWindow()
-	{
-	}
-	~TranslationEditingWindow()
-	{
-		this->!TranslationEditingWindow();
-	}
+	!TranslationEditingWindow();
+	~TranslationEditingWindow();
 
 	virtual void InitializeComponent() override;
 

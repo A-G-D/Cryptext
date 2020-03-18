@@ -39,13 +39,8 @@ private:
 
 protected:
 
-	!AboutWindow()
-	{
-	}
-	~AboutWindow()
-	{
-		this->!AboutWindow();
-	}
+	!AboutWindow();
+	~AboutWindow();
 
 	virtual void InitializeComponent() override;
 
@@ -68,13 +63,8 @@ private:
 
 protected:
 
-	!LicenseWindow()
-	{
-	}
-	~LicenseWindow()
-	{
-		this->!LicenseWindow();
-	}
+	!LicenseWindow();
+	~LicenseWindow();
 
 	virtual void InitializeComponent() override;
 

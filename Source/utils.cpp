@@ -19,7 +19,9 @@
 #include "utils.h"
 #include "stringtable.h"
 #include "macros.h"
+#include "cypher.hpp"
 #include <gcroot.h>
+#include <vcclr.h>
 
 extern gcroot<StringTable^> strtable;
 
@@ -162,4 +164,37 @@ String ^ReadTranslationFile(String ^entryName)
 	sReader->Close();
 	archive->~ZipArchive();
 	return text;
+}
+
+String ^GetEqualTranslation(String ^string)
+{
+	String
+		^archivePath(AppDomain::CurrentDomain->BaseDirectory + TRANSLATION_ARCHIVE_NAME + TRANSLATION_ARCHIVE_EXTENSION),
+		^matchedString(String::Empty);
+
+	if (File::Exists(archivePath))
+	{
+		ZipArchive ^archive(ZipFile::Open(archivePath, ZipArchiveMode::Read));
+		for (int i(archive->Entries->Count - 1); i >= 0; --i)
+			if (Path::GetExtension(archive->Entries[i]->FullName) == TRANSLATION_FILE_EXTENSION)
+			{
+				StreamReader ^sReader(gcnew StreamReader(archive->Entries[i]->Open()));
+				if (Cypher::IsEqual(StringToCharArray(string), StringToCharArray(sReader->ReadToEnd())))
+				{
+					sReader->Close();
+					matchedString = Path::GetFileNameWithoutExtension(archive->Entries[i]->Name);
+					break;
+				}
+				else
+					sReader->Close();
+			}
+		archive->~ZipArchive();
+	}
+	return matchedString;
+}
+
+std::wstring StringToCharArray(String ^str)
+{
+	pin_ptr<const wchar_t> ptr(PtrToStringChars(str));
+	return ptr;
 }

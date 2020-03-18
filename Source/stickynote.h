@@ -36,13 +36,8 @@ private:
 
 protected:
 
-	!StickyNote()
-	{
-	}
-	~StickyNote()
-	{
-		this->!StickyNote();
-	}
+	!StickyNote();
+	~StickyNote();
 
 	virtual void InitializeComponent() override;
 

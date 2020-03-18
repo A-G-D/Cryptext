@@ -20,7 +20,7 @@
 using namespace WinFormsTemplate;
 
 AppForm::AppForm()
-	: pages(gcnew ArrayList), ___p__currentPage(nullptr)
+	: pages(gcnew ArrayList), __currentPage(nullptr)
 {
 	SetStyle(ControlStyles::SupportsTransparentBackColor | ControlStyles::UserPaint | ControlStyles::AllPaintingInWmPaint, true);
 }
@@ -34,12 +34,12 @@ ArrayList ^AppForm::GetPages()
 }
 AppPage ^AppForm::GetCurrentPage()
 {
-	return ___p__currentPage;
+	return __currentPage;
 }
 
 void AppForm::Add(AppPage ^page)
 {
-	page->___p__appForm = this;
+	page->__appForm = this;
 	page->Initialize();
 	Controls->AddRange(static_cast<array<Control^>^>(page->GetControls()->ToArray()));
 	pages->Add(page);

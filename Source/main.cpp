@@ -15,6 +15,8 @@
 *	If not, see <https://www.gnu.org/licenses/>.
 *
 */
+#pragma comment(user, "Compiled on" __DATE__ " at " __TIME__)
+
 #include "macros.h"
 #include "namespaces.h"
 #include "winformstemplate.h"

@@ -24,7 +24,7 @@
 #include "namespaces.h"
 
 #define APPLICATION_NAME						L"Cryptext"
-#define VERSION									L"1.4.1"
+#define VERSION									L"1.4.2"
 #define YEAR									L"2020"
 #define AUTHOR_NAME								L"Aloever Dulay"
 #define AUTHOR_PSEUDONYM						L"AGD"
@@ -68,8 +68,6 @@
 #define BUTTON_WIDTH							75
 #define BACKGROUND_IMAGE_HEIGHT					200
 #define BACKGROUND_IMAGE_WIDTH					175
-
-#define LETTER_SEPARATOR						' '
 
 #endif
 

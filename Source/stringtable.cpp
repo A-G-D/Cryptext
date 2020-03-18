@@ -20,22 +20,6 @@
 #include "namespaces.h"
 #include "macros.h"
 
-String ^StringTable::operator[](unsigned int i)
-{
-	if (i >= STRING_TABLE_SIZE)
-		throw std::out_of_range("Index Out of Range");
-	else if (i >= size())
-		return String::Empty;
-	return __table[i];
-}
-unsigned int StringTable::size()
-{
-	return __table->Count;
-}
-
-StringTable::StringTable()
-{
-}
 StringTable::StringTable(String ^path)
 	: __table(gcnew List<String^>)
 {
@@ -63,6 +47,26 @@ StringTable::StringTable(String ^path)
 			}
 	}
 }
+StringTable::StringTable()
+{
+}
 StringTable::~StringTable()
 {
+	this->!StringTable();
+}
+StringTable::!StringTable()
+{
+}
+
+String ^StringTable::operator[](unsigned int i)
+{
+	if (i >= STRING_TABLE_SIZE)
+		throw std::out_of_range("Index Out of Range");
+	else if (i >= size())
+		return String::Empty;
+	return __table[i];
+}
+unsigned int StringTable::size()
+{
+	return __table->Count;
 }

@@ -45,13 +45,8 @@ private:
 
 protected:
 
-	!TextFilesWindow()
-	{
-	}
-	~TextFilesWindow()
-	{
-		this->!TextFilesWindow();
-	}
+	!TextFilesWindow();
+	~TextFilesWindow();
 
 	virtual void InitializeComponent() override;
 

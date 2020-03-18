@@ -39,6 +39,18 @@ void OnBtnBackClick(Object ^sender, EventArgs ^e);
 /*
 *	TextFilesWindow Class Definitions
 */
+TextFilesWindow::TextFilesWindow()
+	: flag(false)
+{
+}
+TextFilesWindow::~TextFilesWindow()
+{
+	this->!TextFilesWindow();
+}
+TextFilesWindow::!TextFilesWindow()
+{
+}
+
 void TextFilesWindow::InitializeComponent()
 {
 	CreateButton(btnBack, L"btnBack", L"Back", 12, 325, BUTTON_WIDTH, BUTTON_HEIGHT, 4, AnchorType::BOTTOM_LEFT, gcnew EventHandler(&OnBtnBackClick));
@@ -134,10 +146,6 @@ void TextFilesWindow::OnBtnDeleteTextClick(Object ^sender, EventArgs ^e)
 void TextFilesWindow::OnBtnCreateTextClick(Object ^sender, EventArgs ^e)
 {
 	(flag ? (AppPage^)textEditingWindow : (AppPage^)translationEditingWindow)->Display(true);
-}
-TextFilesWindow::TextFilesWindow()
-	: flag(false)
-{
 }
 void TextFilesWindow::UpdateList()
 {

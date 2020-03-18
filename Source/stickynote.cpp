@@ -30,6 +30,17 @@ extern gcroot<AppForm^> appForm;
 /*
 *	StickyNote Class Definitions
 */
+StickyNote::StickyNote()
+{
+}
+StickyNote::~StickyNote()
+{
+	this->!StickyNote();
+}
+StickyNote::!StickyNote()
+{
+}
+
 void StickyNote::InitializeComponent()
 {
 	CreateTextBox(textboxStickyNote, L"textboxStickyNote", 6, 6, 322, 348, 0, AnchorType::CENTER, true);
@@ -48,10 +59,6 @@ void StickyNote::InitializeComponent()
 	UserDefined::GetProperties(L"StickyNotePage.txt", textboxStickyNote);
 
 	ResumeLayout();
-}
-
-StickyNote::StickyNote()
-{
 }
 
 void StickyNote::OnEscKeyDown(Object ^sender, KeyEventArgs ^e)

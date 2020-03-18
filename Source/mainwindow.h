@@ -42,13 +42,8 @@ private:
 
 protected:
 
-	!MainWindow()
-	{
-	}
-	~MainWindow()
-	{
-		this->!MainWindow();
-	}
+	!MainWindow();
+	~MainWindow();
 
 	virtual void InitializeComponent() override;
 

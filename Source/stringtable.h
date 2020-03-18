@@ -32,6 +32,7 @@ private:
 
 protected:
 
+	!StringTable();
 	~StringTable();
 
 public:

@@ -22,7 +22,7 @@
 #include "macros.h"
 #include "utils.h"
 #include "userdefinitions.h"
-#include "cypher.h"
+#include "cypher.hpp"
 #include "stringtable.h"
 #include <gcroot.h>
 
@@ -35,6 +35,17 @@ extern gcroot<ToolTip^> toolTip;
 /*
 *	TextEditingWindow Class Definitions
 */
+TextEditingWindow::TextEditingWindow()
+{
+}
+TextEditingWindow::~TextEditingWindow()
+{
+	this->!TextEditingWindow();
+}
+TextEditingWindow::!TextEditingWindow()
+{
+}
+
 void TextEditingWindow::InitializeComponent()
 {
 	CreateTextBox(textboxFileName, L"textboxFileName", 12, 26, 145, 20, 0, AnchorType::TOP_LEFT, false);
@@ -263,10 +274,10 @@ void TextEditingWindow::OnCBoxTranslationLostFocus(Object ^sender, EventArgs ^e)
 	{
 		bool rewriteOutput = activeTranslation != cboxTranslation->Text;
 		activeTranslation = cboxTranslation->Text;
-		Cypher::LoadFromString(ReadTranslationFile(activeTranslation + TRANSLATION_FILE_EXTENSION));
+		Cypher::LoadFromString(StringToCharArray(ReadTranslationFile(activeTranslation + TRANSLATION_FILE_EXTENSION)));
 		if (rewriteOutput)
 		{
-			textboxOutput->Text = Cypher::TranslateAllText(textboxInput->Text);
+			textboxOutput->Text = CharArrayToString(Cypher::TranslateAllText(StringToCharArray(textboxInput->Text)));
 
 			String ^newInput(String::Empty);
 			for (int i(0); i < textboxInput->Text->Length; ++i)
@@ -380,7 +391,7 @@ void TextEditingWindow::OnTextboxInputKeyPress(Object ^sender, KeyPressEventArgs
 			}
 		}
 
-		String ^input((clipText == nullptr) ? Cypher::Translate(c) : Cypher::TranslateAllText(clipText));
+		String ^input(CharArrayToString((clipText == nullptr) ? Cypher::Translate(c) : Cypher::TranslateAllText(StringToCharArray(clipText))));
 
 		if (input == String::Empty)
 			e->Handled = true;
@@ -452,8 +463,8 @@ void TextEditingWindow::OnBtnSaveClick(Object ^sender, EventArgs ^e)
 			String ^translationText(activeTranslation + L"\n\n" + ReadTranslationFile(activeTranslation + TRANSLATION_FILE_EXTENSION));
 
 			Cypher::LoadInternal();
-			keyOutput = Cypher::TranslateAllText(translationText);
-			Cypher::LoadFromString(translationText);
+			keyOutput = CharArrayToString(Cypher::TranslateAllText(StringToCharArray(translationText)));
+			Cypher::LoadFromString(StringToCharArray(translationText));
 		}
 		else if (File::Exists(currentPath))
 		{
@@ -490,8 +501,8 @@ void TextEditingWindow::OnBtnImportClick(Object ^sender, EventArgs ^e)
 		textboxInput->Text = File::ReadAllText(Path::GetFullPath(dialogImport->FileName));
 		if (cboxTranslation->SelectedIndex > -1)
 		{
-			Cypher::LoadFromString(ReadTranslationFile(cboxTranslation->SelectedItem->ToString() + TRANSLATION_FILE_EXTENSION));
-			textboxOutput->Text = Cypher::TranslateAllText(textboxInput->Text);
+			Cypher::LoadFromString(StringToCharArray(ReadTranslationFile(cboxTranslation->SelectedItem->ToString() + TRANSLATION_FILE_EXTENSION)));
+			textboxOutput->Text = CharArrayToString(Cypher::TranslateAllText(StringToCharArray(textboxInput->Text)));
 			Cypher::Clear();
 		}
 	}
@@ -504,11 +515,11 @@ void TextEditingWindow::OnBtnExportClick(Object ^sender, EventArgs ^e)
 bool TextEditingWindow::LoadKey(String ^filePath)
 {
 	Cypher::LoadInternal();
-	String ^decrypted(Cypher::ReadAllText(File::ReadAllText(filePath)));
-
-	if (Cypher::LoadFromString(decrypted))
+	String ^decrypted(CharArrayToString(Cypher::ReadAllText(StringToCharArray(File::ReadAllText(filePath)))));
+	
+	if (Cypher::LoadFromString(StringToCharArray(decrypted)))
 	{
-		activeTranslation = Cypher::GetEqualTranslation(decrypted);
+		activeTranslation = GetEqualTranslation(decrypted);
 		activeFile = Path::GetFileNameWithoutExtension(filePath);
 		return true;
 	}
@@ -516,13 +527,12 @@ bool TextEditingWindow::LoadKey(String ^filePath)
 }
 bool TextEditingWindow::LoadData(String ^filePath)
 {
-	Cypher::LoadInternal();
 	String ^outputText(File::ReadAllText(filePath));
 
 	if (LoadKey(Path::GetDirectoryName(filePath) + L"\\" + Path::GetFileNameWithoutExtension(filePath) + KEY_FILE_EXTENSION))
 	{
 		textboxFileName->Text = activeFile;
-		textboxInput->Text = Cypher::ReadAllText(outputText)->Replace(L"\n", L"\r\n");
+		textboxInput->Text = CharArrayToString(Cypher::ReadAllText(StringToCharArray(outputText)))->Replace(L"\n", L"\r\n");
 		textboxOutput->Text = outputText;
 
 		return true;
@@ -553,7 +563,4 @@ bool TextEditingWindow::Load(String ^filePath, bool showError)
 	if (showError)
 		MessageBox::Show(MESSAGE_MISSING_KEY_ERROR, CAPTION_MISSING_KEY_ERROR, MessageBoxButtons::OK);
 	return false;
-}
-TextEditingWindow::TextEditingWindow()
-{
 }
