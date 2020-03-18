@@ -1,4 +1,5 @@
-Cryptext v1.4.1
+Cryptext v1.4.2
+(cypher.dll version: v1.0.0)
 
 
 FILE EXTENSIONS
